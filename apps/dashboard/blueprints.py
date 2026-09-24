@@ -5,6 +5,7 @@ from adhocracy4.polls import phases as poll_phases
 from apps.budgeting import phases as budgeting_phases
 from apps.consent import phases as consent_phases
 from apps.debate import phases as debate_phases
+from apps.delegation import phases as delegation_phases
 from apps.delphi import phases as delphi_phases
 from apps.documents import phases as documents_phases
 from apps.forecasting import phases as forecasting_phases
@@ -219,6 +220,23 @@ blueprints = [
              delphi_phases.DelphiPhase(),
          ],
          image='images/delphi.svg',
+         settings_model=None,
+     )),
+    ('liquid-democracy',
+     ProjectBlueprint(
+         title=_('Liquid democracy'),
+         description=_(
+             'Participants vote directly, or delegate their vote to '
+             'another participant they trust, who can delegate onward '
+             'in turn -- a vote follows the chain to whoever finally '
+             'casts a direct vote. Anyone can change their mind and '
+             'recast or un-delegate their vote while the round is '
+             'open. Options are added by a project admin beforehand.'
+         ),
+         content=[
+             delegation_phases.DelegationPhase(),
+         ],
+         image='images/delegation.svg',
          settings_model=None,
      )),
 ]

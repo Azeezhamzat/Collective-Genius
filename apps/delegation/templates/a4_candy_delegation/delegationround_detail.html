@@ -1,0 +1,113 @@
+{% extends extends %}
+{% load i18n delegation_tags %}
+
+{% block phase_content %}
+<div class="row">
+    <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+
+    {% if not delegation_round %}
+        <div class="alert" role="alert">
+            {% trans 'No liquid democracy round has been set up for this module yet.' %}
+        </div>
+    {% else %}
+        <p class="text-muted">
+            {% trans "Vote for an option directly, or delegate your vote to another participant you trust -- they can delegate onward in turn, and your vote follows the chain to whoever finally casts a direct vote. You can change your mind at any time while the round is open." %}
+        </p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if delegation_round.is_open %}
+            {% if request.user.is_authenticated %}
+                {% if my_action == 'voted' %}
+                    <p>{% blocktrans with option=my_target.title %}You are currently voting directly for "{{ option }}".{% endblocktrans %}</p>
+                {% elif my_action == 'delegated' %}
+                    <p>{% blocktrans with name=my_target %}Your vote is currently delegated to {{ name }}.{% endblocktrans %}</p>
+                {% endif %}
+            {% endif %}
+
+            <form method="post" action="">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="vote" />
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{% trans 'Option' %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for option in delegation_round.options.all %}
+                            <tr>
+                                <td>
+                                    <strong>{{ option.title }}</strong>
+                                    {% if option.description %}<br /><span class="text-muted">{{ option.description }}</span>{% endif %}
+                                </td>
+                                <td>
+                                    {% if request.user.is_authenticated %}
+                                        <button type="submit" name="option" value="{{ option.pk }}" class="btn btn--light btn--small">
+                                            {% trans 'Vote for this' %}
+                                        </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+
+            {% if request.user.is_authenticated %}
+                <h3>{% trans 'Or delegate your vote' %}</h3>
+                <form method="post" action="" class="mb-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="delegate" />
+                    <label for="id_delegatee">{% trans 'Username of the person you trust' %}</label>
+                    <input type="text" id="id_delegatee" name="delegatee" />
+                    <button type="submit" class="btn btn--light btn--small">
+                        {% trans 'Delegate' %}
+                    </button>
+                </form>
+
+                {% if my_action %}
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="revoke" />
+                        <button type="submit" class="btn btn--light btn--small">
+                            {% trans 'Clear my choice' %}
+                        </button>
+                    </form>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn--primary">
+                    {% trans 'Log in to vote or delegate' %}
+                </a>
+            {% endif %}
+        {% else %}
+            <h2>{% trans 'Results' %}</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Option' %}</th>
+                        <th>{% trans 'Votes (direct + delegated)' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for option in delegation_round.options.all %}
+                        <tr>
+                            <td>{{ option.title }}</td>
+                            <td>{{ results_by_option_id|get_item:option.pk|default:0 }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endif %}
+
+    </div>
+</div>
+{% endblock %}

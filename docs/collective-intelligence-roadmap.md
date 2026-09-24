@@ -329,6 +329,42 @@ Bigger features that make this platform stand out, not just catch up.
   10 tests: `python3 -m unittest
   apps.documentrevisions.tests.test_engine`.
 
+* **[`apps/delegation`](../apps/delegation) — liquid democracy.** A
+  genuinely different decision mechanism from everything else in this
+  rebuild: quadratic voting, consent, Delphi and forecasting are all
+  "everyone decides for themselves" mechanisms, but a large group
+  often can't have everyone research every question themselves.
+  Liquid democracy lets a participant either vote directly on an
+  option, or delegate their vote to someone they trust — who can
+  delegate onward in turn, transitively, until the chain reaches
+  someone who actually votes. It's a well-established collective-
+  intelligence mechanism (the core idea behind Google's early internal
+  voting tools and platforms like Democracy Earth) that wasn't
+  represented here at all before.
+
+  New phase type, built the same shape as `apps/quadraticvoting`
+  (a per-module `DelegationRound` with admin-configured `Option`s, a
+  hand-written dashboard view since `Option`s hang one level below the
+  `Module`) but with its own resolution problem: following a
+  delegation chain safely. `apps/delegation/engine.py` resolves each
+  chain to whoever ultimately casts a direct vote, and explicitly
+  treats a cycle (A delegates to B, B delegates back to A) or an
+  unreasonably long chain as *void*, not as picking whoever happened
+  to be last followed — nobody in a cycle has actually decided, so
+  everyone in it abstains rather than being silently miscounted. A
+  chain that dead-ends on someone who never votes abstains the same
+  way. Casting a direct vote always supersedes a standing delegation
+  (never both at once), and either can be changed or cleared any time
+  the round is open. Results also surface each direct voter's
+  *voting power* — how many people's votes currently route through
+  them — a standard liquid-democracy transparency expectation: knowing
+  who you delegated to shouldn't mean losing visibility into how much
+  say they've accumulated.
+
+  The chain-resolution and tallying logic is pure Python and unit
+  tested, 20 tests: `python3 -m unittest
+  apps.delegation.tests.test_engine`.
+
 ### Not yet
 
 * **Real-time collaborative documents (the actual original ask).**

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 270 150" style="enable-background:new 0 0 270 150;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#2A3CD4;}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+</style>
+<title>icon_delegation</title>
+<desc>Three linked circles connected by an arrow chain -- a vote passed from one participant to the next until someone casts it.</desc>
+<g id="Concepts">
+	<rect id="icon_delegation" class="st0" width="270" height="150"/>
+	<circle class="st1" cx="60" cy="75" r="14"/>
+	<circle class="st1" cx="135" cy="75" r="14"/>
+	<circle class="st1" cx="210" cy="75" r="18"/>
+	<path class="st1" d="M60,68 L60,82" fill="none" stroke="#2A3CD4" stroke-width="3"/>
+	<path class="st1" d="M135,68 L135,82" fill="none" stroke="#2A3CD4" stroke-width="3"/>
+	<path class="st1" d="M202,68 L218,68 M210,60 L210,82" fill="none" stroke="#2A3CD4" stroke-width="3"/>
+	<path class="st1" d="M78,75 L113,75" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+	<path class="st1" d="M107,68 L117,75 L107,82 Z"/>
+	<path class="st1" d="M153,75 L184,75" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+	<path class="st1" d="M178,68 L188,75 L178,82 Z"/>
+</g>
+</svg>
