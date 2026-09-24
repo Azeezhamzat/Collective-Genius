@@ -355,9 +355,45 @@ Bigger features that make this platform stand out, not just catch up.
 
 ## Phase 3 — platform & ecosystem
 
-* **API-first integrations.** Webhooks + a documented public API (DRF is
-  already in place) for Slack/Teams notifications, Zapier/Make
-  connectors, and embedding synthesis results in external dashboards.
+### Shipped
+
+* **[`apps/webhooks`](../apps/webhooks)** — outbound webhooks: an
+  organisation registers an endpoint URL, and this platform POSTs a
+  signed JSON payload to it when a subscribed event happens. The public
+  REST API for reading/writing data (comments, ratings, polls) was
+  already in place via DRF before this rebuild; what was missing was
+  the *push* side for integrations (a Slack notifier, a Zapier hook, a
+  custom dashboard) that want to react to events instead of polling.
+
+  Four event types wired up so far, each a plain "a new X was created"
+  hook — the simplest, least error-prone trigger shape —
+  `report.created`, `consent_proposal.created`,
+  `forecasting_question.created`, `synthesis_snapshot.created`; adding
+  another is a ~10-line signal handler (see
+  `apps/webhooks/signals.py` and `docs/building_a_module.md`).
+
+  Two pieces of this are genuinely security/reliability-sensitive and
+  are exactly what's unit tested: **payload signing** (HMAC-SHA256 over
+  a canonical JSON encoding, `hmac.compare_digest` for the verification
+  side so a receiver's check can't be timed byte-by-byte — a receiver's
+  entire ability to trust a delivery came from this platform rests on
+  this being right) and **retry scheduling** (exponential backoff, 1 min
+  → 12 hours, so a receiver that's briefly down doesn't silently lose an
+  event, but a dead endpoint isn't retried forever). 11 tests:
+  `python3 -m unittest apps.webhooks.tests.test_engine`.
+
+  Delivery itself uses stdlib `urllib.request`, not a new `requests`
+  dependency, and (like everything network-touching in this rebuild)
+  is not executed end-to-end here. There's no task queue configured in
+  this project, so retries need `python manage.py send_webhook_retries`
+  run on a real cron schedule in production — noted in the command's
+  own `--help` text, not just here. Endpoint management is
+  Django-admin-only for now (no participant-facing dashboard UI) — a
+  reasonable v1 scope, same as how Synthesis/Summarization results were
+  admin-visible before they got a proper page.
+
+### Not yet
+
 * **White-label multi-tenant SaaS.** `apps/organisations` already
   supports multiple orgs on one deployment; add per-organisation theming,
   custom domains, and usage-based billing hooks for a hosted offering.

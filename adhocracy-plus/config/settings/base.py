@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'apps.delphi',
     'apps.search',
     'apps.documentrevisions',
+    'apps.webhooks',
 )
 
 MIDDLEWARE = (

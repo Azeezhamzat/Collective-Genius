@@ -16,7 +16,7 @@ Collective Genius gives any group a toolkit for going from many individual persp
 * **Forecasting** — [prediction-market-style forecasting](./apps/forecasting) for questions with a checkable outcome: the crowd's aggregate probability estimate, plus a Brier-score leaderboard tracking who's actually well-calibrated over time, not just who guessed right once
 * **Expert elicitation** — [Delphi-method rounds](./apps/delphi): anonymous numeric estimates, the group's aggregate shown back, revise and repeat — converges without anyone anchoring on who said what first
 * **Organisation-wide search** — [semantic search](./apps/search) across every idea, proposal, map-idea and debate subject in every project an organisation runs, by meaning, not just exact keywords
-* **Follow-through** — dashboards, exports, notifications, activity feeds
+* **Follow-through** — dashboards, exports, notifications, activity feeds, and [outbound webhooks](./apps/webhooks) (signed, retried on failure) so a Slack notifier, a Zapier hook or a custom dashboard can react to events instead of polling
 * **Cross-language groups** — [on-demand translation](./apps/translation) of discussion content (not just interface chrome) on the Synthesis and Summarization pages, so a multilingual group isn't stuck reading a discussion it can't follow
 
 A "project" in Collective Genius is any structured process a group runs — it doesn't have to be a government initiative. An "organisation" is any group running processes — a company, a lab, a nonprofit, a DAO, a city council, or a community of volunteers.
