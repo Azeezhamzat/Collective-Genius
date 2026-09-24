@@ -13,6 +13,7 @@ Collective Genius gives any group a toolkit for going from many individual persp
 * **Prioritization** — voting, budgeting/resource allocation, topic prioritization, and [quadratic voting](./apps/quadraticvoting) (now configurable entirely from the project dashboard) for surfacing preference intensity, not just majority direction
 * **Synthesis** — clustering related input and surfacing where a group actually agrees or disagrees (see [Synthesis](./apps/synthesis)), plus an automatic ["key points" summary](./apps/summarization) of any discussion (dependency-free by default, with an optional LLM-backed mode)
 * **Decision-making** — polls, phased processes with clear timelines, moderator workflows, and a project-wide [facilitator toolkit](./apps/facilitator) (activity overview, reported-comments queue)
+* **Forecasting** — [prediction-market-style forecasting](./apps/forecasting) for questions with a checkable outcome: the crowd's aggregate probability estimate, plus a Brier-score leaderboard tracking who's actually well-calibrated over time, not just who guessed right once
 * **Follow-through** — dashboards, exports, notifications, activity feeds
 * **Cross-language groups** — [on-demand translation](./apps/translation) of discussion content (not just interface chrome) on the Synthesis and Summarization pages, so a multilingual group isn't stuck reading a discussion it can't follow
 

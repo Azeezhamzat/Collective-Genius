@@ -1,0 +1,21 @@
+{% load i18n %}
+
+<p class="form-hint">
+    {% trans "Add the questions participants will forecast. Give each one a clear, checkable resolution criterion -- vague criteria make the forecasts meaningless. Once you know the answer, come back here, tick 'Resolved' and set the outcome." %}
+</p>
+
+{{ form.management_form }}
+{% if form.non_form_errors %}
+    <div class="alert alert-danger" role="alert">{{ form.non_form_errors }}</div>
+{% endif %}
+{% for sub_form in form %}
+    <div class="mb-3 pb-3" style="border-bottom: 1px solid #ddd;">
+        {{ sub_form.id }}
+        {{ sub_form.as_p }}
+        {% if sub_form.instance.pk %}
+            <label>
+                {{ sub_form.DELETE }} {% trans 'Delete this question' %}
+            </label>
+        {% endif %}
+    </div>
+{% endfor %}

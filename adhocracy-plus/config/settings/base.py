@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'apps.deduplication',
     'apps.facilitator',
     'apps.translation',
+    'apps.forecasting',
 )
 
 MIDDLEWARE = (

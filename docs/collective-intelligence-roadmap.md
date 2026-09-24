@@ -204,19 +204,38 @@ sequence of commits.
 
 Bigger features that make this platform stand out, not just catch up.
 
-* **Reputation & expertise weighting (opt-in, per-project).** Let a
-  project optionally weight synthesis/voting by demonstrated
-  participation quality (verified expertise tags, track record of
-  well-received contributions) — never as a requirement, always visible
-  and auditable, to avoid recreating opaque social-credit systems.
-* **Prediction markets / forecasting module.** For decisions with a
-  future, checkable outcome ("will this proposal reduce X by Y%"), let
-  participants forecast outcomes with calibrated confidence, score
-  forecasters over time (Brier score), and surface the community's
-  aggregate forecast — a genuinely different and powerful collective
-  intelligence mechanism (see Metaculus, Good Judgment Project) that no
-  participation platform currently offers as a first-class module.
-  New blueprint type + app, following the same pattern as `apps/polls`.
+### Shipped
+
+* **[`apps/forecasting`](../apps/forecasting)** — prediction-market-style
+  forecasting: for a question with a clear, checkable resolution
+  criterion ("will X happen by Y date"), participants forecast a
+  probability (0-100%); once a project admin resolves the question with
+  the real outcome, the page shows the crowd's aggregate forecast (the
+  mean of everyone's estimate -- wisdom of crowds applied to prediction,
+  not voting) and a per-forecaster leaderboard by mean Brier score
+  (Brier, 1950 -- the standard proper scoring rule for probabilistic
+  forecasts, `(probability - outcome)²`, lower is better), so forecasting
+  skill is tracked over many questions rather than "who guessed right
+  once." A genuinely different collective-intelligence mechanism from
+  anything else on this platform (see Metaculus, the Good Judgment
+  Project) and, as far as this rebuild is aware, not offered as a
+  first-class module by any comparable participation platform.
+
+  Registered as a real phase/blueprint type, same as Quadratic Voting —
+  forecasting is something participants *do*. Question management
+  (add/edit/resolve) uses `adhocracy4.dashboard.ModuleFormSetComponent`
+  properly this time (unlike Quadratic Voting's hand-written dashboard
+  view): `Question` has a direct FK to `Module`, the exact shape that
+  base class assumes, so there was no mismatch to work around.
+
+  The scoring core (`apps/forecasting/engine.py` — `brier_score`,
+  `aggregate_forecast`, `leaderboard`) is pure Python and unit tested,
+  11 tests including the classic "two confident-but-wrong forecasters on
+  opposite sides average out better calibrated than either" wisdom-of-
+  crowds case: `python3 -m unittest apps.forecasting.tests.test_engine`.
+
+### Not yet
+
 * **Structured consent-based decisions.** A Loomio/sociocracy-style
   decision flow: propose → clarify → react → amend → consent-round (only
   "I object because…" blocks; everything else is a stand-aside or

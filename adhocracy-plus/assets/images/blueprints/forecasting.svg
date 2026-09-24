@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 270 150" style="enable-background:new 0 0 270 150;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#2A3CD4;}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+	.st2{fill:none;stroke:#FFFFFF;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;}
+</style>
+<title>icon_forecasting</title>
+<desc>A rising, uncertain line -- forecasting a probable trend.</desc>
+<g id="Concepts">
+	<rect id="icon_forecasting" class="st0" width="270" height="150"/>
+	<polyline class="st2" points="60,110 100,80 130,95 170,50 210,60" />
+	<circle class="st1" cx="60" cy="110" r="6"/>
+	<circle class="st1" cx="100" cy="80" r="6"/>
+	<circle class="st1" cx="130" cy="95" r="6"/>
+	<circle class="st1" cx="170" cy="50" r="6"/>
+	<circle class="st1" cx="210" cy="60" r="6"/>
+</g>
+</svg>

@@ -1,0 +1,89 @@
+{% extends extends %}
+{% load i18n %}
+
+{% block phase_content %}
+<div class="row">
+    <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if not questions %}
+            <div class="alert" role="alert">
+                {% trans 'No forecasting questions have been added to this module yet.' %}
+            </div>
+        {% else %}
+            {% for question in questions %}
+                <div class="mb-4 pb-4" style="border-bottom: 1px solid #ddd;">
+                    <h2>{{ question.title }}</h2>
+                    {% if question.resolution_criteria %}
+                        <p class="text-muted">{{ question.resolution_criteria }}</p>
+                    {% endif %}
+
+                    {% if question.is_resolved %}
+                        <p>
+                            <strong>{% trans 'Resolved:' %}</strong>
+                            {% if question.outcome %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}
+                        </p>
+                        {% if question.aggregate_percent != None %}
+                            <p>
+                                {% blocktrans with percent=question.aggregate_percent %}
+                                    The crowd's aggregate forecast was {{ percent }}%.
+                                {% endblocktrans %}
+                            </p>
+                        {% endif %}
+                        {% if question.my_probability != None %}
+                            <p class="text-muted">
+                                {% blocktrans with percent=question.my_probability %}
+                                    Your forecast was {{ percent }}%.
+                                {% endblocktrans %}
+                            </p>
+                        {% endif %}
+                    {% else %}
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <input type="hidden" name="question_id" value="{{ question.pk }}" />
+                            <label for="id_probability_{{ question.pk }}">
+                                {% trans 'Your forecast: probability this resolves YES (0-100%)' %}
+                            </label>
+                            <input
+                                type="number" min="0" max="100"
+                                id="id_probability_{{ question.pk }}"
+                                name="probability"
+                                value="{% if question.my_probability != None %}{{ question.my_probability }}{% else %}50{% endif %}"
+                            />
+                            <button type="submit" class="btn btn--primary">
+                                {% trans 'Save forecast' %}
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if leaderboard %}
+            <h2>{% trans 'Forecaster leaderboard' %}</h2>
+            <p class="text-muted">
+                {% trans 'Lower is better -- this is the average Brier score across every resolved question, a standard measure of forecasting calibration, not just who guessed right once.' %}
+            </p>
+            <ol>
+                {% for entry in leaderboard %}
+                    <li>
+                        {% if entry.forecaster %}{{ entry.forecaster }}{% else %}{% trans 'Unknown' %}{% endif %}
+                        &mdash;
+                        {% blocktrans with score=entry.mean_brier_score|floatformat:3 n=entry.n_questions %}
+                            score {{ score }} ({{ n }} questions)
+                        {% endblocktrans %}
+                    </li>
+                {% endfor %}
+            </ol>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

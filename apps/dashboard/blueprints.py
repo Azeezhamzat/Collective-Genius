@@ -5,6 +5,7 @@ from adhocracy4.polls import phases as poll_phases
 from apps.budgeting import phases as budgeting_phases
 from apps.debate import phases as debate_phases
 from apps.documents import phases as documents_phases
+from apps.forecasting import phases as forecasting_phases
 from apps.ideas import phases as ideas_phases
 from apps.interactiveevents import phases as interactiveevent_phases
 from apps.mapideas import phases as mapideas_phases
@@ -166,6 +167,22 @@ blueprints = [
              quadraticvoting_phases.VotingPhase(),
          ],
          image='images/quadratic-voting.svg',
+         settings_model=None,
+     )),
+    ('forecasting',
+     ProjectBlueprint(
+         title=_('Forecasting'),
+         description=_(
+             'Participants forecast the probability of yes/no questions '
+             'with a clear resolution criterion. Once a question is '
+             'resolved, the crowd\'s aggregate forecast and each '
+             'participant\'s calibration (Brier score) are shown. '
+             'Questions are added by a project admin beforehand.'
+         ),
+         content=[
+             forecasting_phases.ForecastPhase(),
+         ],
+         image='images/forecasting.svg',
          settings_model=None,
      )),
 ]
