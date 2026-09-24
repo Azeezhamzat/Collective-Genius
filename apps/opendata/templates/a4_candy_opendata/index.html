@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container my-4">
+    <p>
+        <a href="{{ project.get_absolute_url }}">&laquo; {{ project.name }}</a>
+    </p>
+
+    <h1>{% trans 'Open data export' %}</h1>
+    <p class="text-muted">
+        {% trans "A structured, versioned snapshot of this project's public participation data -- ideas, proposals, map-ideas and debate subjects; the top-level comments on each; and aggregate (not per-person) rating counts. Every export carries a schema version and a checksum, so you can tell whether the underlying data changed between two downloads." %}
+    </p>
+
+    <p>
+        <a class="btn btn--primary" href="{% url 'a4_candy_opendata:opendata-export' organisation_slug=project.organisation.slug project_slug=project.slug %}">
+            {% trans 'Download export (JSON)' %}
+        </a>
+    </p>
+</div>
+{% endblock %}

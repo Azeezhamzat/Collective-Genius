@@ -152,6 +152,13 @@
                                     {% trans 'View moderation activity log' %}
                                 </a>
                             </p>
+                            {% if project.is_public %}
+                            <p>
+                                <a href="{% url 'a4_candy_opendata:opendata-index' organisation_slug=project.organisation.slug project_slug=project.slug %}">
+                                    {% trans 'Download open data export' %}
+                                </a>
+                            </p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

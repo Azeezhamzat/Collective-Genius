@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'apps.webhooks',
     'apps.trustsafety',
     'apps.moderationlog',
+    'apps.opendata',
 )
 
 MIDDLEWARE = (

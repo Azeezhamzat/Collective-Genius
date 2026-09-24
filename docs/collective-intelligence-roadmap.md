@@ -495,11 +495,36 @@ Bigger features that make this platform stand out, not just catch up.
   path (most naturally the same retry/backoff machinery
   `apps/webhooks` already built) that hasn't been designed yet — left
   for a follow-up rather than bolted on here.
-* **Open data & auditability (remaining).** The moderation changelog
-  shipped above (`apps/moderationlog`); still open is a one-click,
-  structured, *versioned* export of full project data as a public
-  artifact (today's `apps/exports` is CSV download for project admins,
-  not a public/versioned dataset).
+* **[`apps/opendata`](../apps/opendata)** — the export half of "open
+  data & auditability", completing what `apps/moderationlog` started.
+  A public, unauthenticated, one-click JSON export per project:
+  ideas/proposals/map-ideas/debate subjects, their top-level comments,
+  and per-item rating *counts* (positive/negative, never who rated
+  what — same anonymization principle as the moderation log). Every
+  export is wrapped in a versioned envelope
+  (`apps/opendata/engine.py`): a `schema_version` that only changes
+  when the JSON *shape* changes (not on every participation event), a
+  `generated_at` timestamp, and a `checksum` over the data so two
+  downloads pulled at different times can be compared for "did
+  anything actually change" without diffing the whole payload —
+  genuine versioning for a continuously-changing dataset, not a
+  cosmetic version string. 11 unit tests on the canonicalization and
+  checksum logic: `python3 -m unittest
+  apps.opendata.tests.test_engine`.
+
+  Scoped deliberately narrow at the boundary that matters most: the
+  view 404s (not 403, so it doesn't even confirm the project exists)
+  for any project that isn't `is_public` — this is the one export in
+  the whole rebuild that's reachable with no login at all, so a
+  private or semi-public project's content must never reach it. Two
+  things are explicitly left out of this first version rather than
+  half-built: replies-to-comments (would need recursing through
+  arbitrarily deep comment threads; top-level comments and the
+  existing per-module admin CSV export already cover the content) and
+  budgeting/forecasting/consent/Delphi results (each has its own
+  richer, differently-shaped data that deserves its own section rather
+  than being force-fit into the generic item/comment/rating shape
+  here).
 
 ## Explicitly out of scope (for now)
 
