@@ -392,17 +392,57 @@ Bigger features that make this platform stand out, not just catch up.
   reasonable v1 scope, same as how Synthesis/Summarization results were
   admin-visible before they got a proper page.
 
+* **[`apps/trustsafety`](../apps/trustsafety)** — rate limiting and
+  spam-likelihood flagging, the two pieces of "trust & safety at scale"
+  that don't need a third-party provider to build responsibly.
+  Proof-of-personhood is explicitly **not** attempted here (see below)
+  — it needs a real identity-verification provider (World ID, Persona,
+  a government eID scheme) and credentials/integration testing this
+  sandbox has neither the access nor the standing to fake; claiming
+  progress on it without that would be worse than leaving it undone.
+
+  What did ship: **rate limiting** — a token-bucket limiter
+  (`RateLimitMiddleware`) capping POST requests per user (or per IP,
+  anonymous) in a rolling window, state kept in Django's cache
+  framework so it works with whatever cache backend a deployment
+  already has. Off by default (`A4_RATE_LIMIT_ENABLED = False`) since
+  it can reject real traffic (a 429) if misconfigured — a deployment
+  opts in deliberately, unlike the spam flag below.
+
+  **Spam-likelihood flagging** — a small, legible heuristic (link
+  density, repeated characters, shouting, a link with almost no other
+  text — deliberately not an opaque learned score nobody could explain
+  to someone who got flagged) that sets the *existing*
+  `is_moderator_marked` field on `adhocracy4.comments.Comment` for new
+  comments, rather than adding a new flag or, worse, blocking or hiding
+  anything outright — moderators already have a workflow built around
+  that field, and a heuristic false positive should cost a moderator
+  one glance, never silently censor a real participant. On by default,
+  since it's strictly additive (more visibility, zero blocking).
+
+  Both cores (`apps/trustsafety/engine.py` — `TokenBucket`,
+  `score_text`) are pure Python and unit tested, 16 tests — two of
+  which caught real bugs during development: the "short message
+  dominated by a link" rule was counting the URL itself as a "word"
+  (so a genuinely link-dominated short message never tripped it), and
+  a hand-picked "mild" spam example in the test itself didn't actually
+  contain 5 repeated characters as intended. Both fixed, not glossed
+  over: `python3 -m unittest apps.trustsafety.tests.test_engine`.
+
 ### Not yet
 
 * **White-label multi-tenant SaaS.** `apps/organisations` already
   supports multiple orgs on one deployment; add per-organisation theming,
   custom domains, and usage-based billing hooks for a hosted offering.
+  Custom domains and billing genuinely need real infrastructure (DNS/TLS
+  provisioning, a payment processor account and API keys) this sandbox
+  doesn't have — same reasoning as proof-of-personhood above. Per-
+  organisation theming (colors/logo, no new infrastructure, `Organisation`
+  already has an image field) is the safely buildable slice of this if
+  picked up next.
 * **Mobile apps / installable PWA.** Push notifications for phase
   deadlines and synthesis updates matter far more for engagement than a
   native app shell — start with a PWA before native.
-* **Trust & safety at scale.** Rate limiting, spam/bot detection, and
-  (opt-in, privacy-respecting) proof-of-personhood for high-stakes votes,
-  building on the existing captcha app.
 * **Open data & auditability.** One-click export of full project data
   (already partially covered by `apps/exports`) in structured, versioned
   form, plus a public changelog of moderation actions, so outcomes are

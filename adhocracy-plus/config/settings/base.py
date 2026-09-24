@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     'apps.search',
     'apps.documentrevisions',
     'apps.webhooks',
+    'apps.trustsafety',
 )
 
 MIDDLEWARE = (
@@ -149,6 +150,7 @@ MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'apps.trustsafety.middleware.RateLimitMiddleware',
 
     'apps.embed.middleware.AjaxPathMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
@@ -569,6 +571,17 @@ A4_ACTIONS_PHASE_ENDS_HOURS = 48
 # to 'extractive' automatically, so this is safe to flip per-deployment
 # without touching code. See apps/summarization/backends.py.
 A4_SUMMARIZATION_BACKEND = 'extractive'
+
+# Trust & safety (apps/trustsafety). Spam-likelihood flagging is a
+# heuristic that only ever sets the existing is_moderator_marked flag
+# for a human to review -- never blocks or hides a submission -- so it
+# defaults on. Rate limiting can reject real requests (a 429) if
+# misconfigured, so it defaults off; a deployment opts in deliberately.
+A4_SPAM_DETECTION_ENABLED = True
+A4_SPAM_SCORE_THRESHOLD = 0.5
+A4_RATE_LIMIT_ENABLED = False
+A4_RATE_LIMIT_CAPACITY = 30              # burst size, in requests
+A4_RATE_LIMIT_REFILL_PER_SECOND = 0.5    # steady-state: 30 requests/minute
 
 # On-demand machine translation of discussion content (apps/translation)
 # -- separate from, and doesn't touch, the gettext-based UI translation
