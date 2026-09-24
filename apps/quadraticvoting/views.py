@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
+from adhocracy4.projects.mixins import DisplayProjectOrModuleMixin
 from adhocracy4.projects.mixins import ProjectMixin
 
 from . import services
@@ -12,7 +13,16 @@ from .models import VotingRound
 from .services import BallotRejected
 
 
-class VotingRoundDetail(ProjectMixin, generic.View):
+class VotingRoundDetail(ProjectMixin, DisplayProjectOrModuleMixin,
+                        generic.View):
+    """The module's main page for a quadratic-voting phase.
+
+    Registered as a phase view (see phases.py), so this is reached
+    through the module's own canonical URL while the voting phase is
+    active/last-active -- there is no separate urls.py for this app, same
+    as apps/polls.
+    """
+
     template_name = 'a4_candy_quadraticvoting/votinground_detail.html'
 
     def get(self, request, *args, **kwargs):

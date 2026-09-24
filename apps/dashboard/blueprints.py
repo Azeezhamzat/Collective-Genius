@@ -8,6 +8,7 @@ from apps.documents import phases as documents_phases
 from apps.ideas import phases as ideas_phases
 from apps.interactiveevents import phases as interactiveevent_phases
 from apps.mapideas import phases as mapideas_phases
+from apps.quadraticvoting import phases as quadraticvoting_phases
 from apps.topicprio import phases as topicprio_phases
 
 blueprints = [
@@ -149,6 +150,22 @@ blueprints = [
              debate_phases.DebatePhase(),
          ],
          image='images/debate.svg',
+         settings_model=None,
+     )),
+    ('quadratic-voting',
+     ProjectBlueprint(
+         title=_('Quadratic voting'),
+         description=_(
+             'Participants spend a shared budget of voice credits across '
+             'a set of options, where casting more votes on one option '
+             'costs disproportionately more. This surfaces how strongly '
+             'the group feels, not just which option gets the most '
+             'votes. Options are added by a project admin beforehand.'
+         ),
+         content=[
+             quadraticvoting_phases.VotingPhase(),
+         ],
+         image='images/quadratic-voting.svg',
          settings_model=None,
      )),
 ]

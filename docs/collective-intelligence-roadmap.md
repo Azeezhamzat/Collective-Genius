@@ -47,32 +47,41 @@ for civic participation.
   spread across a set of options, where casting N votes on one option
   costs N² credits. This surfaces *intensity* of preference (a small
   minority that cares a lot can outweigh a majority that barely cares),
-  which plain majority voting cannot. Standalone module (its own
-  `VotingRound`/`Option`/`Allocation` models, not tangled into
-  adhocracy4's poll internals), reachable per-module at
-  `/<organisation>/quadraticvoting/<module_slug>/`. Core budget/tally
+  which plain majority voting cannot. Standalone models (its own
+  `VotingRound`/`Option`/`Allocation`, not tangled into adhocracy4's poll
+  internals), but properly registered as a phase type
+  (`apps/quadraticvoting/phases.py`) with a blueprint entry in
+  `apps/dashboard/blueprints.py` — a project admin can add a "Quadratic
+  voting" module from the normal blueprint picker, same as Polls or
+  Debate, and it renders inside the module timeline. Core budget/tally
   rules are pure-Python and unit tested
   (`apps/quadraticvoting/tests/test_engine.py`, run with
   `python3 -m unittest apps.quadraticvoting.tests.test_engine`).
 
-  Note on how these two modules are wired in: they render as standalone
-  pages (`{% extends "base.html" %}`), not as a phase inside a module's
-  timeline UI. Making either one a selectable phase type (like
-  `apps/polls` or `apps/topicprio`) needs a `phases.py` +
-  `apps/dashboard` blueprint registration, which is real additional
-  scaffolding — tracked below under Phase 1.
+  Design note: Synthesis is deliberately *not* a phase type. A phase is
+  "what participants do during this time period" — Synthesis doesn't add
+  something to do, it analyzes comments that already exist in whatever
+  phase is running (or has run). It's correctly a standalone page linked
+  from wherever a project wants to surface it, not a step in the
+  timeline. Quadratic Voting, by contrast, *is* something participants
+  do, so it belongs in the timeline like Polls or Debate — which is why
+  only it got full phase/blueprint registration.
+
+  Still open for Quadratic Voting: an in-dashboard configuration UI for
+  adding/editing `Option`s (currently only via `/django-admin/`) —
+  mirroring `apps/polls`' `PollComponent` — is real additional scaffolding
+  (a `dashboard.py` with a formset component) and isn't done yet.
 
 ## Phase 1 (next) — high-leverage, low-risk
 
 Features that extend existing primitives and don't require new
 infrastructure.
 
-* **Phase/blueprint registration for Synthesis and Quadratic Voting.**
-  Register both as proper `adhocracy4.phases.PhaseContent` types with
-  `apps/dashboard` blueprint components (mirroring `apps/topicprio`'s
-  `phases.py` + `dashboard.py`), so a project admin can add them from the
-  module blueprint picker like any other participation module, and they
-  render inside the module timeline instead of as a separate linked page.
+* **In-dashboard configuration for Quadratic Voting.** A
+  `apps/quadraticvoting/dashboard.py` component (formset for `Option`s,
+  a field for `credit_budget`), so a project admin doesn't have to touch
+  `/django-admin/` to set up a round. Mirror `apps/polls/dashboard.py`'s
+  `PollComponent`.
 * **AI-assisted idea deduplication.** When someone starts a new idea/
   proposal, semantically search existing ones in the same module and
   surface likely duplicates before they submit — reduces fragmentation of

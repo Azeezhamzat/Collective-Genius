@@ -1,20 +1,15 @@
-{% extends "base.html" %}
+{% extends extends %}
 {% load i18n quadraticvoting_tags %}
 
-{% block content %}
-<div class="container my-4">
-    <p>
-        <a href="{{ module.project.get_absolute_url }}">&laquo; {{ module.project.name }}</a>
-    </p>
+{% block phase_content %}
+<div class="row">
+    <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
 
     {% if not voting_round %}
         <div class="alert" role="alert">
-            {% trans 'No quadratic voting round has been set up for this discussion yet.' %}
+            {% trans 'No quadratic voting round has been set up for this module yet.' %}
         </div>
     {% else %}
-        <h1>{{ voting_round.title }}</h1>
-        {% if voting_round.description %}<p>{{ voting_round.description }}</p>{% endif %}
-
         <p class="text-muted">
             {% blocktrans with budget=voting_round.credit_budget %}
                 Each participant has {{ budget }} voice credits to spread across
@@ -60,9 +55,15 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <button type="submit" class="btn btn--primary">
-                    {% trans 'Save my votes' %}
-                </button>
+                {% if request.user.is_authenticated %}
+                    <button type="submit" class="btn btn--primary">
+                        {% trans 'Save my votes' %}
+                    </button>
+                {% else %}
+                    <a href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn--primary">
+                        {% trans 'Log in to vote' %}
+                    </a>
+                {% endif %}
             </form>
         {% else %}
             <h2>{% trans 'Results' %}</h2>
@@ -92,5 +93,7 @@
             </table>
         {% endif %}
     {% endif %}
+
+    </div>
 </div>
 {% endblock %}
