@@ -1,4 +1,4 @@
-"""Django settings for adhocracy+."""
+"""Django settings for Collective Genius."""
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -120,7 +120,8 @@ INSTALLED_APPS = (
     'apps.mapideas',
     'apps.polls',
     'apps.topicprio',
-    'apps.debate'
+    'apps.debate',
+    'apps.synthesis',
 )
 
 MIDDLEWARE = (
@@ -423,7 +424,7 @@ BLEACH_LIST = {
 }
 
 # Wagtail
-WAGTAIL_SITE_NAME = 'adhocracy+'
+WAGTAIL_SITE_NAME = 'Collective Genius'
 WAGTAILIMAGES_IMAGE_MODEL = 'a4_candy_cms_images.CustomImage'
 
 WAGTAILADMIN_RICH_TEXT_EDITORS = {
@@ -519,7 +520,10 @@ A4_CATEGORY_ICONS = (
 
 A4_MAP_BASEURL = 'https://{s}.tile.openstreetmap.org/'
 A4_MAP_ATTRIBUTION = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-A4_MAP_BOUNDING_BOX = ([[54.983, 15.016], [47.302, 5.988]])
+# World bounding box by default: Collective Genius is not tied to any single
+# country or region. Deployments that only ever operate locally (e.g. a single
+# city) can still narrow this in their own local settings.
+A4_MAP_BOUNDING_BOX = ([[85, -180], [-85, 180]])
 
 A4_DASHBOARD = {
     'PROJECT_DASHBOARD_CLASS': 'apps.dashboard.ProjectDashboard',
@@ -527,19 +531,21 @@ A4_DASHBOARD = {
 }
 
 A4_PROJECT_TOPICS = (
-    ('ANT', _('Anti-discrimination')),
-    ('WOR', _('Work & economy')),
-    ('BUI', _('Building & living')),
-    ('EDU', _('Education & research')),
-    ('CHI', _('Children, youth & family')),
-    ('FIN', _('Finances')),
-    ('HEA', _('Health & sports')),
-    ('INT', _('Integration')),
-    ('CUL', _('Culture & leisure')),
-    ('NEI', _('Neighborhood & participation')),
-    ('URB', _('Urban development')),
-    ('ENV', _('Environment & public green space')),
-    ('TRA', _('Traffic'))
+    ('STR', _('Strategy & planning')),
+    ('PRO', _('Product & innovation')),
+    ('RES', _('Research & science')),
+    ('OPS', _('Operations & process')),
+    ('GOV', _('Governance & policy')),
+    ('COM', _('Community & culture')),
+    ('EDU', _('Education & learning')),
+    ('HEA', _('Health & wellbeing')),
+    ('ENV', _('Environment & sustainability')),
+    ('TEC', _('Technology & tools')),
+    ('FIN', _('Finance & resource allocation')),
+    ('SOC', _('Social impact & inclusion')),
+    ('ART', _('Arts, media & culture')),
+    ('OSS', _('Open source & software')),
+    ('OTH', _('Other')),
 )
 
 A4_ACTIONS_PHASE_ENDS_HOURS = 48
