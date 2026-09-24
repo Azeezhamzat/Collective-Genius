@@ -85,6 +85,24 @@ for civic participation.
   including cycle-safety on malformed input (`apps/argumentmapping/tests/
   test_engine.py`, 12 tests, run with
   `python3 -m unittest apps.argumentmapping.tests.test_engine`).
+* **[`apps/summarization`](../apps/summarization)** — extractive "key
+  points" summary of a module's comments, using word-frequency
+  centrality (a simplified version of Luhn's 1958 method): comments that
+  share vocabulary with many other comments in the same discussion are
+  more likely to be about its actual central themes, so they're picked
+  as the summary, alongside a plain "common themes" keyword list. No ML
+  library or API key required by default — deliberately a dependency-free
+  baseline behind a swappable `summarize(comments)` signature, so an
+  LLM-backed backend can be added later (tracked in Phase 1) without
+  changing callers. Pure-Python core, unit tested, 10 tests:
+  `python3 -m unittest apps.summarization.tests.test_engine`.
+
+  Same design note as Synthesis: this is an analysis overlay, not a
+  phase, so it's a standalone page. Both Synthesis and Summarization are
+  now linked directly from every module's page (`a4modules/
+  module_detail.html`, a "Key points" / "Where this group agrees" link
+  row) — before this they were only reachable if you already knew the
+  URL, which defeated the point of building them.
 
 ## Phase 1 (next) — high-leverage, low-risk
 
@@ -101,10 +119,13 @@ infrastructure.
   surface likely duplicates before they submit — reduces fragmentation of
   a discussion across near-identical entries. Natural fit on top of
   `apps/ideas` and `apps/budgeting`.
-* **Comment thread summarization.** An on-demand "summarize this
-  discussion" action per module, built the same way as Synthesis: a
-  swappable summarization backend (extractive by default, LLM-backed when
-  an API key is configured) rather than a hard dependency on one vendor.
+* **LLM-backed summarization as an alternate backend.** Now that
+  `apps/summarization` exists (below) with a plain `summarize(comments)`
+  entry point, add an optional second backend behind the same signature
+  that calls out to an LLM when an API key is configured, instead of (or
+  blended with) the extractive default — genuinely better summaries for
+  large discussions, still falling back to the dependency-free default
+  when no key is set.
 * **Facilitator toolkit.** A dashboard view for moderators showing: new
   activity since last visit, comments needing moderation, and — powered by
   Synthesis — where the group currently stands. Builds on the existing

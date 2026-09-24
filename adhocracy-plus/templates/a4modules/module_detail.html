@@ -187,6 +187,19 @@
                 </div>
             </div>
         </div>
+        {% block module_insights %}
+            <div class="row mb-4">
+                <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2 u-font-size-xs">
+                    <a href="{% url 'a4_candy_summarization:summary-module-detail' organisation_slug=module.project.organisation.slug module_slug=module.slug %}">
+                        {% trans 'Key points' %}
+                    </a>
+                    &middot;
+                    <a href="{% url 'a4_candy_synthesis:synthesis-module-detail' organisation_slug=module.project.organisation.slug module_slug=module.slug %}">
+                        {% trans 'Where this group agrees' %}
+                    </a>
+                </div>
+            </div>
+        {% endblock %}
         {% block phase_content %}{% endblock %}
         {% block other_modules %}
             {% if module.is_in_module_cluster %}

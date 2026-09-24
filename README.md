@@ -11,7 +11,7 @@ Collective Genius gives any group a toolkit for going from many individual persp
 * **Idea generation** — open calls for ideas, geo-located proposals, structured briefs
 * **Deliberation** — threaded discussion, commenting on documents paragraph-by-paragraph, structured debates with [argument mapping](./apps/argumentmapping) showing where a debate's support actually concentrates
 * **Prioritization** — voting, budgeting/resource allocation, topic prioritization, and [quadratic voting](./apps/quadraticvoting) for surfacing preference intensity, not just majority direction
-* **Synthesis** — clustering related input and surfacing where a group actually agrees or disagrees (see [Synthesis](./apps/synthesis))
+* **Synthesis** — clustering related input and surfacing where a group actually agrees or disagrees (see [Synthesis](./apps/synthesis)), plus an automatic ["key points" summary](./apps/summarization) of any discussion
 * **Decision-making** — polls, phased processes with clear timelines, moderator workflows
 * **Follow-through** — dashboards, exports, notifications, activity feeds
 

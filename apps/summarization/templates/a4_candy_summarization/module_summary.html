@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container my-4">
+    <p>
+        <a href="{{ module.project.get_absolute_url }}">&laquo; {{ module.project.name }}</a>
+    </p>
+
+    <h1>{% blocktrans with module_name=module.name %}Key points from "{{ module_name }}"{% endblocktrans %}</h1>
+    <p>
+        {% trans 'An automatic, extractive summary: the comments below use language shared across the most other comments in this discussion, so they are a reasonable place to start reading rather than scrolling every comment.' %}
+    </p>
+
+    {% if not snapshot %}
+        <div class="alert" role="alert">
+            {% trans 'No summary has been generated for this discussion yet.' %}
+        </div>
+    {% else %}
+        <p class="text-muted">
+            {% blocktrans with n_comments=snapshot.n_comments %}
+                Based on {{ n_comments }} comments.
+            {% endblocktrans %}
+        </p>
+
+        {% if snapshot.keywords %}
+            <p>
+                <strong>{% trans 'Common themes:' %}</strong>
+                {{ snapshot.keywords|join:', ' }}
+            </p>
+        {% endif %}
+
+        <h2>{% trans 'Key comments' %}</h2>
+        {% if key_comments %}
+            <ol>
+                {% for key_comment in key_comments %}
+                    <li>{{ key_comment.comment.comment }}</li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            <p>{% trans 'Not enough substantial comments yet to pick out key points.' %}</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
