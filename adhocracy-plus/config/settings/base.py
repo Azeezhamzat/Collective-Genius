@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     'apps.translation',
     'apps.forecasting',
     'apps.consent',
+    'apps.delphi',
 )
 
 MIDDLEWARE = (

@@ -259,12 +259,34 @@ Bigger features that make this platform stand out, not just catch up.
   mixed-objections cases: `python3 -m unittest
   apps.consent.tests.test_engine`.
 
+* **[`apps/delphi`](../apps/delphi)** — Delphi-method structured
+  elicitation: participants give an anonymous numeric estimate for a
+  question, the group's aggregate (median, spread, anonymous
+  rationales) is shown back, and a new round opens for people to revise
+  their estimate. Repeated over a few rounds this typically converges
+  without anyone anchoring on who said what first or defending a
+  position socially — the anonymity is the actual mechanism, not an
+  incidental privacy feature. `apps/delphi/services.has_converged`
+  gives a plain "has the spread tightened meaningfully since round one"
+  signal a project can show participants. Useful for research
+  consortia and technical-standards work, a segment adhocracy+ never
+  targeted.
+
+  `Question.current_round` (admin-editable via the dashboard, same
+  `ModuleFormSetComponent` pattern as Forecasting) is what opens a new
+  round; past rounds' `Response`s become immutable automatically once
+  it advances, since new submissions target the new round number and
+  old ones are simply never queried against by ``round_number`` for the
+  live round again. The round-aggregation and convergence core
+  (`apps/delphi/engine.py` — `aggregate_round`, `has_converged`) is pure
+  Python and unit tested, 11 tests covering the statistics themselves
+  and every convergence edge case (too few rounds, spread barely
+  changing, spread widening, zero spread in round one, empty rounds
+  skipped, a custom threshold): `python3 -m unittest
+  apps.delphi.tests.test_engine`.
+
 ### Not yet
 
-* **Delphi-method rounds.** Multi-round structured expert elicitation:
-  anonymous responses, aggregate feedback shown to all, revise, repeat.
-  Useful for research consortia and technical standards work — a segment
-  adhocracy+ never targeted.
 * **Real-time collaborative documents.** CRDT-based co-editing (e.g. via
   Yjs) for `apps/documents`, so a group can draft text together, not just
   comment on a static version — turns the platform into a genuine

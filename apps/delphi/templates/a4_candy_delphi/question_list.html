@@ -1,0 +1,90 @@
+{% extends extends %}
+{% load i18n %}
+
+{% block phase_content %}
+<div class="row">
+    <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if not questions %}
+            <div class="alert" role="alert">
+                {% trans 'No questions have been added to this module yet.' %}
+            </div>
+        {% else %}
+            {% for question in questions %}
+                <div class="mb-4 pb-4" style="border-bottom: 1px solid #ddd;">
+                    <h2>{{ question.title }}</h2>
+                    {% if question.description %}<p>{{ question.description }}</p>{% endif %}
+
+                    {% if question.previous_rounds %}
+                        <h3>{% trans 'Previous rounds' %}</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>{% trans 'Round' %}</th>
+                                    <th>{% trans 'Median' %}</th>
+                                    <th>{% trans 'Range' %}</th>
+                                    <th>{% trans 'Responses' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for round in question.previous_rounds %}
+                                    {% if round %}
+                                        <tr>
+                                            <td>{{ round.round_number }}</td>
+                                            <td>{{ round.median|floatformat:1 }} {{ question.scale_hint }}</td>
+                                            <td>{{ round.minimum|floatformat:1 }} &ndash; {{ round.maximum|floatformat:1 }}</td>
+                                            <td>{{ round.n_responses }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if question.converged %}
+                            <p><strong>{% trans 'The group’s estimates have converged.' %}</strong></p>
+                        {% endif %}
+                        {% if question.previous_rationales %}
+                            <p class="text-muted">{% trans 'Anonymous rationales from the last round:' %}</p>
+                            <ul>
+                                {% for rationale in question.previous_rationales %}
+                                    <li>{{ rationale }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if not question.is_closed %}
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <input type="hidden" name="question_id" value="{{ question.pk }}" />
+                            <label for="id_value_{{ question.pk }}">
+                                {% blocktrans with round=question.current_round %}Your estimate for round {{ round }}{% endblocktrans %}
+                                {% if question.scale_hint %}({{ question.scale_hint }}){% endif %}
+                            </label>
+                            <input
+                                type="number" step="any"
+                                id="id_value_{{ question.pk }}"
+                                name="value"
+                                value="{% if question.my_response %}{{ question.my_response.value }}{% endif %}"
+                            />
+                            <label for="id_rationale_{{ question.pk }}">{% trans 'Rationale (optional)' %}</label>
+                            <textarea id="id_rationale_{{ question.pk }}" name="rationale" rows="2" style="width: 100%;">{% if question.my_response %}{{ question.my_response.rationale }}{% endif %}</textarea>
+                            <button type="submit" class="btn btn--primary">{% trans 'Save estimate' %}</button>
+                        </form>
+                    {% else %}
+                        <p class="text-muted">{% trans 'This question is closed.' %}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

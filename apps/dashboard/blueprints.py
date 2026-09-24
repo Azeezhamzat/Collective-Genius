@@ -5,6 +5,7 @@ from adhocracy4.polls import phases as poll_phases
 from apps.budgeting import phases as budgeting_phases
 from apps.consent import phases as consent_phases
 from apps.debate import phases as debate_phases
+from apps.delphi import phases as delphi_phases
 from apps.documents import phases as documents_phases
 from apps.forecasting import phases as forecasting_phases
 from apps.ideas import phases as ideas_phases
@@ -200,6 +201,24 @@ blueprints = [
              consent_phases.ConsentPhase(),
          ],
          image='images/consent.svg',
+         settings_model=None,
+     )),
+    ('delphi',
+     ProjectBlueprint(
+         title=_('Delphi rounds'),
+         description=_(
+             'Participants give an anonymous numeric estimate for a '
+             'question, see the group\'s aggregate result, and revise '
+             'their estimate over a few structured rounds -- often '
+             'converges toward consensus without a discussion ever '
+             'anchoring on who said what first. Questions are added by '
+             'a project admin beforehand, who also opens each new '
+             'round.'
+         ),
+         content=[
+             delphi_phases.DelphiPhase(),
+         ],
+         image='images/delphi.svg',
          settings_model=None,
      )),
 ]
