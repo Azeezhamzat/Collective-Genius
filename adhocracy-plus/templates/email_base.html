@@ -17,7 +17,7 @@
                     </div>
                     {% else %}
                     <div  style="width: 150px; height: 100px; box-shadow: 0 2px 18px 0 rgba(0, 0, 0, 0.08); background-color: #ffffff;">
-                        <img src="cid:logo" height="80" alt="adhocracy-plus logo" style="margin: 10px;" />
+                        <img src="cid:logo" height="80" alt="Collective Genius logo" style="margin: 10px;" />
                     </div>
                     {% endif %}
             </td>
@@ -63,7 +63,7 @@
         {% if organisation %}
       <tr>
           <td style="padding-top: 60px; font-size: small; color: DarkSlateGray; font-weight: bold" align="center">
-              {% trans 'Responsible for the participation project:' %}
+              {% trans 'Responsible for this project:' %}
           </td>
       </tr>
       <tr>
@@ -92,8 +92,7 @@
           <td style="color: #818181; font-size: small; padding-top: 20px; padding-left: 5px; padding-right: 5px;">
               {% block reason %}{% endblock %}
               <p>
-                {% blocktrans with platformname=settings.a4_candy_cms_settings.OrganisationSettings.platform_name %}{{ platformname }} is a participation platform operated by{% endblocktrans %}<br />
-                Liquid Democracy e.V., Am Sudhaus 2, D-12053 Berlin
+                {% blocktrans with platformname=settings.a4_candy_cms_settings.OrganisationSettings.platform_name %}{{ platformname }} is a collective intelligence platform.{% endblocktrans %}
               </p>
           </td>
       </tr>

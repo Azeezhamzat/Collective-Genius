@@ -1,16 +1,16 @@
 {
-  "name": "adhocracy-plus",
-  "version": "1.0.0-dev.1",
+  "name": "collective-genius",
+  "version": "0.1.0-dev.1",
+  "description": "Open-source platform for collective intelligence: idea generation, deliberation, prioritization and decision-making for any group.",
   "license": "AGPL-3.0+",
   "author": {
-    "name": "Liquid Democracy e.V.",
-    "email": "info@liqd.de",
-    "url": "https://liqd.net"
+    "name": "Azeez Adewale Hamzat",
+    "url": "https://azeezhamzat.com/"
   },
   "files": [
     "adhocracy-plus"
   ],
-  "repository": "https://github.com/liqd/adhocracy-plus.git",
+  "repository": "https://github.com/Azeezhamzat/Collective-Genius.git",
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.4",
     "adhocracy4": "git+https://github.com/liqd/adhocracy4#3a30aa9cd701416516f41a66e731151f70b51aea",

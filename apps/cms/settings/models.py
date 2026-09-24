@@ -95,7 +95,7 @@ class ImportantPages(BaseSetting):
 class OrganisationSettings(BaseSetting):
     platform_name = models.CharField(
         max_length=20,
-        default="adhocracy+",
+        default="Collective Genius",
         verbose_name="Platform name",
         help_text=("This name appears in the footer of all pages and e-mails "
                    "as well as in the tab of the browser.")
@@ -132,9 +132,9 @@ class SocialMedia(BaseSetting):
         help_text="Fallback Image for social meta tags if no other image is there"
     )
     fallback_description_de = models.TextField(
-        default='Mit adhocracy+ wird digitale Demokratie einfach – für alle und überall.')
+        default='Collective Genius macht kollektive Intelligenz einfach – für jede Gruppe, überall.')
     fallback_description_en = models.TextField(
-        default='adhocracy+ makes digital democracy easy - for everyone no matter where.')
+        default='Collective Genius makes collective intelligence easy - for any group, anywhere.')
 
     fallback_description = TranslatedField(
         'fallback_description_de',
