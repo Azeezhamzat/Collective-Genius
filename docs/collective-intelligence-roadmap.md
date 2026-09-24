@@ -42,12 +42,37 @@ for civic participation.
   algorithm (`apps/synthesis/engine.py`) is dependency-free, pure-Python,
   and unit tested (`apps/synthesis/tests/test_engine.py`); run it with
   `python3 -m unittest apps.synthesis.tests.test_engine`.
+* **[`apps/quadraticvoting`](../apps/quadraticvoting)** — quadratic
+  voting: each participant gets a fixed budget of "voice credits" to
+  spread across a set of options, where casting N votes on one option
+  costs N² credits. This surfaces *intensity* of preference (a small
+  minority that cares a lot can outweigh a majority that barely cares),
+  which plain majority voting cannot. Standalone module (its own
+  `VotingRound`/`Option`/`Allocation` models, not tangled into
+  adhocracy4's poll internals), reachable per-module at
+  `/<organisation>/quadraticvoting/<module_slug>/`. Core budget/tally
+  rules are pure-Python and unit tested
+  (`apps/quadraticvoting/tests/test_engine.py`, run with
+  `python3 -m unittest apps.quadraticvoting.tests.test_engine`).
+
+  Note on how these two modules are wired in: they render as standalone
+  pages (`{% extends "base.html" %}`), not as a phase inside a module's
+  timeline UI. Making either one a selectable phase type (like
+  `apps/polls` or `apps/topicprio`) needs a `phases.py` +
+  `apps/dashboard` blueprint registration, which is real additional
+  scaffolding — tracked below under Phase 1.
 
 ## Phase 1 (next) — high-leverage, low-risk
 
 Features that extend existing primitives and don't require new
 infrastructure.
 
+* **Phase/blueprint registration for Synthesis and Quadratic Voting.**
+  Register both as proper `adhocracy4.phases.PhaseContent` types with
+  `apps/dashboard` blueprint components (mirroring `apps/topicprio`'s
+  `phases.py` + `dashboard.py`), so a project admin can add them from the
+  module blueprint picker like any other participation module, and they
+  render inside the module timeline instead of as a separate linked page.
 * **AI-assisted idea deduplication.** When someone starts a new idea/
   proposal, semantically search existing ones in the same module and
   surface likely duplicates before they submit — reduces fragmentation of
@@ -57,11 +82,6 @@ infrastructure.
   discussion" action per module, built the same way as Synthesis: a
   swappable summarization backend (extractive by default, LLM-backed when
   an API key is configured) rather than a hard dependency on one vendor.
-* **Quadratic / weighted voting as a poll mode.** `adhocracy4.polls`
-  already has a clean vote model; add a voting mode where participants get
-  a budget of "voice credits" to spread across options, which surfaces
-  intensity of preference, not just direction — much better than simple
-  majority voting for prioritization among many options.
 * **Argument mapping for debates.** `apps/debate` currently threads
   comments; add explicit "supports / opposes / because" relations between
   comments (Kialo-style) so a debate's structure is visible at a glance,

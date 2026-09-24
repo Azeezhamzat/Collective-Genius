@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load i18n quadraticvoting_tags %}
+
+{% block content %}
+<div class="container my-4">
+    <p>
+        <a href="{{ module.project.get_absolute_url }}">&laquo; {{ module.project.name }}</a>
+    </p>
+
+    {% if not voting_round %}
+        <div class="alert" role="alert">
+            {% trans 'No quadratic voting round has been set up for this discussion yet.' %}
+        </div>
+    {% else %}
+        <h1>{{ voting_round.title }}</h1>
+        {% if voting_round.description %}<p>{{ voting_round.description }}</p>{% endif %}
+
+        <p class="text-muted">
+            {% blocktrans with budget=voting_round.credit_budget %}
+                Each participant has {{ budget }} voice credits to spread across
+                the options below. Casting N votes on one option costs N&times;N
+                credits -- so a strong preference for one option costs far more
+                than spreading modest support across several.
+            {% endblocktrans %}
+        </p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if voting_round.is_open %}
+            <form method="post" action="">
+                {% csrf_token %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{% trans 'Option' %}</th>
+                            <th>{% trans 'Your votes' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for option in voting_round.options.all %}
+                            <tr>
+                                <td>
+                                    <strong>{{ option.title }}</strong>
+                                    {% if option.description %}<br /><span class="text-muted">{{ option.description }}</span>{% endif %}
+                                </td>
+                                <td>
+                                    <input
+                                        type="number"
+                                        name="votes_{{ option.pk }}"
+                                        value="{{ my_ballot|get_item:option.pk|default:0 }}"
+                                    />
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn--primary">
+                    {% trans 'Save my votes' %}
+                </button>
+            </form>
+        {% else %}
+            <h2>{% trans 'Results' %}</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Option' %}</th>
+                        <th>{% trans 'Net votes' %}</th>
+                        <th>{% trans 'Support' %}</th>
+                        <th>{% trans 'Oppose' %}</th>
+                        <th>{% trans 'Voters' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for option in voting_round.options.all %}
+                        {% with result=results_by_option_id|get_item:option.pk %}
+                            <tr>
+                                <td>{{ option.title }}</td>
+                                <td>{{ result.net_votes|default:0 }}</td>
+                                <td>{{ result.support_votes|default:0 }}</td>
+                                <td>{{ result.oppose_votes|default:0 }}</td>
+                                <td>{{ result.n_voters|default:0 }}</td>
+                            </tr>
+                        {% endwith %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

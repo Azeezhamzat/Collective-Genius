@@ -122,6 +122,7 @@ INSTALLED_APPS = (
     'apps.topicprio',
     'apps.debate',
     'apps.synthesis',
+    'apps.quadraticvoting',
 )
 
 MIDDLEWARE = (
