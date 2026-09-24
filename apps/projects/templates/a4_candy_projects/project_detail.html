@@ -63,6 +63,7 @@
                         <p class="project-header__description">{{ project.description }}</p>
                         {% if request.user.is_authenticated %}
                             {% react_follows project %}
+                            {% include 'a4_candy_pushnotifications/subscribe_button.html' %}
                         {% endif %}
                     </div>
                 </div>

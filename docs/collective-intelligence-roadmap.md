@@ -488,13 +488,47 @@ Bigger features that make this platform stand out, not just catch up.
   offline risks submitting an expired token or showing someone else's
   view of the app. That's a real, working install-to-homescreen PWA, not
   an offline-first app — full offline support for a forms-heavy Django
-  app is its own project. Push notifications for phase deadlines and
-  synthesis updates are still open: Web Push doesn't strictly need a
-  third-party service (VAPID keys + the browser's own push endpoint are
-  enough), but it does need a subscription-storage model and a delivery
-  path (most naturally the same retry/backoff machinery
-  `apps/webhooks` already built) that hasn't been designed yet — left
-  for a follow-up rather than bolted on here.
+  app is its own project.
+
+* **[`apps/pushnotifications`](../apps/pushnotifications)** — the
+  follow-up this doc previously flagged as left for later: real Web
+  Push notifications for phase deadlines and synthesis updates, to
+  anyone who already follows a project (reusing `adhocracy4`'s existing
+  `Follow` model — no new "who to notify" concept). Confirms Web Push
+  genuinely doesn't need a third-party push provider: VAPID keys and
+  the browser's own push service are enough, generated once per
+  deployment (`vapid --gen`) and set in `settings/local.py`, never
+  committed. The actual Web Push crypto (ECDH + HKDF + AES-128-GCM
+  payload encryption, ES256-signed VAPID JWTs) is exactly the kind of
+  thing that should never be hand-rolled, so this uses `pywebpush` (a
+  new dependency, see `requirements/base.txt`) rather than
+  reimplementing it.
+
+  Two triggers ship: a `post_save` hook on `SynthesisSnapshot` (the
+  same event `apps/webhooks` already dispatches, now also pushed to
+  followers), and a `send_phase_deadline_reminders` management command
+  that finds phases ending within the next 24 hours and haven't been
+  reminded about yet (tracked by a `PhaseReminderSent` row so it never
+  double-sends), meant to run hourly via cron — same "no task queue in
+  this project" caveat as `apps/webhooks`' own retry command. Delivery
+  retry backoff isn't reimplemented either: it reuses
+  `apps.webhooks.engine.should_retry` / `retry_delay_seconds` directly,
+  since "wait longer after each failure, give up eventually" is the
+  same problem for a webhook endpoint and a push endpoint. A 404/410
+  from a push endpoint (the browser subscription is permanently gone,
+  not just briefly unreachable) deletes the subscription outright
+  instead of retrying a dead endpoint forever.
+
+  The pure logic -- deciding which phases just entered their reminder
+  window, and the flat title/body/url shape of a push message -- is
+  what's unit tested, 13 tests:
+  `python3 -m unittest apps.pushnotifications.tests.test_engine`. The
+  subscribe/unsubscribe flow (a small vanilla-JS button using
+  `PushManager.subscribe()`, no new frontend framework dependency) and
+  delivery itself are Django/browser-facing and, like everything
+  network-touching in this rebuild, not executed end-to-end here.
+  Nothing is sent at all until a deployment sets its own VAPID keys --
+  `notifications_enabled()` is false by default.
 * **[`apps/opendata`](../apps/opendata)** — the export half of "open
   data & auditability", completing what `apps/moderationlog` started.
   A public, unauthenticated, one-click JSON export per project:

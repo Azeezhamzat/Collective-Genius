@@ -23,6 +23,7 @@ Collective Genius gives any group a toolkit for going from many individual persp
 * **White-label** — organisation-level [custom CSS](./apps/organisations) so a deployment's colors, fonts and components can be re-themed per organisation, on top of the existing per-organisation logo and header image
 * **Installable app** — a web app manifest and service worker make the platform installable to a phone or desktop home screen, with static assets cached for faster repeat visits
 * **Open data** — a public, [versioned JSON export](./apps/opendata) per project (checksummed, so you can tell if it changed since your last download), with anonymized comment and rating data — no login required, for any project the organisation has made public
+* **Push notifications** — real [Web Push](./apps/pushnotifications) (no third-party push provider needed) for project followers: new synthesis results, and a phase-ending-soon reminder sent once per phase
 
 A "project" in Collective Genius is any structured process a group runs — it doesn't have to be a government initiative. An "organisation" is any group running processes — a company, a lab, a nonprofit, a DAO, a city council, or a community of volunteers.
 

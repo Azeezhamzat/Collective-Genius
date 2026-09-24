@@ -50,3 +50,34 @@ self.addEventListener('fetch', (event) => {
         ))
     );
 });
+
+// Web Push notifications (see apps/pushnotifications). The push
+// message body is the small flat JSON built by
+// apps.pushnotifications.engine.build_payload -- title/body/url only,
+// never content that wasn't already safe to send unencrypted-at-rest
+// through the browser's push service.
+self.addEventListener('push', (event) => {
+    if (!event.data) {
+        return;
+    }
+    let payload;
+    try {
+        payload = event.data.json();
+    } catch (err) {
+        return;
+    }
+    event.waitUntil(
+        self.registration.showNotification(payload.title || 'Update', {
+            body: payload.body || '',
+            data: { url: payload.url || '/' },
+        })
+    );
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    const url = event.notification.data && event.notification.data.url;
+    if (url) {
+        event.waitUntil(clients.openWindow(url));
+    }
+});

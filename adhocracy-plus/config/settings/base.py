@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'apps.trustsafety',
     'apps.moderationlog',
     'apps.opendata',
+    'apps.pushnotifications',
 )
 
 MIDDLEWARE = (
@@ -584,6 +585,18 @@ A4_SPAM_SCORE_THRESHOLD = 0.5
 A4_RATE_LIMIT_ENABLED = False
 A4_RATE_LIMIT_CAPACITY = 30              # burst size, in requests
 A4_RATE_LIMIT_REFILL_PER_SECOND = 0.5    # steady-state: 30 requests/minute
+
+# Web Push notifications (apps/pushnotifications) for project followers
+# -- synthesis updates and phase-ending-soon reminders. Empty by default,
+# which apps.pushnotifications.services.notifications_enabled() treats
+# as "disabled": nothing is sent until a deployment generates its own
+# VAPID key pair (one-time: `vapid --gen` from the pywebpush package, or
+# `python -c "from py_vapid import Vapid; Vapid().generate_keys()"`) and
+# sets these three values in settings/local.py. Never commit real keys
+# here -- same reasoning as SECRET_KEY.
+A4_VAPID_PUBLIC_KEY = ''
+A4_VAPID_PRIVATE_KEY = ''
+A4_VAPID_ADMIN_EMAIL = 'admin@example.com'
 
 # On-demand machine translation of discussion content (apps/translation)
 # -- separate from, and doesn't touch, the gettext-based UI translation

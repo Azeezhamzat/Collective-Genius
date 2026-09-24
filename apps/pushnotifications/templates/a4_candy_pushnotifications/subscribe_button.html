@@ -1,0 +1,99 @@
+{% load i18n pushnotification_tags %}
+{% vapid_public_key as vapid_key %}
+{% if request.user.is_authenticated and vapid_key %}
+<p>
+    <button type="button" id="push-subscribe-toggle" class="btn btn--light btn--small"
+            data-project-slug="{{ project.slug }}"
+            data-organisation-slug="{{ project.organisation.slug }}"
+            data-vapid-key="{{ vapid_key }}">
+        {% trans 'Enable notifications for this project' %}
+    </button>
+</p>
+<script>
+(function () {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+        return;
+    }
+
+    function urlBase64ToUint8Array(base64String) {
+        var padding = '='.repeat((4 - base64String.length % 4) % 4);
+        var base64 = (base64String + padding)
+            .replace(/-/g, '+')
+            .replace(/_/g, '/');
+        var rawData = window.atob(base64);
+        var outputArray = new Uint8Array(rawData.length);
+        for (var i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
+    }
+
+    function getCookie(name) {
+        var match = document.cookie.match(
+            new RegExp('(^|; )' + name + '=([^;]*)'));
+        return match ? decodeURIComponent(match[2]) : '';
+    }
+
+    var button = document.getElementById('push-subscribe-toggle');
+    if (!button) {
+        return;
+    }
+
+    var organisationSlug = button.dataset.organisationSlug;
+    var projectSlug = button.dataset.projectSlug;
+    var vapidKey = button.dataset.vapidKey;
+    var csrftoken = getCookie('csrftoken');
+
+    function apiUrl(action) {
+        return '/' + organisationSlug + '/pushnotifications/'
+            + projectSlug + '/' + action + '/';
+    }
+
+    function postJson(url, body) {
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify(body),
+        });
+    }
+
+    button.addEventListener('click', function () {
+        navigator.serviceWorker.ready.then(function (registration) {
+            registration.pushManager.getSubscription().then(
+                function (existing) {
+                    if (existing) {
+                        postJson(apiUrl('unsubscribe'), {
+                            endpoint: existing.endpoint,
+                        }).then(function () {
+                            return existing.unsubscribe();
+                        }).then(function () {
+                            button.textContent = '{% trans "Enable notifications for this project" %}';
+                        });
+                        return;
+                    }
+                    registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: urlBase64ToUint8Array(vapidKey),
+                    }).then(function (subscription) {
+                        return postJson(
+                            apiUrl('subscribe'), subscription.toJSON());
+                    }).then(function () {
+                        button.textContent = '{% trans "Notifications enabled -- click to disable" %}';
+                    });
+                });
+        });
+    });
+
+    navigator.serviceWorker.ready.then(function (registration) {
+        registration.pushManager.getSubscription().then(function (existing) {
+            if (existing) {
+                button.textContent = '{% trans "Notifications enabled -- click to disable" %}';
+            }
+        });
+    });
+})();
+</script>
+{% endif %}
