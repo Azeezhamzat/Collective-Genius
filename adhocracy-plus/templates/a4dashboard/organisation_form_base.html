@@ -1,0 +1,41 @@
+{% extends "a4dashboard/base_dashboard.html" %}
+{% load i18n rules wagtailsettings_tags %}
+{% get_settings %}
+
+{% block dashboard_content %}
+<div class="row">
+    <nav class="col-md-3" aria-label="{% trans 'Organisation settings' %}">
+        <div class="dashboard-nav">
+            <div class="dashboard-nav__dropdown">
+                {% trans "Organisation settings" %}
+            </div>
+            <ul class="dashboard-nav__pages">
+                <li class="dashboard-nav__page">
+                    <a href="{% url 'a4dashboard:organisation-settings' organisation_slug=view.organisation.slug %}"
+                        class="dashboard-nav__item dashboard-nav__item--interactive {% if request.resolver_match.url_name == 'organisation-settings' %}is-active{% endif %}">
+                        {% trans "General information" %}
+                        {% if not object.title %}
+                            <i class="fa fa-exclamation-circle text-danger" title="{% trans 'Missing important fields' %}" aria-label="{% trans 'Missing important fields' %}"></i>
+                        {% endif %}
+
+                    </a>
+                </li>
+                <li class="dashboard-nav__page">
+                    <a href="{% url 'a4dashboard:organisation-legal-information' organisation_slug=view.organisation.slug %}"
+                        class="dashboard-nav__item dashboard-nav__item--interactive {% if request.resolver_match.url_name == 'organisation-legal-information' %}is-active{% endif %}">
+                        {% trans "Legal information" %}
+                        {% if not object.imprint or not object.terms_of_use or not object.data_protection %}
+                            <i class="fa fa-exclamation-circle text-danger" title="{% trans 'Missing important fields' %}" aria-label="{% trans 'Missing important fields' %}"></i>
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="col-md-9">
+        {% block organisation_form %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'email_base.'|add:part_type %}
+{% load i18n %}
+
+{% block subject %}{% blocktrans with site_name=site.name %}Feedback for your contribution on {{ site_name }}{% endblocktrans %}{% endblock %}
+
+{% block headline %}{% blocktrans %}Feedback for your contribution{% endblocktrans %}{% endblock  %}
+{% block sub-headline %}{{ object.project.name }}{% endblock  %}
+
+{% block greeting %}{% blocktrans with receiver_name=receiver.username %}Hello {{ receiver_name }},{% endblocktrans %}{% endblock %}
+
+{% block content %}
+{% blocktrans with organisation_name=object.module.project.organisation.name %}{{ organisation_name }} reacted on your contribution.{% endblocktrans %}
+
+{% if object.moderator_feedback %}{% blocktrans with feedback=object.get_moderator_feedback_display %}Your contribution is {{ feedback }}.{% endblocktrans %}
+
+{% endif %}
+{% if object.moderator_statement.statement %}{% blocktrans with statement=object.moderator_statement.statement|safe %}Official feedback: {{ statement }}{% endblocktrans %}
+
+{% endif %}
+{% blocktrans %}Do you want to answer?{% endblocktrans %}
+{% endblock %}
+
+{% block cta_url %}{% if object.get_absolute_url %}{{ email.get_host }}{{ object.get_absolute_url }}{% else %}{{ email.get_host }}{{ object.project.get_absolute_url }}{% endif %}{% endblock %}
+{% block cta_label %}{% if object.get_absolute_url %}{% blocktrans %}Check your contribution{% endblocktrans %}{% else %}{% blocktrans %}Visit the project{% endblocktrans %}{% endif %}{% endblock %}
+
+{% block reason %}{% blocktrans with receiver_mail=receiver.email %}This email was sent to {{ receiver_mail }}. You have received the e-mail because you added a contribution to the above project.{% endblocktrans %} {{ account_link | safe }}{% endblock %}

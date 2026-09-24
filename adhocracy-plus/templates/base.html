@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% load absolute_url contrib_tags i18n organisation_tags static wagtailimages_tags wagtailsettings_tags wagtailuserbar %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_organisation as ORGANISATION %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %}{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name }}{% if ORGANISATION %}/{{ ORGANISATION.name }}{% endif %}{% endblock %}</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'images/favicon-96x96.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+    {% block extra_css %}
+        {# Override this in templates to add extra stylesheets #}
+    {% endblock %}
+
+    {% block social_meta %}
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name }}{% if ORGANISATION %}/{{ ORGANISATION.name }}{% endif %}">
+    <meta name="linkedin:title" content="{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name }}{% if ORGANISATION %}/{{ ORGANISATION.name }}{% endif %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name }}{% if ORGANISATION %}/{{ ORGANISATION.name }}{% endif %}">
+    {% endblock %}
+
+    {% block social_meta_image %}
+    {% if settings.a4_candy_cms_settings.SocialMedia.fallback_image %}
+    {% image settings.a4_candy_cms_settings.SocialMedia.fallback_image width-400 as fallback_image %}
+    <meta name="twitter:image" content="{{ fallback_image.url }}">
+    <meta name="linkedin:image" content="{{ fallback_image.url }}">
+    <meta property="og:image" content="{{ fallback_image.url }}">
+    <meta property="og:image:width" content="{{ fallback_image.width }}">
+    <meta property="og:image:height" content="{{ fallback_image.height }}">
+    {% endif %}
+    {% endblock %}
+
+    {% block social_meta_description %}
+    {% if settings.a4_candy_cms_settings.SocialMedia.fallback_description %}
+    <meta name="twitter:description" content="{{ settings.a4_candy_cms_settings.SocialMedia.fallback_description }}">
+    <meta name="linkedin:description" content="{{ settings.a4_candy_cms_settings.SocialMedia.fallback_description }}">
+    <meta property="og:description" content="{{ settings.a4_candy_cms_settings.SocialMedia.fallback_description }}">
+    {% endif %}
+    {% endblock %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'adhocracy4.css' %}" />
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <script src="{% static 'adhocracy4.js' %}"></script>
+    <meta name="viewport" content="width=device-width" />
+
+    {% block extra_js %}
+        {# Override this in templates to add extra javascript #}
+    {% endblock %}
+    {% matomo_enabled as matomo %}
+    {% if matomo %} {% matomo_tracking_code %} {% endif %}
+</head>
+<body>
+    {% wagtailuserbar %}
+        <a href="#main" class="visually-hidden-focusable">{% trans "Skip to content "%}</a>
+
+        {% block header %}
+        {% include 'header.html' %}
+        {% endblock %}
+        <div class="min-height__wrapper d-flex flex-column">
+        <main id="main" class="flex-fill">
+            {% if messages %}
+            <div class="row">
+              <div class="col">
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li class="alert alert--{{ message.tags }}">
+                        <div class="container">
+                            {{ message }}
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+              </div>
+            </div>
+            {% endif %}
+
+            {% block extra_messages %}{% endblock %}
+
+            {% block super_content %}
+                {% block content %}{% endblock %}
+            {% endblock %}
+        </main>
+
+        {% block before_footer %}{% endblock %}
+        {% block footer %}
+        {% include 'footer.html' %}
+        {% endblock %}
+
+        {% block donation_banner %}
+        {% if not ORGANISATION.is_supporting %}
+        {% if settings.a4_candy_cms_settings.ImportantPages.donate_link %}
+        <div class="donation-banner">
+            <a href="{{ settings.a4_candy_cms_settings.ImportantPages.donate_link }}"  class="btn {% if ORGANISATION %} btn--bg-tertiary {% else %} btn--secondary-filled {% endif %}">
+                <span class="d-none d-md-block">
+                    {% blocktrans with platformname=settings.a4_candy_cms_settings.OrganisationSettings.platform_name %}{{ platformname }} is funded by donations.{% endblocktrans %}
+                    <br>
+                    <b>{% trans 'Donate now' %}</b>
+                </span>
+                <span class="d-md-none">
+                    <b>{% blocktrans with platformname=settings.a4_candy_cms_settings.OrganisationSettings.platform_name %}Donate now to {{ platformname }}{% endblocktrans %}</b>
+                </span>
+            </a>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+# A4
+git+https://github.com/liqd/adhocracy4.git@3a30aa9cd701416516f41a66e731151f70b51aea#egg=adhocracy4
+
+# Additional requirements
+bcrypt==3.2.0
+brotli==1.0.9
+django-capture-tag==1.0
+django-cloudflare-push==0.2.1
+django_csp==3.7
+django-parler==2.2.1
+sentry-sdk==1.4.3
+wagtail==2.15.1
+whitenoise==5.3.0
+xmltodict==0.12.0
+zeep==4.1.0
+
+# Obsolete in Django >= 3.1
+django-samesite-none==0.0.3
+
+# Inherited a4-core requirements
+bleach==4.1.0
+Django==3.2.9 # pyup: <3.3
+django-allauth==0.46.0
+django-autoslug==1.9.8
+django-background-tasks==1.2.5
+django-ckeditor==6.1.0
+django-filter==21.1
+django-enumfield==2.0.2
+django-multiselectfield==0.1.12
+django-widget-tweaks==1.4.9
+djangorestframework==3.12.4
+easy-thumbnails==2.8
+html5lib==1.1
+jsonfield==3.1.0
+psycopg2-binary==2.9.2
+python-dateutil==2.8.2
+python-magic==0.4.24
+rules==3.0
+XlsxWriter==3.0.2

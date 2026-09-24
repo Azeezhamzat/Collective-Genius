@@ -1,0 +1,43 @@
+{% load discovery_tags i18n module_tags static thumbnail %}
+
+<li class="list-item list-item--spaced d-flex flex-column justify-content-between">
+    <a class="list-item__link" href="{{ object.get_absolute_url }}"><span class="visually-hidden">{{ object.name }}</span></a>
+    <div class="row">
+        <h2 class="col list-item__hover mt-0">
+        {{ object.name }}
+        </h2>
+    </div>
+    <div class="row align-items-end">
+        <div class="col-12 col-sm-auto">
+            {% if object.last_three_creators %}
+            <div class="creator-count__circles pt-sm-2 pe-2" aria-hidden="true">
+                {% for creator in object.last_three_creators %}
+                    {% if creator.avatar %}
+                    <span class="creator-count__circle creator-count__circle--{{ forloop.counter }}" style="background-image: url({{ creator.avatar | thumbnail_url:'avatar'}});">
+                    </span>
+                    {% else %}
+                    <span class="creator-count__circle creator-count__circle--{{ forloop.counter }}" style="background-image: url({{ creator.avatar_fallback }});">
+                    </span>
+                    {% endif %}
+                {% endfor %}
+                {% if object.comment_creator_count_minus_three %}
+                <span class="creator-count__circle creator-count__circle--count">+{{ object.comment_creator_count_minus_three }}</span>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% spaceless %}
+            <div class="creator-count__comment-count">
+                {% blocktrans count count=object.comment_count %} {{ count }} Contribution {% plural %} {{ count }} Contributions {% endblocktrans %}
+            </div>
+            {% endspaceless %}
+        </div>
+        <div class="col-12 col-sm text-end list-item__cta list-item__hover" href="{{ object.get_absolute_url }}">
+            {% has_or_would_have_perm 'a4_candy_debate.comment_subject' request.user object as debate_allowed %}
+            {% if debate_allowed %}
+            <span class="">{% trans 'Discuss with us!' %}</span>
+            {% else %}
+            <span class="">{% trans 'Read more' %}</span>
+            {% endif %}
+        </div>
+    </div>
+</li>

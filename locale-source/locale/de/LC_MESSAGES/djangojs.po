@@ -1,0 +1,1025 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# Translators:
+# Katharina Lindenlaub, 2020
+# Katharina Schmid, 2020
+# Frederik Wegener <frederik.wegener@liqd.de>, 2021
+# Luca Thüer, 2021
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-11-22 11:41+0100\n"
+"PO-Revision-Date: 2020-11-12 13:23+0000\n"
+"Last-Translator: Luca Thüer, 2021\n"
+"Language-Team: German (https://www.transifex.com/liqd/teams/109316/de/)\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: adhocracy4/ckeditor/static/ckeditor_collapsible/plugin.js:12
+#: adhocracy4/ckeditor/static/ckeditor_collapsible/plugin.js:12
+msgid "Insert Collapsible Item"
+msgstr "Aufklappbares Element einfügen"
+
+#: adhocracy4/ckeditor/static/ckeditor_collapsible/plugin.js:14
+#: adhocracy4/ckeditor/static/ckeditor_collapsible/plugin.js:14
+msgid "Title"
+msgstr "Titel"
+
+#: adhocracy4/ckeditor/static/ckeditor_collapsible/plugin.js:15
+#: adhocracy4/ckeditor/static/ckeditor_collapsible/plugin.js:15
+msgid "Body text"
+msgstr "Textkörper"
+
+#: adhocracy4/ckeditor/static/ckeditor_collapsible/plugin.js:37
+#: adhocracy4/ckeditor/static/ckeditor_collapsible/plugin.js:37
+msgid "Collapsible element"
+msgstr "Aufklappbares Element"
+
+#: adhocracy4/comments/static/comments/Comment.jsx:23
+#: adhocracy4/comments/static/comments/Comment.jsx:23
+#, javascript-format
+msgid "hide one reply"
+msgid_plural "hide %s replies"
+msgstr[0] "Antwort ausblenden"
+msgstr[1] "%s Antworten ausblenden"
+
+#: adhocracy4/comments/static/comments/Comment.jsx:25
+#: adhocracy4/comments/static/comments/Comment.jsx:25
+#, javascript-format
+msgid "view one reply"
+msgid_plural "view %s replies"
+msgstr[0] "Antwort einblenden"
+msgstr[1] "%s Antworten einblenden"
+
+#: adhocracy4/comments/static/comments/Comment.jsx:30
+#: adhocracy4/comments/static/comments/Comment.jsx:30
+msgid "Answer"
+msgstr "Antworten"
+
+#: adhocracy4/comments/static/comments/Comment.jsx:31
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:420
+#: adhocracy4/comments/static/comments/Comment.jsx:31
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:420
+msgid "Your reply here"
+msgstr "Ihre Antwort hier"
+
+#: adhocracy4/comments/static/comments/Comment.jsx:32
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:294
+#: adhocracy4/reports/static/reports/react_reports.jsx:20
+#: adhocracy4/comments/static/comments/Comment.jsx:32
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:294
+#: adhocracy4/reports/static/reports/react_reports.jsx:20
+msgid ""
+"You want to report this content? Your message will be sent to the "
+"moderation. The moderation will look at the reported content. The content "
+"will be deleted if it does not meet our discussion rules (netiquette)."
+msgstr ""
+"Sie möchten diesen Beitrag melden? Ihre Nachricht wird an die Moderation "
+"weitergeleitet. Diese prüft den gemeldeten Beitrag. Er wird gelöscht, wenn "
+"er nicht unseren Diskussionsregeln (Netiquette) entspricht."
+
+#: adhocracy4/comments/static/comments/Comment.jsx:96
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:271
+#: adhocracy4/comments/static/comments/Comment.jsx:96
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:271
+msgid "Moderator"
+msgstr "Moderation"
+
+#: adhocracy4/comments/static/comments/Comment.jsx:105
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:266
+#: adhocracy4/comments/static/comments/Comment.jsx:105
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:266
+msgid "Latest edit on"
+msgstr "Letzte Änderung am"
+
+#: adhocracy4/comments/static/comments/Comment.jsx:110
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:260
+#: adhocracy4/comments/static/comments/Comment.jsx:110
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:260
+msgid "Deleted by creator on"
+msgstr "Vom Ersteller gelöscht am"
+
+#: adhocracy4/comments/static/comments/Comment.jsx:112
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:262
+#: adhocracy4/comments/static/comments/Comment.jsx:112
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:262
+msgid "Deleted by moderator on"
+msgstr "Von der Moderation gelöscht am"
+
+#: adhocracy4/comments/static/comments/Comment.jsx:151
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:241
+#: adhocracy4/comments/static/comments/Comment.jsx:151
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:241
+msgid "Do you really want to delete this comment?"
+msgstr "Möchten Sie diesen Kommentar wirklich löschen?"
+
+#: adhocracy4/comments/static/comments/Comment.jsx:152
+#: adhocracy4/comments/static/comments/CommentManageDropdown.jsx:7
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:243
+#: adhocracy4/comments_async/static/comments_async/comment_manage_dropdown.jsx:22
+#: adhocracy4/polls/assets/EditPollOpenQuestion.jsx:68
+#: adhocracy4/polls/assets/EditPollOpenQuestion.jsx:73
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:152
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:157
+#: adhocracy4/comments/static/comments/Comment.jsx:152
+#: adhocracy4/comments/static/comments/CommentManageDropdown.jsx:7
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:243
+#: adhocracy4/comments_async/static/comments_async/comment_manage_dropdown.jsx:22
+#: apps/documents/assets/ChapterNavItem.jsx:56
+#: apps/documents/assets/ChapterNavItem.jsx:61
+#: apps/documents/assets/ParagraphForm.jsx:133
+#: apps/documents/assets/ParagraphForm.jsx:138
+msgid "Delete"
+msgstr "Löschen"
+
+#: adhocracy4/comments/static/comments/Comment.jsx:153
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:244
+#: adhocracy4/comments_async/static/modals/modal.jsx:58
+#: adhocracy4/comments_async/static/modals/moderate_modal.jsx:54
+#: adhocracy4/static/Modal.jsx:59
+#: adhocracy4/comments/static/comments/Comment.jsx:153
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:244
+#: adhocracy4/comments_async/static/modals/modal.jsx:58
+#: adhocracy4/comments_async/static/modals/moderate_modal.jsx:54
+msgid "Abort"
+msgstr "Abbrechen"
+
+#: adhocracy4/comments/static/comments/CommentBox.jsx:165
+#: adhocracy4/comments/static/comments/CommentEditForm.jsx:34
+#: adhocracy4/comments/static/comments/CommentBox.jsx:165
+#: adhocracy4/comments/static/comments/CommentEditForm.jsx:34
+msgid "Your comment here"
+msgstr "Ihr Kommentar hier"
+
+#: adhocracy4/comments/static/comments/CommentBox.jsx:168
+#: adhocracy4/comments/static/comments/CommentBox.jsx:168
+msgid "comment"
+msgid_plural "comments"
+msgstr[0] "Kommentar"
+msgstr[1] "Kommentare"
+
+#: adhocracy4/comments/static/comments/CommentEditForm.jsx:35
+#: adhocracy4/comments_async/static/comments_async/comment_category_edit_form.jsx:76
+#: adhocracy4/comments_async/static/comments_async/comment_edit_form.jsx:48
+#: adhocracy4/comments/static/comments/CommentEditForm.jsx:35
+#: adhocracy4/comments_async/static/comments_async/comment_category_edit_form.jsx:76
+#: adhocracy4/comments_async/static/comments_async/comment_edit_form.jsx:48
+msgid "save changes"
+msgstr "Änderungen speichern"
+
+#: adhocracy4/comments/static/comments/CommentEditForm.jsx:36
+#: adhocracy4/comments_async/static/comments_async/comment_category_edit_form.jsx:79
+#: adhocracy4/comments_async/static/comments_async/comment_edit_form.jsx:51
+#: adhocracy4/comments/static/comments/CommentEditForm.jsx:36
+#: adhocracy4/comments_async/static/comments_async/comment_category_edit_form.jsx:79
+#: adhocracy4/comments_async/static/comments_async/comment_edit_form.jsx:51
+msgid "cancel"
+msgstr "Abbrechen"
+
+#: adhocracy4/comments/static/comments/CommentForm.jsx:37
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:107
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:108
+#: adhocracy4/comments/static/comments/CommentForm.jsx:37
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:107
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:108
+msgid "post"
+msgstr "Senden"
+
+#: adhocracy4/comments/static/comments/CommentForm.jsx:38
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:117
+#: adhocracy4/comments/static/comments/CommentForm.jsx:38
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:117
+msgid "Please login to comment"
+msgstr "Bitte melden Sie sich zum Kommentieren an."
+
+#: adhocracy4/comments/static/comments/CommentForm.jsx:39
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:129
+#: adhocracy4/comments/static/comments/CommentForm.jsx:39
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:129
+msgid "The currently active phase doesn't allow to comment."
+msgstr "Die aktuell laufende Phase erlaubt keine Kommentare."
+
+#: adhocracy4/comments/static/comments/CommentForm.jsx:40
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:123
+#: adhocracy4/comments/static/comments/CommentForm.jsx:40
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:123
+msgid "Only invited users can actively participate."
+msgstr "Nur eingeladene Nutzer*innen können sich aktiv beteiligen."
+
+#: adhocracy4/comments/static/comments/CommentManageDropdown.jsx:6
+#: adhocracy4/comments_async/static/comments_async/comment_manage_dropdown.jsx:18
+#: adhocracy4/comments/static/comments/CommentManageDropdown.jsx:6
+#: adhocracy4/comments_async/static/comments_async/comment_manage_dropdown.jsx:18
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: adhocracy4/comments/static/comments/CommentManageDropdown.jsx:8
+#: adhocracy4/comments/static/comments/CommentManageDropdown.jsx:8
+msgid "Report"
+msgstr "Melden"
+
+#: adhocracy4/comments_async/static/comments_async/category_list.jsx:6
+#: adhocracy4/comments_async/static/comments_async/category_list.jsx:6
+msgid "Choose categories for your comment"
+msgstr "Wähle mindestens eine Kategorie"
+
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:19
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:19
+msgid "Entry successfully created"
+msgstr "Beitrag erstellt"
+
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:20
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:20
+msgid "Read more..."
+msgstr "Weiterlesen..."
+
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:21
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:21
+msgid "Read less"
+msgstr "Weniger anzeigen"
+
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:22
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:22
+msgid "Share"
+msgstr "Teilen"
+
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:23
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:23
+msgid " Report"
+msgstr " Melden"
+
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:33
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:33
+msgid "hide comments"
+msgstr "Kommentare verbergen"
+
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:36
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:36
+#, javascript-format
+msgid "1 comment"
+msgid_plural "%s comments"
+msgstr[0] "1 Kommentar"
+msgstr[1] "%s Kommentare"
+
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:39
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:39
+msgctxt "verb"
+msgid "Comment"
+msgstr "Kommentieren"
+
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:264
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:264
+msgid "Blocked by moderator on"
+msgstr ""
+
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:301
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:301
+msgid "Share link"
+msgstr "Link teilen"
+
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:341
+#: adhocracy4/comments_async/static/comments_async/comment.jsx:341
+msgid "Categories: "
+msgstr "Kategorien: "
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:15
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:15
+msgid "Newest"
+msgstr "Neueste"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:16
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:16
+msgid "Most up votes"
+msgstr "Meiste Zustimmung"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:17
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:17
+msgid "Most down votes"
+msgstr "Meiste Ablehnung"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:18
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:18
+msgid "Most answers"
+msgstr "Meiste Antworten"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:19
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:19
+msgid "Last discussed"
+msgstr "Zuletzt diskutiert"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:51
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:310
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:545
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:51
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:310
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:545
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_box.jsx:57
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_filters.jsx:32
+msgid "all"
+msgstr "Alle"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:503
+#: adhocracy4/comments_async/static/comments_async/comment_category_edit_form.jsx:72
+#: adhocracy4/comments_async/static/comments_async/comment_edit_form.jsx:44
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:96
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:503
+#: adhocracy4/comments_async/static/comments_async/comment_category_edit_form.jsx:72
+#: adhocracy4/comments_async/static/comments_async/comment_edit_form.jsx:44
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:96
+msgid "Write contribution"
+msgstr "Beitrag verfassen"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:519
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:523
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:519
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:523
+msgid "Search contributions"
+msgstr "Beiträge durchsuchen"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:521
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:521
+msgid "Clear search"
+msgstr "Suche aufheben"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:537
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:537
+msgid "display: "
+msgstr "anzeigen: "
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:566
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:566
+msgid "sorted by: "
+msgstr "sortiert nach: "
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:587
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:587
+msgid "entry"
+msgid_plural "entries"
+msgstr[0] "Beitrag"
+msgstr[1] "Beiträge"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:591
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:591
+msgid "entry found for "
+msgid_plural "entries found for "
+msgstr[0] "Beitrag gefunden zu "
+msgstr[1] "Beiträge gefunden zu "
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:595
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:595
+msgid "Filters"
+msgstr "Filter"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:595
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:595
+msgid "Show filters"
+msgstr "Filter anzeigen"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:598
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:598
+msgid "Hide Filters"
+msgstr "Filter ausblenden"
+
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:598
+#: adhocracy4/comments_async/static/comments_async/comment_box.jsx:598
+msgid "Hide filters"
+msgstr "Filter ausblenden"
+
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:104
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:104
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_form.jsx:78
+msgid " characters"
+msgstr " Zeichen"
+
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:108
+#: adhocracy4/comments_async/static/comments_async/comment_form.jsx:108
+msgid "Comment"
+msgstr "Kommentar"
+
+#: adhocracy4/comments_async/static/modals/moderate_modal.jsx:31
+#: adhocracy4/comments_async/static/modals/moderate_modal.jsx:31
+msgid "Recommend comment"
+msgstr "Kommentar empfehlen"
+
+#: adhocracy4/comments_async/static/modals/moderate_modal.jsx:35
+#: adhocracy4/comments_async/static/modals/moderate_modal.jsx:35
+msgid "Is recommended"
+msgstr "Wird empfohlen"
+
+#: adhocracy4/comments_async/static/modals/moderate_modal.jsx:53
+#: adhocracy4/comments_async/static/modals/moderate_modal.jsx:53
+msgid "Submit"
+msgstr "Einreichen"
+
+#: adhocracy4/comments_async/static/modals/report_modal.jsx:62
+#: adhocracy4/comments_async/static/modals/report_modal.jsx:62
+msgid ""
+"Thanks for the feedback. It will be checked by the moderators as soon as "
+"possible."
+msgstr ""
+"Danke für die Rückmeldung. Der Beitrag wird so schnell wie möglich von der "
+"Moderation geprüft."
+
+#: adhocracy4/comments_async/static/modals/report_modal.jsx:71
+#: adhocracy4/reports/static/reports/ReportModal.jsx:61
+#: adhocracy4/comments_async/static/modals/report_modal.jsx:71
+#: adhocracy4/reports/static/reports/ReportModal.jsx:61
+msgid "Your message"
+msgstr "Ihre Nachricht"
+
+#: adhocracy4/comments_async/static/modals/report_modal.jsx:84
+#: adhocracy4/reports/static/reports/ReportModal.jsx:62
+#: adhocracy4/comments_async/static/modals/report_modal.jsx:84
+#: adhocracy4/reports/static/reports/ReportModal.jsx:62
+msgid "Send Report"
+msgstr "Meldung senden"
+
+#: adhocracy4/comments_async/static/modals/url_modal.jsx:23
+#: adhocracy4/comments_async/static/modals/url_modal.jsx:23
+msgid "Copy"
+msgstr "Kopieren"
+
+#: adhocracy4/comments_async/static/modals/url_modal.jsx:24
+#: adhocracy4/comments_async/static/modals/url_modal.jsx:24
+msgid "Copied"
+msgstr "Kopiert"
+
+#: adhocracy4/follows/static/follows/FollowButton.jsx:27
+#: adhocracy4/follows/static/follows/FollowButton.jsx:27
+msgid "You will no longer be updated via email."
+msgstr "Sie werden nicht mehr via E-Mail auf dem Laufenden gehalten."
+
+#: adhocracy4/follows/static/follows/FollowButton.jsx:29
+#: adhocracy4/follows/static/follows/FollowButton.jsx:29
+msgid "You will be updated via email."
+msgstr "Sie werden via E-Mail auf dem Laufenden gehalten."
+
+#: adhocracy4/follows/static/follows/FollowButton.jsx:63
+#: adhocracy4/follows/static/follows/FollowButton.jsx:63
+msgid "Follow"
+msgstr "Folgen"
+
+#: adhocracy4/follows/static/follows/FollowButton.jsx:64
+#: adhocracy4/follows/static/follows/FollowButton.jsx:64
+msgid "Following"
+msgstr "Folge ich"
+
+#: adhocracy4/polls/assets/EditPollChoice.jsx:9
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:69
+msgctxt "noun"
+msgid "Answer"
+msgstr "Antwort"
+
+#: adhocracy4/polls/assets/EditPollChoice.jsx:27
+#: adhocracy4/polls/assets/EditPollChoice.jsx:33
+msgid "remove"
+msgstr "entfernen"
+
+#: adhocracy4/polls/assets/EditPollOpenQuestion.jsx:16
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:19
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_form.jsx:66
+msgid "Question"
+msgstr "Frage"
+
+#: adhocracy4/polls/assets/EditPollOpenQuestion.jsx:36
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:119
+#: adhocracy4/polls/assets/HelptextForm.jsx:11
+msgid "Explanation"
+msgstr "Erklärung"
+
+#: adhocracy4/polls/assets/EditPollOpenQuestion.jsx:45
+#: adhocracy4/polls/assets/EditPollOpenQuestion.jsx:50
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:129
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:134
+#: apps/documents/assets/ChapterNavItem.jsx:32
+#: apps/documents/assets/ChapterNavItem.jsx:37
+#: apps/documents/assets/ParagraphForm.jsx:110
+#: apps/documents/assets/ParagraphForm.jsx:115
+msgid "Move up"
+msgstr "nach oben"
+
+#: adhocracy4/polls/assets/EditPollOpenQuestion.jsx:57
+#: adhocracy4/polls/assets/EditPollOpenQuestion.jsx:62
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:141
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:146
+#: apps/documents/assets/ChapterNavItem.jsx:44
+#: apps/documents/assets/ChapterNavItem.jsx:49
+#: apps/documents/assets/ParagraphForm.jsx:122
+#: apps/documents/assets/ParagraphForm.jsx:127
+msgid "Move down"
+msgstr "nach unten"
+
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:46
+msgid "Participants can vote for more than one option (multiple choice)"
+msgstr ""
+"Die Teilnehmer*innen können für mehr als eine Option stimmen "
+"(Mehrfachauswahl)"
+
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:61
+msgid "Participants can add their own answer"
+msgstr "Teilnehmer*innen können ihre eigene Antwort hinzufügen"
+
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:94
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:95
+msgid "Other"
+msgstr "Sonstige"
+
+#: adhocracy4/polls/assets/EditPollQuestion.jsx:112
+msgid "New answer"
+msgstr "Neue Antwort"
+
+#: adhocracy4/polls/assets/EditPollQuestions.jsx:163
+msgid "The poll has been updated."
+msgstr "Die Umfrage wurde aktualisiert."
+
+#: adhocracy4/polls/assets/EditPollQuestions.jsx:177
+msgid "The poll could not be updated."
+msgstr "Die Umfrage konnte nicht aktualisiert werden."
+
+#: adhocracy4/polls/assets/EditPollQuestions.jsx:196
+msgid "New question"
+msgstr "Neue Frage"
+
+#: adhocracy4/polls/assets/EditPollQuestions.jsx:202
+msgid "Multiple choice question"
+msgstr "Multiple-Choice-Frage"
+
+#: adhocracy4/polls/assets/EditPollQuestions.jsx:207
+msgid "Open question"
+msgstr "Offene Frage"
+
+#: adhocracy4/polls/assets/EditPollQuestions.jsx:279
+#: apps/documents/assets/DocumentManagement.jsx:324
+msgid "Save"
+msgstr "Speichern"
+
+#: adhocracy4/polls/assets/PollQuestion.jsx:18
+msgid "Multiple answers are possible."
+msgstr "Mehrere Antworten sind möglich."
+
+#: adhocracy4/polls/assets/PollQuestion.jsx:84
+#: adhocracy4/polls/assets/PollQuestion.jsx:123
+#: adhocracy4/polls/assets/PollResults.jsx:135
+msgid "other"
+msgstr "Sonstige"
+
+#: adhocracy4/polls/assets/PollQuestions.jsx:13
+msgid "Your answer has been saved."
+msgstr "Ihre Antwort wurde gespeichert."
+
+#: adhocracy4/polls/assets/PollQuestions.jsx:18
+msgid ""
+"Your answer could not be saved due to a server error. Please try again later."
+msgstr ""
+"Ihre Antwort konnte aufgrund eines Serverfehlers nicht gespeichert werden. "
+"Bitte versuchen Sie es später noch einmal."
+
+#: adhocracy4/polls/assets/PollQuestions.jsx:23
+msgid "Your answer is invalid or empty. Please try again."
+msgstr "Ihre Antwort ist ungültig oder leer. Bitte versuchen Sie es erneut."
+
+#: adhocracy4/polls/assets/PollQuestions.jsx:41
+msgid "To poll"
+msgstr "Zur Umfrage"
+
+#: adhocracy4/polls/assets/PollQuestions.jsx:47
+#: adhocracy4/polls/assets/PollQuestions.jsx:122
+msgid "Change answer"
+msgstr "Antwort ändern"
+
+#: adhocracy4/polls/assets/PollQuestions.jsx:122
+msgid "Submit answer"
+msgstr "Antwort senden"
+
+#: adhocracy4/polls/assets/PollQuestions.jsx:128
+msgid "Please login to answer"
+msgstr "Bitte einloggen, um zu antworten"
+
+#: adhocracy4/polls/assets/PollQuestions.jsx:138
+msgid "Show results"
+msgstr "Ergebnisse anzeigen"
+
+#: adhocracy4/polls/assets/PollQuestions.jsx:144
+msgid "Show preliminary results"
+msgstr "Vorläufiges Ergebnis zeigen"
+
+#: adhocracy4/polls/assets/PollQuestions.jsx:165
+msgid "Please enter your answer in this field."
+msgstr "Bitte geben Sie Ihre Antwort in dieses Feld ein."
+
+#: adhocracy4/polls/assets/PollResults.jsx:65
+msgid "Hide other answers"
+msgstr "Sonstige Antworten ausblenden"
+
+#: adhocracy4/polls/assets/PollResults.jsx:67
+msgid "Show other answers"
+msgstr "Sonstige Antworten anzeigen"
+
+#: adhocracy4/polls/assets/PollResults.jsx:81
+#, javascript-format
+msgid "%s participant gave 1 answer."
+msgstr "%s Teilnehmer*in gab 1 Antwort."
+
+#: adhocracy4/polls/assets/PollResults.jsx:83
+#: adhocracy4/polls/assets/PollResults.jsx:85
+#, javascript-format
+msgid "%s participant gave %s answers."
+msgid_plural "%s participants gave %s answers."
+msgstr[0] " %s Teilnehmer*in hat %s Anworten gegeben."
+msgstr[1] "%s Teilnehmer*innen haben %s Anworten gegeben."
+
+#: adhocracy4/polls/assets/PollResults.jsx:87
+msgid ""
+" For multiple choice questions the percentages may add up to more than 100%."
+msgstr ""
+" Bei Multiple-Choice-Fragen können sich die Prozentsätze auf mehr als 100 % "
+"summieren."
+
+#: adhocracy4/polls/assets/PollResults.jsx:89
+#: adhocracy4/polls/assets/PollResults.jsx:98
+#, javascript-format
+msgid "1 person has answered."
+msgid_plural "%s people have answered."
+msgstr[0] "1 Person hat geantwortet."
+msgstr[1] "%s Menschen haben geantwortet."
+
+#: adhocracy4/polls/assets/PollResults.jsx:100
+msgid "noone has answered this question"
+msgstr "niemand hat diese Frage beantwortet"
+
+#: adhocracy4/polls/assets/PollResults.jsx:132
+msgid "Your choice"
+msgstr "Ihre Wahl"
+
+#: adhocracy4/reports/static/reports/ReportModal.jsx:60
+#: adhocracy4/reports/static/reports/ReportModal.jsx:60
+msgid "Thank you! We are taking care of it."
+msgstr "Dankeschön! Wir werden uns darum kümmern."
+
+#: adhocracy4/static/Alert.jsx:5
+#: apps/contrib/assets/Alert.jsx:10 apps/contrib/assets/Alert.jsx:11
+#: apps/dashboard/assets/ajax_modal.js:12 apps/embed/assets/embed.js:57
+#: apps/embed/assets/embed.js:58
+#: apps/maps/assets/map_choose_polygon_with_preset.js:84
+msgid "Close"
+msgstr "Schließen"
+
+#: apps/captcha/assets/captcheck.js:29
+msgid "Image mode"
+msgstr "Bildmodus"
+
+#: apps/captcha/assets/captcheck.js:30
+msgid "Text mode"
+msgstr "Textmodus"
+
+#: apps/captcha/assets/captcheck.js:31
+msgid "Switch between image and text question"
+msgstr "Wechseln Sie zwischen Bild- und Textmodus"
+
+#: apps/documents/assets/ChapterForm.jsx:13
+msgid "Chapter title"
+msgstr "Kapitelüberschrift"
+
+#: apps/documents/assets/ChapterForm.jsx:55
+msgid "Add a new paragraph"
+msgstr "Neuer Absatz"
+
+#: apps/documents/assets/ChapterNav.jsx:9
+msgid "Chapter navigation"
+msgstr "Kapitelnavigation"
+
+#: apps/documents/assets/ChapterNav.jsx:38
+msgid "Add a new chapter"
+msgstr "Neues Kapitel hinzufügen"
+
+#: apps/documents/assets/DocumentManagement.jsx:18
+msgid "first chapter"
+msgstr "Erstes Kapitel"
+
+#: apps/documents/assets/DocumentManagement.jsx:98
+msgid "new chapter"
+msgstr "Neues Kapitel"
+
+#: apps/documents/assets/DocumentManagement.jsx:261
+msgid "The document has been updated."
+msgstr "Das Dokument wurde aktualisiert."
+
+#: apps/documents/assets/DocumentManagement.jsx:279
+msgid "The document could not be updated."
+msgstr "Das Dokument konnte nicht aktualisiert werden."
+
+#: apps/documents/assets/DocumentManagement.jsx:295
+msgid "Contents"
+msgstr "Inhaltsverzeichnis"
+
+#: apps/documents/assets/DocumentManagement.jsx:307
+msgid "Edit chapter"
+msgstr "Kapitel bearbeiten"
+
+#: apps/documents/assets/ParagraphForm.jsx:71
+msgid "Headline"
+msgstr "Überschrift"
+
+#: apps/documents/assets/ParagraphForm.jsx:88
+msgid "Paragraph"
+msgstr "Absatz"
+
+#: apps/embed/assets/embed.js:111
+msgid "We couldn't find what you were looking for."
+msgstr "Wir konnten diese Seite nicht finden."
+
+#: apps/embed/assets/embed.js:115
+msgid "You don't have the permission to view this page."
+msgstr "Sie haben nicht die nötigen Rechte, um diese Seite anzuschauen."
+
+#: apps/embed/assets/embed.js:118
+msgid "Something went wrong!"
+msgstr "Etwas ging schief!"
+
+#: apps/embed/assets/embed.js:218
+msgid ""
+"You have third party cookies disabled. You can still view the content of "
+"this project but won't be able to login."
+msgstr ""
+"Sie haben Third Party Cookies deaktiviert. Sie können sich dieses Projekt "
+"zwar anschauen, werden sich aber nicht anmelden können."
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_box.jsx:10
+msgid "Statistics"
+msgstr "Statistik"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_box.jsx:11
+msgid "Entries"
+msgstr "Beiträge"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_box.jsx:12
+msgid "Click to view statistics of answered questions"
+msgstr "Klicken, um die Statistik der beantworteten Fragen zu sehen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_box.jsx:13
+msgid "display on screen"
+msgstr "auf Bildschirm zeigen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_box.jsx:14
+msgid "Click to view list of marked questions screen"
+msgstr ""
+"Klicken, um die Liste der markierten Fragen auf dem Bildschirm anzuzeigen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_box.jsx:27
+msgid "select affiliation"
+msgstr "Zugehörigkeit auswählen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_category_select.jsx:15
+msgid "Affiliation"
+msgstr "Zugehörigkeit"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_category_select.jsx:17
+msgid ""
+"Answered questions will be displayed in the statistics according to the "
+"chosen affiliation."
+msgstr ""
+"Beantwortete Fragen werden entsprechend der ausgewählten Zugehörigkeit in "
+"der Statistik dargestellt."
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_filters.jsx:27
+msgid " Filters"
+msgstr "Filter"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_filters.jsx:28
+msgid "Click to view filters"
+msgstr "Zum Anzeigen der Filter klicken"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_filters.jsx:29
+msgid "Click to only display marked questions"
+msgstr "Klicken, um nur markierte Fragen anzuzeigen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_filters.jsx:30
+msgid "Click to only display questions which are not hidden"
+msgstr "Klicken, um Fragen anzuzeigen die nicht verborgen sind"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_filters.jsx:31
+msgid "Click to order list by likes"
+msgstr "Klicken, um die Liste nach Unterstützung zu sortieren"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_form.jsx:61
+msgid "Here you can ask your question"
+msgstr "Hier können Sie Ihre Frage stellen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_form.jsx:68
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_form.jsx:87
+msgid "Add Question"
+msgstr "Frage hinzufügen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_info_box.jsx:4
+msgid "Info"
+msgstr "Info"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_info_box.jsx:5
+msgid "display question on screen"
+msgstr "Frage auf dem Bildschirm anzeigen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_info_box.jsx:6
+msgid "add question to shortlist"
+msgstr "Frage der Redeliste hinzufügen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_info_box.jsx:7
+msgid "hide question from audience"
+msgstr "Frage vor dem Publikum verbergen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_info_box.jsx:8
+msgid "mark question as answered"
+msgstr "Frage als beantwortet markieren"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_info_box.jsx:9
+msgid "is shown in front of a question? It has been marked by the moderation."
+msgstr ""
+"wird vor einer Frage angezeigt? Dann wurde sie von der Moderation vorgemerkt."
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_info_box.jsx:10
+msgid "Close information"
+msgstr "Information schließen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_info_box.jsx:11
+msgid "Open information"
+msgstr "Information öffnen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_moderator.jsx:97
+msgid "mark as hidden"
+msgstr "als verborgen markieren"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_moderator.jsx:98
+msgid "undo mark as hidden"
+msgstr "nicht mehr als verborgen markieren"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_moderator.jsx:99
+msgid "mark as done"
+msgstr "als beantwortet markieren"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_moderator.jsx:100
+msgid "add to live list"
+msgstr "auf Bildschirm anzeigen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_moderator.jsx:101
+msgid "remove from live list"
+msgstr "vom Bildschirm entfernen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_moderator.jsx:102
+msgid "add to shortlist"
+msgstr "Frage der Redeliste hinzufügen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_moderator.jsx:103
+msgid "remove from shortlist"
+msgstr "Von der Redeliste entfernen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_present.jsx:29
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_user.jsx:52
+msgid "likes"
+msgstr "positive Bewertungen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_statistics_box.jsx:46
+msgid "Questions Answered"
+msgstr "Beantwortete Fragen"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_user.jsx:51
+msgid "on shortlist"
+msgstr "auf Redeliste"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_user.jsx:53
+msgid "add like"
+msgstr "positiv bewerten"
+
+#: apps/interactiveevents/assets/js/a4_candy_interactive_events/livequestion_user.jsx:54
+msgid "undo like"
+msgstr "positive Bewertung zurück nehmen"
+
+#: apps/maps/assets/map-address.js:87
+msgid "No matches found within the project area"
+msgstr "Keine Treffer im Bereich des Projekts gefunden"
+
+#: apps/maps/assets/map-address.js:90
+msgid "Did you mean:"
+msgstr "Meinten Sie:"
+
+#: apps/maps/assets/map_choose_polygon_with_preset.js:66
+msgid "Export polygon as GeoJSON"
+msgstr "Polygon als GeoJSON exportierten"
+
+#: apps/maps/assets/map_choose_polygon_with_preset.js:67
+#: apps/maps/assets/map_choose_polygon_with_preset.js:77
+#: apps/maps/assets/map_choose_polygon_with_preset.js:89
+msgid "Import polygon via file upload"
+msgstr "Polygon aus Datei importieren"
+
+#: apps/maps/assets/map_choose_polygon_with_preset.js:91
+msgid ""
+"Upload a polygon from a GeoJSON (.geojson) or a zipped Shapefile (.zip)."
+msgstr ""
+"Laden Sie eine GeoJSON Datei (.geojson) oder ein gepacktes Shapefile (.zip) "
+"hoch."
+
+#: apps/maps/assets/map_choose_polygon_with_preset.js:92
+msgid ""
+"Note that uploading Shapefiles is not supported with Internet Explorer 10"
+msgstr ""
+"Beachten Sie, dass der Import von Shapefiles mit dem Internet Explorer 10 "
+"nicht unterstützt wird"
+
+#: apps/maps/assets/map_choose_polygon_with_preset.js:93
+msgid "Attention importing a file will delete the existing polygons."
+msgstr ""
+"Achtung der Import einer Datei wird alle vorher ausgewählten Polygone "
+"entfernen."
+
+#: apps/maps/assets/map_choose_polygon_with_preset.js:98
+msgid "Upload"
+msgstr "Hochladen"
+
+#: apps/maps/assets/map_choose_polygon_with_preset.js:105
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: apps/maps/assets/map_choose_polygon_with_preset.js:140
+#: apps/maps/assets/map_choose_polygon_with_preset.js:142
+msgid "The uploaded file is not a valid shapefile."
+msgstr "Die hochgeladene Datei ist kein gültiges Shapefile."
+
+#: apps/maps/assets/map_choose_polygon_with_preset.js:144
+msgid "The uploaded file could not be imported."
+msgstr "Die hochgeladene Datei kann nicht importiert werden."
+
+#: apps/maps/assets/map_choose_polygon_with_preset.js:159
+msgid "The uploaded file is not a valid geojson file."
+msgstr "Die hochgeladene Datei ist keine gültiges GeoJSON Datei."
+
+#: apps/maps/assets/map_choose_polygon_with_preset.js:164
+msgid "Invalid file format."
+msgstr "Ungültiges Dateiformat."
+
+#: apps/maps/assets/map_choose_polygon_with_preset.js:283
+msgid "Do you want to load this preset and delete all the existing polygons?"
+msgstr ""
+"Möchten Sie diesen Kartenausschnitt auswählen und alle vorher ausgewählten "
+"entfernen?"
+
+#: adhocracy-plus/assets/js/unload_warning.js:15
+msgid "If you leave this page changes you made will not be saved."
+msgstr ""
+"Wenn Sie diese Seite verlassen ohne zu speichern, gehen die von Ihnen "
+"vorgenommenen Änderungen verloren."
+
+#: dsgvo-video-embed/js/dsgvo-video-embed.js:13
+#: dsgvo-video-embed/js/dsgvo-video-embed.js:18
+msgid "External Video"
+msgstr "Externes Video"
+
+#: dsgvo-video-embed/js/dsgvo-video-embed.js:14
+msgid ""
+"Here you can find a video from Google (YouTube). To protect your data the "
+"content will only be loaded after you give your consent. Only then will "
+"YouTube set Cookies that collect information on user behaviour."
+msgstr ""
+"Hier befindet sich ein Video von dem Anbieter Google (YouTube). Um Ihre "
+"Daten zu schützen, laden wir dieses Video nur mit Ihrer Zustimmung. Erst "
+"dann werden vom Anbieter Cookies gesetzt, die Hinweise über das "
+"Nutzerverhalten sammeln."
+
+#: dsgvo-video-embed/js/dsgvo-video-embed.js:15
+msgid "More information can be found in the privacy policy of Google under: "
+msgstr ""
+"Weitere Informationen finden Sie in der Datenschutzerklärung von Google "
+"unter: "
+
+#: dsgvo-video-embed/js/dsgvo-video-embed.js:17
+#: dsgvo-video-embed/js/dsgvo-video-embed.js:22
+msgid "Link to Video: "
+msgstr "Link zum Video: "
+
+#: dsgvo-video-embed/js/dsgvo-video-embed.js:17
+#: dsgvo-video-embed/js/dsgvo-video-embed.js:22
+msgid "Play video"
+msgstr "Video abspielen"
+
+#: dsgvo-video-embed/js/dsgvo-video-embed.js:19
+msgid ""
+"Here you can find a video from Vimeo. To protect your data the content will "
+"only be loaded after you give your consent. Only then will Vimeo set Cookies "
+"that collect information on user behaviour."
+msgstr ""
+"Hier befindet sich ein Video von dem Anbieter Vimeo. Um Ihre Daten zu "
+"schützen, laden wir dieses Video nur mit Ihrer Zustimmung. Erst dann werden "
+"vom Anbieter Cookies gesetzt, die Hinweise über das Nutzerverhalten sammeln."
+
+#: dsgvo-video-embed/js/dsgvo-video-embed.js:20
+msgid "More information can be found in the privacy policy of Vimeo under: "
+msgstr ""
+"Weitere Informationen finden Sie in der Datenschutzerklärung von Vimeo "
+"unter: "

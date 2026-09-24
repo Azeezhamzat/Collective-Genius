@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+{% load i18n rules react_follows thumbnail wagtailcore_tags a4_candy_project_tags offlineevent_tags contrib_tags ckeditor_tags static %}
+
+{% block title %}{{project.name}} &mdash; {{ block.super }}{% endblock %}
+
+{% block social_meta_image %}
+{% if project.image %}
+<meta name="twitter:image" content="{{ project.image |thumbnail_url:'heroimage'}}">
+<meta name="linkedin:image" content="{{ project.image |thumbnail_url:'heroimage'}}">
+<meta property="og:image" content="{{ project.image |thumbnail_url:'heroimage'}}">
+<meta property="og:image:width" content="1500">
+<meta property="og:image:height" content="500">
+{% endif %}
+{% endblock %}
+
+{% block social_meta_description %}
+{% if project.description %}
+<meta name="twitter:description" content="{{ project.description }}">
+<meta name="linkedin:description" content="{{ project.description }}">
+<meta property="og:description" content="{{ project.description }}">
+{% endif %}
+{% endblock %}
+
+<!-- ensure cookie overlay for embedded videos -->
+{% block extra_css %}
+  {{ block.super }}
+    <link rel="stylesheet" href="{% static 'dsgvo_video_embed.css' %}" />
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+    <script type="text/javascript" src="{% static 'dsgvo_video_embed.js' %}"></script>
+{% endblock %}
+
+{% block extra_messages %}
+<div class="u-bg-light py-5">
+    <div class="container">
+        <div class="col-12 container--shadow">
+            {{ block.super }}
+
+            {% if project.is_draft %}
+                <div class="row">
+                  <div class="col">
+                    <ul class="messages">
+                        <li class="alert alert--warning" role="alert">
+                            <div class="container">
+                                {% trans 'This project is not yet published.' %}
+                            </div>
+                        </li>
+                    </ul>
+                    </div>
+                </div>
+            {% endif %}
+        {% endblock %}
+
+        {% block content %}
+            <div class="project-header{% if project.image %} project-header--image{% endif %}" style="{% if view.project.image %}
+                           background-image: url({{ project.image |thumbnail_url:'heroimage' }});
+                           {% endif %}">
+                <div class="mb-5 u-z-index--0">
+                    <div class="col-md-8 col-lg-6 offset-md-2 offset-lg-3">
+                        <h1 class="project-header__title">{{ project.name }}</h1>
+                        <p class="project-header__description">{{ project.description }}</p>
+                        {% if request.user.is_authenticated %}
+                            {% react_follows project %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% if project.image_copyright %}
+                <div class="header__copyright copyright">© {{ project.image_copyright }}</div>
+                {% endif %}
+                  <div class="tablist project-header__tabs">
+                      <nav class="nav d-none d-md-inline-block" role="tablist">
+                          <a
+                              id="tab-project-{{ project.pk }}-information"
+                              class="tab"
+                              data-bs-toggle="tab"
+                              href="#tabpanel-project-{{ project.pk }}-information"
+                              role="tab"
+                              aria-controls="tabpanel-project-{{ project.pk }}-information"
+                              aria-expanded="false">
+                              {% trans 'Information' %}
+                          </a>
+                          <a
+                              id="tab-project-{{ project.pk }}-participation"
+                              class="tab active"
+                              data-bs-toggle="tab"
+                              href="#tabpanel-project-{{ project.pk }}-participation"
+                              role="tab"
+                              aria-controls="tabpanel-project-{{ project.pk }}-participation"
+                              aria-expanded="true">
+                              {% trans 'Participation' %}
+                          </a>
+                          <a
+                              id="tab-project-{{ project.pk }}-result"
+                              class="tab"
+                              data-bs-toggle="tab"
+                              href="#tabpanel-project-{{ project.pk }}-result"
+                              role="tab"
+                              aria-controls="tabpanel-project-{{ project.pk }}-result"
+                              aria-expanded="false">
+                              {% trans 'Result' %}
+                          </a>
+                      </nav>
+                      {% include 'includes/project_header_mobile_toggle.html' %}
+                  </div>
+                {% include 'header_lower.html' with organisation=project.organisation %}
+            </div>
+            {% has_perm 'a4projects.change_project' request.user view.project as user_may_change %}
+            {% if user_may_change %}
+            <div class="u-align-right">
+                <a href="{% url 'a4dashboard:project-edit' organisation_slug=project.organisation.slug project_slug=project.slug %}" class="btn btn--light btn--small me-3" data-embed-target="external">{% trans 'Edit' %}</a>
+            </div>
+            {% else %}
+            <div class="u-spacer-bottom-4"></div>
+            {% endif %}
+
+            <div
+                class="tabpanel tabpanel--topnav"
+                id="tabpanel-project-{{ project.pk }}-information"
+                role="tabpanel"
+                aria-labelledby="tab-project-{{ project.pk }}-information"
+                aria-expanded="false">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+                            {{ project.information | transform_collapsibles | richtext }}
+                            {% if project.contact_name or project.contact_address_text or project.contact_email or project.contact_phone or project.contact_url %}
+                                <h3 class="u-top-divider">{% trans 'Contact for questions' %}</h3>
+                                {% if project.contact_name %}
+                                <p>{{ project.contact_name }}</p>
+                                {% endif %}
+                                {% if project.contact_address_text %}
+                                <p>{{ project.contact_address_text|linebreaks }}</p>
+                                {% endif %}
+                                {% if project.contact_phone %}
+                                <p><strong>{% trans 'Telephone' %}: </strong>{{ project.contact_phone }}</p>
+                                {% endif %}
+                                {% if project.contact_email %}
+                                <a class="btn btn--secondary" href="mailto:{{ project.contact_email }}">
+                                    {% trans 'Email' %}
+                                </a>
+                                {% endif %}
+                                {% if project.contact_url %}
+                                <a class="btn btn--secondary" target="_blank" href="{{ project.contact_url }}">
+                                    {% trans 'Website' %}
+                                </a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="tabpanel tabpanel--topnav active"
+                id="tabpanel-project-{{ project.pk }}-participation"
+                role="tabpanel"
+                aria-labelledby="tab-project-{{ project.pk }}-participation"
+                aria-expanded="true">
+                <div class="timeline-carousel__wrapper">
+                {% if project.display_timeline %}
+                    {% include "a4_candy_projects/includes/project_timeline-carousel.html" with dates=project.participation_dates project=project %}
+                {% endif %}
+                </div>
+                <div class="container">
+                    {% if event %}
+                    <div class="row">
+                        <div class="col-md-8 col-lg-6 offset-md-2 offset-lg-3">
+                            <h2>{{ event.name }}</h2>
+                            <div class="phase-info__item__subtitle">
+                                {% html_date event.date 'DATETIME_FORMAT' %}
+                            </div>
+                            <P>{{ event.description | safe}}</P>
+                        </div>
+                    </div>
+
+                    {% elif view.is_project_view %}
+                    <div class="participation-tile__wrapper px-sm-3">
+                        <div class="participation-tile__list-container">
+                            <ul class="u-list-reset participation-tile__list">
+                            {% for module in modules %}
+                                {% include "a4_candy_projects/includes/project_module_tile.html" with project=project module=module %}
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    {% else %} <!-- if just one module and no phase view to dispatch to -->
+                    {% if module.phases.first.type != 'a4_candy_interactive_events:issue' %}
+                        {% if not module.active_phase %}
+                        <div class="row">
+                            <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2 mb-3">
+                                <strong>
+                                    {% trans 'Participation is not possible at the moment.' %}
+                                    {% if not module.past_phases %}
+                                        {% html_date module.future_phases.first.start_date 'DATETIME_FORMAT' as start_date %}
+                                        {% blocktrans with date=start_date %}It starts on {{ date }}.{% endblocktrans%}
+                                    {% elif module.future_phases %}
+                                        {% html_date module.future_phases.first.start_date 'DATETIME_FORMAT' as start_date %}
+                                        {% blocktrans with date=start_date %}It continues on {{ date }}.{% endblocktrans%}
+                                    {% else %}
+                                        {% html_date module.past_phases.last.end_date 'DATETIME_FORMAT' as end_date %}
+                                        {% blocktrans with date=end_date %}It ended on {{ date }}.{% endblocktrans%}
+                                    {% endif %}
+                                </strong>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% with phase_count=module.phases.count %}
+                        <div class="row">
+                            <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+                                {% for phase in module.phases %}
+                                    {% if phase.is_over or phase == module.active_phase %}
+                                    <div class="phase-info__item {% if phase_count == 1 %} u-no-border {% endif %}">
+                                        <div class="font-weight-bold{% if phase == module.active_phase %} lr-bar{% endif %}">
+                                            {% if phase == module.active_phase %}
+                                                <span class="lr-bar__left">{{ phase.name }}</span>
+                                                <span class="lr-bar__right phase-info__highlight">{% trans 'active' %}</span>
+                                            {% else %}
+                                                {{ phase.name }}
+                                            {% endif %}
+                                        </div>
+                                        <div class="phase-info__item__subtitle">
+                                            {% html_date phase.start_date 'DATETIME_FORMAT' %}
+                                            &ndash; {% html_date phase.end_date 'DATETIME_FORMAT' %}
+                                        </div>
+                                        <div class="phase-info__item__description">
+                                            {{ phase.description }}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endwith %}
+                    {% endif %}
+                    {% endif %}
+                </div>
+                {% if not view.is_project_view and not event %}
+                <div class="container">
+                    <div class="row">
+                    {% if project.is_private %}
+                        <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2 u-font-size-xs my-4">
+                            <i class="fas fa-lock pe-2" aria-hidden="true"></i>{% trans 'This project is not publicly visible. Only invited users can see content and actively participate.' %}
+                        </div>
+                    {% elif project.is_semipublic %}
+                        <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2 u-font-size-xs my-4">
+                            <i class="fas fa-eye pe-2" aria-hidden="true"></i>{% trans 'This project is publicly visible. Invited users can actively participate.' %}
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                <!-- these blocks are only filled when in phase view -->
+                <div class="col-md-6 col-lg-4 offset-md-3 offset-lg-4">
+                {% block project_action %}{% endblock %}
+                </div>
+                {% block phase_content %}{% endblock %}
+            </div>
+
+            <div
+                class="tabpanel tabpanel--topnav"
+                id="tabpanel-project-{{ project.pk }}-result"
+                role="tabpanel"
+                aria-labelledby="tab-project-{{ project.pk }}-result"
+                aria-expanded="false">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+                            {% if project.result %}
+                                {{ project.result | transform_collapsibles | richtext }}
+                            {% else %}
+                                {% trans 'No results yet.' %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% include 'footer_upper.html' with organisation=project.organisation %}
+        </div>
+    </div>
+</div>
+{% endblock %}

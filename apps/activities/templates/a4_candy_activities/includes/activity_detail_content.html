@@ -1,0 +1,13 @@
+{% load wagtailcore_tags ckeditor_tags %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-lg-6 offset-md-2 offset-lg-3">
+            <div class="bg--top-border">
+                <h1>{{ object.name }}</h1>
+                <p>{{ object.highlight }}</p>
+                <p>{{ object.description | transform_collapsibles | richtext }}</p>
+            </div>
+        </div>
+    </div>
+</div>

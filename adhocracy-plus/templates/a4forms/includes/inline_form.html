@@ -1,0 +1,36 @@
+{% load i18n widget_tweaks %}
+<div class="js-form category-formset__form form-group">
+    <div class="category-formset__form__category">
+        {% if can_delete %}
+            <input type="checkbox" name="{{ form.DELETE.html_name }}" id="{{ form.DELETE.id_for_label }}" class="category-formset__delete">
+        {% endif %}
+
+        <label for="{{ form.name.id_for_label }}" class="visually-hidden">
+            {{ form.name.label }}
+        </label>
+        {{ form.name }}
+
+        {% if not form.name.value %}
+            <button type="button" class="category-formset__delete-label js-remove-form" title="{% trans 'Remove item' %}">
+                <i class="fa fa-times" aria-label="{% trans 'Remove item' %}"></i>
+            </button>
+        {% elif can_delete %}
+            <label for="{{ form.DELETE.id_for_label }}" class="category-formset__delete-label" title="{% trans 'Remove item' %}">
+                <i class="far fa-trash-alt" aria-label="{% trans 'Remove item' %}"></i>
+            </label>
+        {% endif %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        {{ form.name.errors }}
+    </div>
+
+    {% if form.icon %}
+        <label for="{{ form.name.id_for_label }}" class="visually-hidden">
+            {{ form.name.label }}
+        </label>
+        <div class="category-formset__form__icon select-icon">
+            {{ form.icon|add_class:'d-none category-icon-select' }}
+        </div>
+    {% endif %}
+</div>

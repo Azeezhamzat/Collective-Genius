@@ -1,0 +1,15 @@
+<div class="dropdown {% if right %}dropdown-menu-end{% endif %}" {{ attrs }}>
+    <button
+        type="button"
+        class="dropdown-toggle btn btn--light btn--select"
+        data-bs-toggle="dropdown"
+        data-flip="false"
+        aria-haspopup="true"
+        aria-expanded="false"
+        id="{{ id }}"
+    >
+        {{ label }}: {{ value_label }}
+        <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </button>
+    {{ options }}
+</div>

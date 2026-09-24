@@ -1,0 +1,14 @@
+{% extends "a4_candy_contrib/includes/form_field.html" %}
+{% load widget_tweaks %}
+
+{% block field %}
+    <div class="widget widget--{{ field|widget_type }} input-group">
+        {% if before %}
+            <span class="btn btn--light input-group-text">{{ before }}</span>
+        {% endif %}
+        {{ field|add_class:'form-control' }}
+        {% if after %}
+            <span class="btn btn--light input-group__after">{{ after }}</span>
+        {% endif %}
+    </div>
+{% endblock %}

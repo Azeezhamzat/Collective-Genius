@@ -1,0 +1,25 @@
+{% load wagtailcore_tags %}
+
+<div class="accordion mb-4">
+    <a
+        id="{{ id }}-title"
+        href="#{{ id }}-body"
+        aria-haspopup="true"
+        aria-expanded="false"
+        aria-controls="{{ id }}-body"
+        data-bs-toggle="collapse"
+        class="accordion__title collapsed"
+        >
+        <h3 class="my-2">
+            {{ title|safe }}
+            <i class="fas fa-plus" aria-hidden="true"></i>
+        </h3>
+    </a>
+
+    <div
+        class="accordion__body collapse"
+        id="{{ id }}-body"
+        aria-labelledby="{{ id }}-title">
+        {{ body|richtext }}
+    </div>
+</div>

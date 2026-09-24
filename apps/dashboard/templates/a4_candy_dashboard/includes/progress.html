@@ -1,0 +1,54 @@
+{% load i18n a4_candy_dashboard_tags a4dashboard_tags rules static %}
+
+{% if project.is_draft %}
+    {% include "a4dashboard/includes/progress_line.html" %}
+{% else %}
+    {% include "a4dashboard/includes/progress_line_done.html" %}
+{% endif %}
+
+
+{% if project.is_draft %}
+    <button {% if not project|is_publishable:project_progress %}disabled{% endif %} class="btn btn--primary btn--full u-spacer-bottom" data-bs-toggle="modal" data-bs-target="#publish-modal">
+        {% trans 'Publish' %}
+    </button>
+{% else %}
+    <form action="{% url 'a4dashboard:project-publish' organisation_slug=project.organisation.slug project_slug=project.slug %}" method="post" data-ignore-submit="true">
+        {% csrf_token %}
+        <input type="hidden" name="referrer" value="{{ request.path }}" />
+        <button name="action" value="unpublish" class="btn btn--light btn--full u-spacer-bottom">
+            {% trans 'Unpublish' %}
+        </button>
+    </form>
+{% endif %}
+
+<div class="modal" tabindex="-1" role="dialog" id="publish-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title m-0">{% trans "Are you sure you want to publish your project?" %}</h3>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="{% trans 'Close'%}">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% if project.unpublished_modules %}
+                <p>
+                {% blocktrans count counter=project.unpublished_modules.count %}One module has not been added to the project.{% plural %}{{ counter }} modules have not been added to the project.{% endblocktrans %}
+                </p>
+                {% endif %}
+                <div class="u-spacer-bottom d-flex justify-content-end">
+                  <button type="button" data-bs-dismiss="modal" class="btn btn--light me-3">{% trans 'Cancel'%}
+                  </button>
+                    <form action="{% url 'a4dashboard:project-publish' organisation_slug=project.organisation.slug project_slug=project.slug %}" method="post" data-ignore-submit="true" class="u-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="referrer" value="{{ request.path }}" />
+                        <button name="action" value="publish" class="btn btn--primary">
+                        {% trans 'Publish' %}
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

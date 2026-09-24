@@ -1,0 +1,70 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Register" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Register" %}</h1>
+
+    <p>{% blocktrans %}Already have an account? Then please
+        <a href="{{ login_url }}">login</a>.{% endblocktrans %}</p>
+
+    <form id="signup_form" method="post" action="{% url 'account_signup' %}">
+        {{ form.non_field_errors }}
+        {{ form.media }}
+        {% csrf_token %}
+        {% for field in form %}
+            {% if field is not form.terms_of_use and field is not form.terms_of_use_extra and field is not form.get_newsletters and field is not form.captcha %}
+                {% include 'a4_candy_contrib/includes/form_field.html' with field=field %}
+            {% endif %}
+        {% endfor %}
+        <div class="form-check">
+            <label class="form-check__label">
+                {{ form.terms_of_use }}
+                {% blocktrans with terms_of_use_url=settings.a4_candy_cms_settings.ImportantPages.terms_of_use.url data_protection_policy=settings.a4_candy_cms_settings.ImportantPages.data_protection_policy.url %}
+                I confirm that I have read and accepted the <a href="{{terms_of_use_url}}" target="_blank">terms of use</a> and the <a href="{{data_protection_policy}}" target="_blank">data protection policy</a>.
+                {% endblocktrans %}
+                {% if form.terms_of_use.field.required %}<span role="presentation" title="{% trans 'This field is required' %}">*</span>{% endif %}
+            </label>
+            {{ form.terms_of_use.errors }}
+        </div>
+        {% if form.terms_of_use_extra %}
+        <div class="form-check">
+          <label class="form-check__label">
+            {{ form.terms_of_use_extra }}
+            {{ form.terms_of_use_extra.label|safe}}
+            {% if form.terms_of_use_extra.field.required %}<span role="presentation" title="{% trans 'This field is required' %}">*</span>{% endif %}
+            </label>
+            {{ form.terms_of_use.errors }}
+        </div>
+        {% endif %}
+        <div class="form-check">
+            <label class="form-check__label">
+                {{ form.get_newsletters }}
+                {{ form.get_newsletters.label }}
+            </label>
+            <div class="form-hint">
+                {{ form.get_newsletters.help_text }}
+            </div>
+            {{ form.get_newsletters.errors }}
+        </div>
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+
+        {% include 'a4_candy_contrib/includes/form_field.html' with field=form.captcha %}
+
+        <p>
+        {% blocktrans with data_protection_url=settings.a4_candy_cms_settings.ImportantPages.data_protection_policy.url platformname=settings.a4_candy_cms_settings.OrganisationSettings.platform_name %}
+            With your account on {{ platformname }}, you can take part in every public participation project on this platform. This platform allows organisations initiatives to conduct digital participation projects.
+            If you have any questions regarding the data protection on this platform you can find <a href="{{ data_protection_url }}" target="_blank">further information here</a>.
+        {% endblocktrans %}
+        </p>
+
+        <div class="u-spacer-bottom-double">
+            <button class="btn btn--primary" type="submit">{% trans "Register" %}</button>
+        </div>
+    </form>
+
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block title %}
+    {{ self.subtitle }} &mdash; {{ block.super }}
+{% endblock %}
+
+{% block social_meta %}
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name }}/{{ page.title }}">
+<meta name="linkedin:title" content="{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name }}/{{ page.title }}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:title" content="{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name }}/{{ page.title }}">
+{% endblock %}
+
+{% block social_meta_description %}
+{% if page.subtitle  %}
+<meta name="twitter:description" content="{{ page.subtitle }}">
+<meta name="linkedin:description" content="{{ page.subtitle }}">
+<meta property="og:description" content="{{ page.subtitle }}">
+{% else %}
+{% if settings.a4_candy_cms_settings.SocialMedia.fallback_description %}
+<meta name="twitter:description" content="{{ settings.a4_candy_cms_settings.SocialMedia.fallback_description }}">
+<meta name="linkedin:description" content="{{ settings.a4_candy_cms_settings.SocialMedia.fallback_description }}">
+<meta property="og:description" content="{{ settings.a4_candy_cms_settings.SocialMedia.fallback_description }}">
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="cms__wrapper">
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-12 col-lg-10">
+                <h1 class="cms__title--serif cms__title--underlined cms__title--h2-size text-center">{{ page.subtitle }}</h1>
+                <div class="row justify-content-start">
+                {% for post in news %}
+                    <div class="col-12 col-md-6 cms-news__tile">
+                        <a class="cms__tile-link" href="{% pageurl post %}">
+                            <div class="cms__text">
+                                {{ post.first_published_at|date }}
+                            </div>
+                            <h2 class="cms__title--bold cms-news__header-margin cms__title--h3-size">{{ post.subtitle }}</h2>
+                            <div class="cms__text">
+                                {{ post.teaser }}
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+                </div>
+                <div class="text-center">
+                {% include "a4_candy_contrib/includes/pagination.html" with page_obj=news %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

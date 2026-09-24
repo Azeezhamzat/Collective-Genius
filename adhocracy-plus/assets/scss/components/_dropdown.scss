@@ -1,0 +1,55 @@
+.dropdown-toggle {
+    // the current dropdown-toggle should be above the dropdown-menu shadow
+    .dropdown.show & {
+        position: relative;
+        z-index: 4;
+    }
+}
+
+// bootstrap overwrites
+.dropdown-menu {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    border-radius: 2px;
+    border: 1px solid $text-color;
+    z-index: 3;
+
+    a,
+    button {
+        display: block;
+        width: 100%;
+        padding: 0.5em;
+        color: inherit;
+        white-space: nowrap;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            text-decoration: none;
+            background-color: $bg-secondary;
+            color: contrast-color($bg-secondary);
+        }
+
+        i {
+            display: inline-block;
+            width: 1.5em;
+        }
+    }
+
+    &.show {
+        top: -2px !important; // needed to overwrite BS translate figure
+    }
+
+    img { // for category icons in dropdown
+        display: inline-block;
+        height: 1.5 * $spacer;
+        width: auto;
+        vertical-align: middle;
+        margin-right: 0.5 * $spacer;
+    }
+
+    @media print {
+        display: none;
+    }
+}

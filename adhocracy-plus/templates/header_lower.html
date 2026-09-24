@@ -1,0 +1,39 @@
+{% load userindicator static i18n thumbnail %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<div class="header-lower__position">
+    <div class="col-md-10 offset-md-1 ps-3 ps-md-0">
+        <nav class="header-lower__nav">
+
+            {% if organisation.logo %}
+              {% url 'organisation' organisation_slug=organisation.slug as organisation_url %}
+                <a href="{% url 'organisation' organisation_slug=organisation.slug %}" class="header-lower__logo-box" rel="home">
+                    <img src="{% thumbnail organisation.logo '0x160' %}" height="80" alt="{{ organisation.name }}" class="header-lower__logo-img" />
+                </a>
+            {% else %}
+              <div class="header-lower__brand u-bg-body">
+                <a class="header-lower__brand--link font-weight-bold" href="{% url 'organisation' organisation_slug=organisation.slug %}">
+                    {{ organisation.name }}
+                </a>
+              </div>
+            {% endif %}
+
+            {% url 'organisation' organisation_slug=organisation.slug as organisation_url %}
+
+            {% if request.get_full_path == organisation_url or '/information' in request.get_full_path %}
+                <ul class="header-lower__nav-list--md d-none d-sm-block">
+                  {% include 'includes/header_lower_org_items.html' %}
+                </ul>
+            {% endif %}
+        </nav>
+    </div>
+</div>
+
+<!-- mobile navigation  -->
+{% if request.get_full_path == organisation_url or '/information' in request.get_full_path %}
+    <div class="col-md-10 offset-md-1 d-sm-none pb-3">
+        <ul class="header-lower__nav-list--sm">
+            {% include 'includes/header_lower_org_items.html' %}
+        </ul>
+    </div>
+{% endif %}

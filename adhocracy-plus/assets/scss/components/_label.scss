@@ -1,0 +1,67 @@
+.label {
+    display: inline-block;
+    background-color: $text-color;
+    color: contrast-color($text-color);
+    font-size: $font-size-xs;
+    font-weight: normal;
+    border-radius: 0.4em;
+    padding: 0.2em 0.7em;
+}
+
+.label--big {
+    padding: 0.4em 0.6em;
+    font-size: $font-size-sm;
+    border-radius: 0.3em;
+}
+
+.label--active {
+    background-color: $body-bg;
+    border: 2px solid $brand-primary;
+    color: $text-color;
+}
+
+.label--secondary {
+    background-color: $brand-secondary-dark;
+    color: contrast-color($brand-secondary-dark, $text-color-inverted);
+}
+
+.label--danger {
+    background-color: $brand-danger;
+    color: contrast-color($brand-danger);
+}
+
+.label--live {
+    background-color: $body-bg;
+    border: 1px solid $brand-danger;
+    color: $brand-danger;
+    text-transform: uppercase;
+}
+
+.label--info {
+    background-color: $body-bg;
+    border: 1px solid $text-color;
+    color: $text-color;
+    text-transform: uppercase;
+}
+
+.label--consideration {
+    background-color: $feedback-color-consideration;
+    color: contrast-color($feedback-color-consideration);
+}
+
+.label--rejected {
+    background-color: $feedback-color-rejected;
+    color: contrast-color($feedback-color-rejected);
+}
+
+.label--accepted {
+    background-color: $feedback-color-accepted;
+    color: contrast-color($feedback-color-accepted);
+}
+
+@media screen and (max-width: $breakpoint-xs-down) {
+    .label--big {
+        padding: 0.2em 0.7em;
+        font-size: $font-size-xs;
+    }
+}

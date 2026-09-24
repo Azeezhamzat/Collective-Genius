@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load i18n rules thumbnail static %}
+
+{% block content %}
+    {% block dashboard_nav %}
+    <div class="tablist tablist--right tablist--background">
+        <div class="container">
+        <div class="tablist__left d-flex">
+            {% if ORGANISATION.logo %}
+              {% url 'organisation' organisation_slug=ORGANISATION.slug as organisation_url %}
+                <a href="{% url 'organisation' organisation_slug=ORGANISATION.slug %}" rel="home">
+                    <img src="{% thumbnail ORGANISATION.logo '0x160' %}" height="80" alt="{{ ORGANISATION.name }}" class="dashboard-nav__logo" />
+                </a>
+            {% else %}
+              <div class="dashboard-nav__logo-link">
+                <a class="font-weight-bold" href="{% url 'organisation' organisation_slug=ORGANISATION.slug %}">
+                  <i class="fas fa-home pt-2" aria-label="{{ ORGANISATION.name }} {% trans 'Home' %}"></i>
+                </a>
+              </div>
+            {% endif %}
+            <div class="dropdown">
+                {% if view.other_organisations_of_user %}
+                    <button
+                            title="{% trans 'Organisations' %}"
+                            type="button"
+                            class="dropdown-toggle btn btn--none btn--small"
+                            data-bs-toggle="dropdown"
+                            data-flip="false"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            id="organisation-selection"
+                    >
+                        {{ view.organisation.name }}
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="organisation-selection">
+                        {% for organisation in view.other_organisations_of_user %}
+                            <a
+                                class="dropdown-item"
+                                href="{% url 'a4dashboard:project-list' organisation_slug=organisation.slug %}">
+                                {{ organisation.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <span class="btn btn--none btn--small">{{ view.organisation.name }}</span>
+                {% endif %}
+            </div>
+          </div>
+
+            <nav class="d-none d-sm-inline-block" aria-label="{% trans 'Dashboard' %}">
+                <a href="{% url 'a4dashboard:project-list' organisation_slug=view.organisation.slug %}"
+                   class="tab {% ifequal view.menu_item 'project' %}active{% endifequal %}">
+                    {% trans 'Participation projects' %}
+                </a>
+                <a href="{% url 'a4dashboard:newsletter-create' organisation_slug=view.organisation.slug %}"
+                   class="tab {% ifequal view.menu_item 'newsletter' %}active{% endifequal %}">
+                    {% trans 'Newsletter' %}
+                </a>
+                {% has_perm 'a4_candy_organisations.change_organisation' request.user view.organisation as user_may_change_organisation %}
+                {% if user_may_change_organisation %}
+                <a href="{% url 'a4dashboard:organisation-settings' organisation_slug=view.organisation.slug %}"
+                   class="tab {% ifequal view.menu_item 'organisation' %}active{% endifequal %}">
+                    {% trans 'Organisation settings' %}
+                </a>
+                {% endif %}
+            </nav>
+
+            <!-- mobile tab version -->
+            <ul class="nav d-sm-none tablist__right">
+                <li class="nav-item dropdown">
+                  <a
+                      class="nav-link dropdown-toggle tab active me-2"
+                      data-bs-toggle="dropdown"
+                      href="{% url 'a4dashboard:project-list' organisation_slug=view.organisation.slug %}"
+                      role="button"
+                      aria-expanded="false"
+                      data-bs-toggle="tab">
+                      {% url 'a4dashboard:project-list' organisation_slug=view.organisation.slug as project_list %}
+                      {% url 'a4dashboard:newsletter-create' organisation_slug=view.organisation.slug as newsletter_create %}
+                      {% if request.path ==  project_list %}
+                        {% trans 'Participation projects' %}
+                      {% elif request.path == newsletter_create %}
+                        {% trans 'Newsletter' %}
+                      {% else %}
+                        {% trans 'Organisation settings' %}
+                      {% endif %}
+                      <i class="fa fa-caret-down" aria-hidden="true"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end">
+                      <a
+                          class="dropdown-item"
+                          href="{{ project_list }}">
+                          {% trans 'Participation projects' %}
+                      </a>
+                      <a
+                          class="dropdown-item"
+                          href="{{ newsletter_create }}">
+                          {% trans 'Newsletter' %}
+                      </a>
+                      {% has_perm 'a4_candy_organisations.change_organisation' request.user view.organisation as user_may_change_organisation %}
+                      {% if user_may_change_organisation %}
+                      <a
+                          class="dropdown-item"
+                          href="{% url 'a4dashboard:organisation-settings' organisation_slug=view.organisation.slug %}">
+                          {% trans 'Organisation settings' %}
+                      </a>
+                      {% endif %}
+                  </div>
+                </li>
+            </ul>
+
+
+        </div>
+    </div>
+    {% endblock %}
+    <div class="container">
+        {% block dashboard_content %}{% endblock %}
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'unload_warning.js' %}"></script>
+    <script src="{% static 'init_dashboard_accordion.js' %}"></script>
+{% endblock %}

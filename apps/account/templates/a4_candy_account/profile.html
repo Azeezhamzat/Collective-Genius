@@ -1,0 +1,26 @@
+{% extends "a4_candy_account/account_dashboard.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans 'Your user profile' %} &mdash; {{ block.super }}{% endblock %}
+{% block dashboard_content %}
+    <h1 class="mt-0">{% trans 'Your profile' %}</h1>
+
+    <form enctype="multipart/form-data" action="{{ request.path }}" method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+            {% if not field.name == 'get_notifications' and not field.name == 'get_newsletters' %}
+            {% include 'a4_candy_contrib/includes/form_field.html' with field=field %}
+            {% endif %}
+        {% endfor %}
+
+        {% include 'a4_candy_contrib/includes/form_checkbox_field.html' with field=form.get_notifications %}
+        {% include 'a4_candy_contrib/includes/form_checkbox_field.html' with field=form.get_newsletters %}
+
+        <div class="d-flex justify-content-end mb-3">
+            <button type="submit" class="btn btn--primary">{% trans 'Save changes'%}</button>
+        </div>
+    </form>
+    {{ form.media }}
+{% endblock %}

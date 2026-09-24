@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags i18n %}
+
+{% block title %}
+    {{ self.subtitle }} &mdash; {{ block.super }}
+{% endblock %}
+
+{% block social_meta %}
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name }}{% if page.subtitle %}/{{ page.subtitle }}{% else %}/{{ page.title }}{% endif %}">
+<meta name="linkedin:title" content="{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name }}{% if page.subtitle %}/{{ page.subtitle }}{% else %}/{{ page.title }}{% endif %}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:title" content="{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name }}{% if page.subtitle %}/{{ page.subtitle }}{% else %}/{{ page.title }}{% endif %}">
+{% endblock %}
+
+{% block social_meta_description %}
+{% if page.teaser  %}
+<meta name="twitter:description" content="{{ page.teaser }}">
+<meta name="linkedin:description" content="{{ page.teaser }}">
+<meta property="og:description" content="{{ page.teaser }}">
+{% else %}
+{% if settings.a4_candy_cms_settings.SocialMedia.fallback_description %}
+<meta name="twitter:description" content="{{ settings.a4_candy_cms_settings.SocialMedia.fallback_description }}">
+<meta name="linkedin:description" content="{{ settings.a4_candy_cms_settings.SocialMedia.fallback_description }}">
+<meta property="og:description" content="{{ settings.a4_candy_cms_settings.SocialMedia.fallback_description }}">
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block social_meta_image %}
+{% if page.image %}
+{% image page.image width-400 as image %}
+<meta property="og:image" content="{{ image.url }}" />
+<meta property="og:image:width" content="{{ image.width }}">
+<meta property="og:image:height" content="{{ image.height }}">
+<meta name="twitter:image" content="{{ image.url }}">
+{% else %}
+{% if settings.a4_candy_cms_settings.SocialMedia.fallback_image %}
+{% image settings.a4_candy_cms_settings.SocialMedia.fallback_image width-400 as fallback_image %}
+<meta name="twitter:image" content="{{ fallback_image.url }}">
+<meta name="linkedin:image" content="{{ fallback_image.url }}">
+<meta property="og:image" content="{{ fallback_image.url }}">
+<meta property="og:image:width" content="{{ fallback_image.width }}">
+<meta property="og:image:height" content="{{ fallback_image.height }}">
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="cms__wrapper py-5">
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-12 col-md-10">
+                <div class="cms__text">
+                    {{ page.first_published_at|date }}
+                </div>
+                <h1 class="cms__title--bold cms-page__header-margin">{{ page.subtitle }}</h1>
+            </div>
+        </div>
+        {% if page.image %}
+        {% image page.image width-1200 as image %}
+        <div class="row justify-content-md-center">
+            <div class="col-12">
+                <img src="{{ image.url }}" alt="{{ image.alt }}" class="cms-page__hero-image" />
+                {% if page.image.caption %}
+                <div class="mt-3 font-italic">{{ page.image.caption }}</div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="row justify-content-md-center pt-5">
+            <div class="col-12 col-md-10 cms__text">
+                {{ page.body }}
+            </div>
+        </div>
+        <div class="row justify-content-center pt-5">
+            <div class="cms__text">
+                <a href="{{ page.get_parent.url }}" class="btn btn--transparent">{% trans 'Back to overview' %}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

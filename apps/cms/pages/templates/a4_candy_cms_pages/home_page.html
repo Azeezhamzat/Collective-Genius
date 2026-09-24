@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags wagtailimages_tags static %}
+
+{% block content %}
+    <div class="homepage__wrapper">
+    {% include "a4_candy_cms_pages/includes/homepage_hero.html" with image=page.random_image title=page.hero_title subtitle=page.hero_subtitle|richtext %}
+        {% if page.body %}
+        <div class="p-3">{{ page.body|richtext }}</div>
+        {% endif %}
+
+        <div>{{ page.body_streamfield }}</div>
+
+        {% if page.form_page %}
+            <div id="form_page">
+            {% include 'a4_candy_cms_contacts/includes/form.html' with page=page.form_page form=page.form %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
