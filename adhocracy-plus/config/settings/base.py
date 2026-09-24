@@ -555,6 +555,14 @@ A4_PROJECT_TOPICS = (
 
 A4_ACTIONS_PHASE_ENDS_HOURS = 48
 
+# Comment summarization (apps/summarization). 'extractive' (default) is
+# dependency-free and always available. Set to 'llm' to use an
+# LLM-backed backend instead -- requires `pip install anthropic` and
+# ANTHROPIC_API_KEY to be set; any failure of that backend falls back
+# to 'extractive' automatically, so this is safe to flip per-deployment
+# without touching code. See apps/summarization/backends.py.
+A4_SUMMARIZATION_BACKEND = 'extractive'
+
 # Disable CSP by default
 CSP_REPORT_ONLY = True
 CSP_DEFAULT_SRC = ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'data:', 'blob:', '*']

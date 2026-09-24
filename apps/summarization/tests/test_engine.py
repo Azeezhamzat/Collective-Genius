@@ -96,5 +96,60 @@ class TopKeywordsTests(unittest.TestCase):
         self.assertEqual(engine.top_keywords([]), [])
 
 
+class SummarizeWithFallbackTests(unittest.TestCase):
+
+    def test_returns_primary_result_when_primary_succeeds(self):
+        primary = lambda comments, top_n, min_significant_words: 'primary'
+        fallback = lambda comments, top_n, min_significant_words: 'fallback'
+        result = engine.summarize_with_fallback(primary, fallback, [])
+        self.assertEqual(result, 'primary')
+
+    def test_falls_back_when_primary_raises(self):
+        def primary(comments, top_n, min_significant_words):
+            raise RuntimeError('backend unavailable')
+        fallback = lambda comments, top_n, min_significant_words: 'fallback'
+        result = engine.summarize_with_fallback(primary, fallback, [])
+        self.assertEqual(result, 'fallback')
+
+    def test_falls_back_on_any_exception_type(self):
+        # Deliberately broad: a missing API key, a network timeout, a
+        # malformed response, an unrelated bug -- all must degrade
+        # rather than break the page.
+        for exc_type in (ValueError, KeyError, ImportError, TypeError):
+            def primary(comments, top_n, min_significant_words,
+                       _exc=exc_type):
+                raise _exc('boom')
+            fallback = lambda comments, top_n, min_significant_words: 'ok'
+            result = engine.summarize_with_fallback(primary, fallback, [])
+            self.assertEqual(result, 'ok', msg=exc_type)
+
+    def test_on_fallback_callback_receives_the_exception(self):
+        caught = []
+
+        def primary(comments, top_n, min_significant_words):
+            raise RuntimeError('boom')
+
+        fallback = lambda comments, top_n, min_significant_words: None
+        engine.summarize_with_fallback(
+            primary, fallback, [], on_fallback=caught.append)
+
+        self.assertEqual(len(caught), 1)
+        self.assertIsInstance(caught[0], RuntimeError)
+
+    def test_arguments_are_forwarded(self):
+        seen = {}
+
+        def primary(comments, top_n, min_significant_words):
+            seen['args'] = (comments, top_n, min_significant_words)
+            return 'ok'
+
+        fallback = lambda comments, top_n, min_significant_words: None
+        engine.summarize_with_fallback(
+            primary, fallback, ['a', 'b'], top_n=3,
+            min_significant_words=7)
+
+        self.assertEqual(seen['args'], (['a', 'b'], 3, 7))
+
+
 if __name__ == '__main__':
     unittest.main()

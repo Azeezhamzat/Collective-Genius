@@ -9,6 +9,7 @@ indexed database column.
 
 from adhocracy4.comments.models import Comment
 
+from . import backends
 from . import engine
 from .models import KeyComment
 from .models import SummarySnapshot
@@ -35,8 +36,10 @@ def run_summarization(module, top_n=5, min_significant_words=3):
     comments = list(comments_for_module(module))
     pairs = [(str(c.pk), c.comment) for c in comments]
 
-    scored = engine.summarize(
+    scored = backends.summarize(
         pairs, top_n=top_n, min_significant_words=min_significant_words)
+    # Keyword extraction stays extractive-only: it's a plain word-frequency
+    # statistic, not worth an LLM call.
     keywords = engine.top_keywords(pairs, top_n=10)
 
     snapshot = SummarySnapshot.objects.create(

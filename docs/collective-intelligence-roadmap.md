@@ -113,13 +113,19 @@ for civic participation.
   Pure-Python core, unit tested, 9 tests:
   `python3 -m unittest apps.deduplication.tests.test_engine`.
 
-  Update: now also wired into `apps/budgeting` proposals — `Proposal`
-  turned out to be the same shape (`.module`, `.name`, `.description`,
-  since it's built on the same `AbstractIdea`/`Item` base as `Idea`), so
-  `services.py` was generalized to `find_similar_items(model, module,
-  query_text, ...)` behind two thin `find_similar_ideas` /
-  `find_similar_proposals` wrappers, and both the idea and proposal
-  submission forms now link to a "check for similar" page.
+  Update: now also wired into `apps/budgeting` proposals and
+  `apps/mapideas` — `Proposal` and `MapIdea` turned out to be the same
+  shape (`.module`, `.name`, `.description`, since both are built on the
+  same `AbstractIdea`/`Item` base as `Idea`), so `services.py` was
+  generalized to `find_similar_items(model, module, query_text, ...)`
+  behind thin `find_similar_ideas` / `find_similar_proposals` /
+  `find_similar_mapideas` wrappers, and all three submission forms now
+  link to a "check for similar" page. `apps/debate` turned out not to be
+  a good fit: `Subject` has the right shape, but unlike ideas/proposals/
+  map-ideas, debate subjects are only ever added by project admins
+  through the dashboard, not submitted by participants — there's no
+  "about to submit, check for duplicates first" moment to hook into, so
+  it was deliberately skipped rather than forced.
 * **In-dashboard configuration for Quadratic Voting.** Project admins
   can now set a round's credit budget and add/edit/remove `Option`s from
   the normal project dashboard (`apps/quadraticvoting/dashboard.py` +
@@ -147,24 +153,29 @@ for civic participation.
   and unit tested, including day-boundary edge cases: `python3 -m
   unittest apps.facilitator.tests.test_engine` (8 tests).
 
+* **LLM-backed summarization as an alternate backend**
+  (`apps/summarization/backends.py`). `settings.A4_SUMMARIZATION_BACKEND`
+  selects `'extractive'` (default, dependency-free, always available) or
+  `'llm'` (calls Claude via the `anthropic` package — not added to
+  requirements.txt since it's optional, `pip install anthropic` plus
+  `ANTHROPIC_API_KEY` to use it). Any failure of the LLM backend — no
+  key, no package installed, a network error, a malformed response —
+  falls back to extractive automatically via a new
+  `engine.summarize_with_fallback(primary, fallback, ...)` helper, which
+  *is* unit tested (5 tests: primary succeeds, primary raises, every
+  exception type falls back, the fallback callback fires, arguments
+  forward correctly) even though `backends.py` itself can't be — it
+  needs Django's settings machinery just to import, which this sandbox
+  doesn't have, and the LLM path additionally needs a real network call
+  this sandbox can't make. Review `backends.py` carefully before relying
+  on the `'llm'` mode in production; the extractive default needs no
+  such caveat.
+
 ## Phase 1 (next) — high-leverage, low-risk
 
 Features that extend existing primitives and don't require new
 infrastructure.
 
-* **Extend idea deduplication to `apps/mapideas` and `apps/debate`.**
-  `find_similar_items` already takes any model shaped like an
-  adhocracy4 `Item` (`.module`, `.name`, `.description`) — `MapIdea` and
-  `Subject` both qualify. Just needs a third/fourth thin wrapper in
-  `services.py` and a link from their respective create forms, same as
-  Idea and Proposal.
-* **LLM-backed summarization as an alternate backend.** Now that
-  `apps/summarization` exists (below) with a plain `summarize(comments)`
-  entry point, add an optional second backend behind the same signature
-  that calls out to an LLM when an API key is configured, instead of (or
-  blended with) the extractive default — genuinely better summaries for
-  large discussions, still falling back to the dependency-free default
-  when no key is set.
 * **Expanded i18n.** Currently 5 languages; add machine-translation
   fallback (with a "translated" badge) for languages without a maintained
   translation, so non-English/German groups aren't second-class.

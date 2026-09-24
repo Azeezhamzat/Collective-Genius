@@ -108,3 +108,32 @@ def top_keywords(comments, top_n=10):
     token_lists = [tokenize(text) for _, text in comments]
     freq = word_frequencies(token_lists)
     return freq.most_common(top_n)
+
+
+def summarize_with_fallback(primary, fallback, comments, top_n=5,
+                            min_significant_words=3, on_fallback=None):
+    """Call ``primary(comments, top_n=..., min_significant_words=...)``;
+    if it raises *any* exception, call ``fallback`` with the same
+    arguments instead and return that.
+
+    Summarization is a nice-to-have -- a discussion page should never
+    500 because an optional (e.g. LLM-backed) backend had a bad day.
+    This is the generic "try the fancy thing, degrade to the reliable
+    thing" wiring, kept dependency-free and separate from any particular
+    backend so it's unit testable without needing Django, a network, or
+    an API key: see ``apps/summarization/backends.py`` for where the
+    real (network-calling) primary backend plugs in.
+
+    ``on_fallback``, if given, is called with the caught exception
+    before returning the fallback result -- callers use this to log
+    without this function needing to know about logging configuration.
+    """
+    try:
+        return primary(comments, top_n=top_n,
+                       min_significant_words=min_significant_words)
+    except Exception as err:  # noqa: BLE001 - deliberately broad: any
+        # failure of an optional backend should degrade, not propagate.
+        if on_fallback is not None:
+            on_fallback(err)
+        return fallback(comments, top_n=top_n,
+                        min_significant_words=min_significant_words)
