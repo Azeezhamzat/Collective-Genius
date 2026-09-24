@@ -19,6 +19,7 @@ Collective Genius gives any group a toolkit for going from many individual persp
 * **Follow-through** — dashboards, exports, notifications, activity feeds, and [outbound webhooks](./apps/webhooks) (signed, retried on failure) so a Slack notifier, a Zapier hook or a custom dashboard can react to events instead of polling
 * **Cross-language groups** — [on-demand translation](./apps/translation) of discussion content (not just interface chrome) on the Synthesis and Summarization pages, so a multilingual group isn't stuck reading a discussion it can't follow
 * **Trust & safety** — [rate limiting and spam-likelihood flagging](./apps/trustsafety) for new comments; flagging is advisory only (a moderator glance, never an auto-block)
+* **Auditability** — a public, anonymized [moderation activity log](./apps/moderationlog) per project, so participants can see moderation is happening without this platform exposing what was moderated or by whom
 
 A "project" in Collective Genius is any structured process a group runs — it doesn't have to be a government initiative. An "organisation" is any group running processes — a company, a lab, a nonprofit, a DAO, a city council, or a community of volunteers.
 

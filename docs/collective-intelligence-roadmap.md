@@ -429,6 +429,31 @@ Bigger features that make this platform stand out, not just catch up.
   contain 5 repeated characters as intended. Both fixed, not glossed
   over: `python3 -m unittest apps.trustsafety.tests.test_engine`.
 
+* **[`apps/moderationlog`](../apps/moderationlog)** — the moderation-log
+  half of "open data & auditability": a public, per-project changelog of
+  moderation activity, so participants can see that moderation is
+  happening without this platform having to expose what was moderated.
+  Full structured data export was already covered separately by
+  `apps/exports` before this rebuild; what was missing was visibility
+  into moderation *itself*.
+
+  A `pre_save` signal on `adhocracy4.comments.Comment` (the same
+  diff-against-the-database pattern `apps/documentrevisions` uses for
+  paragraph edits) compares the three moderation flags
+  (`is_censored`, `is_removed`, `is_blocked`) against what's currently
+  stored and writes one `LogEntry` per flag that changed. Deliberately
+  anonymized by design, not just by omission: `LogEntry` has no
+  reference to *which* comment changed, its text, or who moderated it —
+  only a project, a flag name, an action (`set`/`cleared`), and a
+  timestamp. That's what makes it safe to put behind a public URL
+  (`/<organisation>/moderationlog/<project>/`, linked from the project
+  page's Information tab) rather than restricting it to admins the way
+  the existing Django-admin audit trail already is.
+
+  The diffing logic (`apps/moderationlog/engine.py`) is pure Python and
+  unit tested, 6 tests: `python3 -m unittest
+  apps.moderationlog.tests.test_engine`.
+
 ### Not yet
 
 * **White-label multi-tenant SaaS.** `apps/organisations` already
@@ -443,11 +468,11 @@ Bigger features that make this platform stand out, not just catch up.
 * **Mobile apps / installable PWA.** Push notifications for phase
   deadlines and synthesis updates matter far more for engagement than a
   native app shell — start with a PWA before native.
-* **Open data & auditability.** One-click export of full project data
-  (already partially covered by `apps/exports`) in structured, versioned
-  form, plus a public changelog of moderation actions, so outcomes are
-  auditable by participants — important for trust in any collective
-  decision, civic or otherwise.
+* **Open data & auditability (remaining).** The moderation changelog
+  shipped above (`apps/moderationlog`); still open is a one-click,
+  structured, *versioned* export of full project data as a public
+  artifact (today's `apps/exports` is CSV download for project admins,
+  not a public/versioned dataset).
 
 ## Explicitly out of scope (for now)
 

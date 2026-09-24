@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container my-4">
+    <p>
+        <a href="{{ project.get_absolute_url }}">&laquo; {{ project.name }}</a>
+    </p>
+
+    <h1>{% trans 'Moderation activity log' %}</h1>
+    <p class="text-muted">
+        {% trans "A public record of moderation activity on this project. It shows how much moderation has happened and of what kind, without revealing which comments were affected, their content, or who moderated them." %}
+    </p>
+
+    <h2>{% trans 'Summary' %}</h2>
+    {% if summary %}
+        <ul>
+            {% for flag_action, count in summary.items %}
+                <li>{{ flag_action.0 }} &ndash; {{ flag_action.1 }}: {{ count }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>{% trans 'No moderation activity has been logged yet.' %}</p>
+    {% endif %}
+
+    <h2>{% trans 'Recent activity' %}</h2>
+    {% if entries %}
+        <ul>
+            {% for entry in entries %}
+                <li>
+                    {{ entry.created }} &ndash; {{ entry.flag }} {{ entry.action }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>{% trans 'No moderation activity has been logged yet.' %}</p>
+    {% endif %}
+</div>
+{% endblock %}

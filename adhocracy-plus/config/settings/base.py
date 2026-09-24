@@ -135,6 +135,7 @@ INSTALLED_APPS = (
     'apps.documentrevisions',
     'apps.webhooks',
     'apps.trustsafety',
+    'apps.moderationlog',
 )
 
 MIDDLEWARE = (

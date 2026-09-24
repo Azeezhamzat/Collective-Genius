@@ -147,6 +147,11 @@
                                 </a>
                                 {% endif %}
                             {% endif %}
+                            <p class="u-top-divider">
+                                <a href="{% url 'a4_candy_moderationlog:moderation-log' organisation_slug=project.organisation.slug project_slug=project.slug %}">
+                                    {% trans 'View moderation activity log' %}
+                                </a>
+                            </p>
                         </div>
                     </div>
                 </div>
