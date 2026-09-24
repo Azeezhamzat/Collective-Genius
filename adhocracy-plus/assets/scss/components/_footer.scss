@@ -14,6 +14,14 @@
     }
 }
 
+.footer__tagline {
+    font-weight: $demi-bold;
+    color: $brand-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: $font-size-sm;
+}
+
 .footer__description {
     font-family: $font-family-serif;
 }

@@ -1,5 +1,7 @@
 # Collective Genius
 
+### *Empowering Collective Genius*
+
 **Collective Genius** is a free, open-source platform for **collective intelligence** — structured tools that help any group think, decide and act together, at scale. Where it can be used for public participation and civic decision-making, it works just as well for a company's product roadmap, a research consortium's priorities, an open-source project's governance, a school's curriculum planning, or a neighborhood association's budget.
 
 It is a rebuild of [adhocracy+](https://github.com/liqd/adhocracy-plus), originally built and maintained by [Liquid Democracy e.V.](https://liqd.net) for civic participation, and still built on [adhocracy 4](https://github.com/liqd/adhocracy4) and [Django](https://github.com/django/django). We are deeply grateful to the original authors — this project exists because of their work, and we aim to carry it forward for a wider range of groups and use cases. See [`docs/collective-intelligence-roadmap.md`](./docs/collective-intelligence-roadmap.md) for where this is headed.

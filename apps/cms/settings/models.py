@@ -100,6 +100,16 @@ class OrganisationSettings(BaseSetting):
         help_text=("This name appears in the footer of all pages and e-mails "
                    "as well as in the tab of the browser.")
     )
+    platform_tagline = models.CharField(
+        max_length=60,
+        default="Empowering Collective Genius",
+        blank=True,
+        verbose_name="Platform tagline",
+        help_text=("A short line shown alongside the platform name -- "
+                   "currently in the footer and the installable-app "
+                   "manifest. Leave blank to hide it entirely rather "
+                   "than showing an empty line.")
+    )
     address = fields.RichTextField(
         help_text="The address is published on the contact form."
     )
@@ -112,6 +122,7 @@ class OrganisationSettings(BaseSetting):
 
     panels = [
         FieldPanel('platform_name'),
+        FieldPanel('platform_tagline'),
         FieldPanel('address'),
         FieldPanel('contacts')
     ]

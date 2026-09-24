@@ -1,6 +1,7 @@
 {% load static %}{
     "name": "{% filter escapejs %}{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name|default:"Collective Genius" }}{% endfilter %}",
     "short_name": "{% filter escapejs %}{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name|default:"Collective Genius" }}{% endfilter %}",
+    "description": "{% filter escapejs %}{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_tagline|default:"Empowering Collective Genius" }}{% endfilter %}",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
