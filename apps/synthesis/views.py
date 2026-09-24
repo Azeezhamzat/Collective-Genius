@@ -1,13 +1,11 @@
 from django.views import generic
 
-from adhocracy4.projects.mixins import DisplayProjectOrModuleMixin
 from adhocracy4.projects.mixins import ProjectMixin
 
 from .models import SynthesisSnapshot
 
 
-class SynthesisModuleDetail(ProjectMixin, DisplayProjectOrModuleMixin,
-                            generic.TemplateView):
+class SynthesisModuleDetail(ProjectMixin, generic.TemplateView):
     template_name = 'a4_candy_synthesis/module_synthesis.html'
 
     def get_context_data(self, **kwargs):

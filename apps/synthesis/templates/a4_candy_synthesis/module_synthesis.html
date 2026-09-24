@@ -1,10 +1,15 @@
-{% extends extends %}
+{% extends "base.html" %}
 {% load i18n %}
 
-{% block phase_content %}
+{% block content %}
+<div class="container my-4">
+    <p>
+        <a href="{{ module.project.get_absolute_url }}">&laquo; {{ module.project.name }}</a>
+    </p>
+
     <div class="row">
         <div class="col-md-12 my-2">
-            <h1>{% trans 'Where this group agrees' %}</h1>
+            <h1>{% blocktrans with module_name=module.name %}Where "{{ module_name }}" agrees{% endblocktrans %}</h1>
             <p>
                 {% blocktrans %}
                     Collective Genius clusters everyone who has voted on comments in this
@@ -74,4 +79,5 @@
             </div>
         </div>
     {% endif %}
+</div>
 {% endblock %}
