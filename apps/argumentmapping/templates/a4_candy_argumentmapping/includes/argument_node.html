@@ -1,0 +1,36 @@
+{% load i18n argumentmapping_tags %}
+{% with comment=comments_by_id|get_item:node.id %}
+<li class="argument-node {% if node.stance == 'supports' %}argument-node--supports{% elif node.stance == 'opposes' %}argument-node--opposes{% endif %}">
+    <div class="argument-node__body">
+        <strong>{{ comment.creator }}</strong>:
+        {{ comment.comment }}
+        <span class="text-muted">
+            ({% blocktrans count support=node.support_count %}{{ support }} supporting{% plural %}{{ support }} supporting{% endblocktrans %},
+            {% blocktrans count oppose=node.oppose_count %}{{ oppose }} opposing{% plural %}{{ oppose }} opposing{% endblocktrans %})
+        </span>
+    </div>
+
+    {% if request.user.is_authenticated and comment.creator_id == request.user.pk %}
+        <form method="post" action="" class="argument-node__stance-form">
+            {% csrf_token %}
+            <input type="hidden" name="comment_id" value="{{ comment.pk }}" />
+            <button type="submit" name="value" value="supports"
+                    class="btn btn--small {% if node.stance == 'supports' %}btn--primary{% endif %}">
+                {% trans 'Mark as supporting' %}
+            </button>
+            <button type="submit" name="value" value="opposes"
+                    class="btn btn--small {% if node.stance == 'opposes' %}btn--primary{% endif %}">
+                {% trans 'Mark as opposing' %}
+            </button>
+        </form>
+    {% endif %}
+
+    {% if node.children %}
+        <ul class="list-unstyled ps-4">
+            {% for child in node.children %}
+                {% include "a4_candy_argumentmapping/includes/argument_node.html" with node=child %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>
+{% endwith %}

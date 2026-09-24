@@ -71,6 +71,20 @@ for civic participation.
   adding/editing `Option`s (currently only via `/django-admin/`) —
   mirroring `apps/polls`' `PollComponent` — is real additional scaffolding
   (a `dashboard.py` with a formset component) and isn't done yet.
+* **[`apps/argumentmapping`](../apps/argumentmapping)** — Kialo-style
+  argument mapping for `apps/debate`. A comment's own author can mark it
+  as supporting or opposing whatever it's replying to; the argument map
+  page then shows the whole reply tree sorted so the most strongly
+  supported branches come first, with each node's own supporting/opposing
+  descendant counts visible. Deliberately doesn't touch the existing
+  React-based comment widget (`react_comments_async`) at all — stance is
+  set on a separate, plain server-rendered page linked from the subject
+  detail page, which keeps the change additive and avoids needing a JS
+  build to verify it. The tree-building and strength-scoring logic
+  (`apps/argumentmapping/engine.py`) is pure Python and unit tested,
+  including cycle-safety on malformed input (`apps/argumentmapping/tests/
+  test_engine.py`, 12 tests, run with
+  `python3 -m unittest apps.argumentmapping.tests.test_engine`).
 
 ## Phase 1 (next) — high-leverage, low-risk
 
@@ -91,10 +105,6 @@ infrastructure.
   discussion" action per module, built the same way as Synthesis: a
   swappable summarization backend (extractive by default, LLM-backed when
   an API key is configured) rather than a hard dependency on one vendor.
-* **Argument mapping for debates.** `apps/debate` currently threads
-  comments; add explicit "supports / opposes / because" relations between
-  comments (Kialo-style) so a debate's structure is visible at a glance,
-  not just a flat or nested list.
 * **Facilitator toolkit.** A dashboard view for moderators showing: new
   activity since last visit, comments needing moderation, and — powered by
   Synthesis — where the group currently stands. Builds on the existing

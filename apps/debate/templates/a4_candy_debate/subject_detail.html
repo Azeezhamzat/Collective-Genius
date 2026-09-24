@@ -28,6 +28,11 @@
                     <div class="item-detail">
                         <h1 class="item-detail__title">{{ object.name }}</h1>
                         <p class="item-detail__description">{{ object.description }}</p>
+                        <p>
+                            <a href="{% url 'a4_candy_argumentmapping:argument-map' organisation_slug=module.project.organisation.slug subject_pk=object.pk %}">
+                                {% trans 'View argument map' %}
+                            </a>
+                        </p>
 
                         {% react_comments_async object True %}
                     </div>

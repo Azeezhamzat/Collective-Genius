@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container my-4">
+    <p>
+        <a href="{{ subject.get_absolute_url }}">&laquo; {{ subject.name }}</a>
+    </p>
+
+    <h1>{% blocktrans with name=subject.name %}Argument map: {{ name }}{% endblocktrans %}</h1>
+    <p class="text-muted">
+        {% trans "Comments are colored by whether their author marked them as supporting or opposing whatever they're replying to, and sorted so the most strongly-supported branches come first." %}
+    </p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if not trees %}
+        <p>{% trans 'No comments yet.' %}</p>
+    {% else %}
+        <ul class="argument-map list-unstyled">
+            {% for node in trees %}
+                {% include "a4_candy_argumentmapping/includes/argument_node.html" with node=node %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endblock %}
