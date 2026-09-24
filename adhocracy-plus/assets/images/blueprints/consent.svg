@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 270 150" style="enable-background:new 0 0 270 150;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#2A3CD4;}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+</style>
+<title>icon_consent</title>
+<desc>A checkmark in a circle, made of two joined hands -- consent reached.</desc>
+<g id="Concepts">
+	<rect id="icon_consent" class="st0" width="270" height="150"/>
+	<circle class="st1" cx="90" cy="75" r="10"/>
+	<circle class="st1" cx="180" cy="75" r="10"/>
+	<circle class="st1" cx="135" cy="45" r="10"/>
+	<path class="st1" d="M90,85 L135,55 L180,85" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+	<path class="st1" d="M110,100 L130,120 L165,80" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg>

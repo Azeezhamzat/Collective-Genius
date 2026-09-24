@@ -234,13 +234,33 @@ Bigger features that make this platform stand out, not just catch up.
   opposite sides average out better calibrated than either" wisdom-of-
   crowds case: `python3 -m unittest apps.forecasting.tests.test_engine`.
 
+* **[`apps/consent`](../apps/consent)** — sociocracy/Loomio-style
+  consent decisions: a genuinely different decision rule from majority
+  voting. Participants propose actions and respond **agree** / **stand
+  aside** (doesn't support it, won't block it) / **object** (blocks the
+  proposal, must give a reason). A proposal has consent once there are
+  no *unresolved* objections — one unresolved objection blocks it
+  regardless of how many people agree, by design: consent protects a
+  real, unaddressed concern from being outvoted. An objection can be
+  marked resolved by the objector or the proposer once it's been
+  addressed, without the objector having to change their stance.
+  Simplified from the original "propose → clarify → react → amend →
+  consent-round" staged-flow idea to just proposals + responses:
+  clarification and reaction already happen fine as ordinary discussion
+  (comments exist generically), and formalizing five rigid stages as
+  separate app states would have added real complexity for what the
+  actual distinguishing mechanic — the consent rule itself — doesn't
+  need. Registered as a real phase/blueprint type (participants
+  propose *and* respond, so, like Quadratic Voting and Forecasting,
+  this is something people *do*). The consent-resolution core
+  (`apps/consent/engine.py` — `resolve`) is pure Python and unit
+  tested, 7 tests including the core "one unresolved objection blocks
+  it even with four agreements" case and the resolved-objection/
+  mixed-objections cases: `python3 -m unittest
+  apps.consent.tests.test_engine`.
+
 ### Not yet
 
-* **Structured consent-based decisions.** A Loomio/sociocracy-style
-  decision flow: propose → clarify → react → amend → consent-round (only
-  "I object because…" blocks; everything else is a stand-aside or
-  agreement) — a genuinely different decision mechanism from majority
-  voting, well suited to working groups and org governance.
 * **Delphi-method rounds.** Multi-round structured expert elicitation:
   anonymous responses, aggregate feedback shown to all, revise, repeat.
   Useful for research consortia and technical standards work — a segment

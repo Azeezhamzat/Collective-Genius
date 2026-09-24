@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from adhocracy4.dashboard.blueprints import ProjectBlueprint
 from adhocracy4.polls import phases as poll_phases
 from apps.budgeting import phases as budgeting_phases
+from apps.consent import phases as consent_phases
 from apps.debate import phases as debate_phases
 from apps.documents import phases as documents_phases
 from apps.forecasting import phases as forecasting_phases
@@ -183,6 +184,22 @@ blueprints = [
              forecasting_phases.ForecastPhase(),
          ],
          image='images/forecasting.svg',
+         settings_model=None,
+     )),
+    ('consent',
+     ProjectBlueprint(
+         title=_('Consent decisions'),
+         description=_(
+             'Participants propose actions for the group and decide by '
+             'consent rather than a majority vote: a proposal passes '
+             'once nobody has a standing objection to it. Objections '
+             'must give a reason and can be marked resolved once '
+             'addressed.'
+         ),
+         content=[
+             consent_phases.ConsentPhase(),
+         ],
+         image='images/consent.svg',
          settings_model=None,
      )),
 ]

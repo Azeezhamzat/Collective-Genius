@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'apps.facilitator',
     'apps.translation',
     'apps.forecasting',
+    'apps.consent',
 )
 
 MIDDLEWARE = (

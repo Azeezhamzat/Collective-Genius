@@ -1,0 +1,107 @@
+{% extends extends %}
+{% load i18n %}
+
+{% block phase_content %}
+<div class="row">
+    <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <h2>{% trans 'Propose something new' %}</h2>
+        {% if request.user.is_authenticated %}
+            <form method="post" action="" class="mb-4">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="create_proposal" />
+                <label for="id_title">{% trans 'Title' %}</label>
+                <input type="text" id="id_title" name="title" style="width: 100%;" />
+                <label for="id_description">{% trans 'Description' %}</label>
+                <textarea id="id_description" name="description" style="width: 100%;" rows="3"></textarea>
+                <button type="submit" class="btn btn--primary">{% trans 'Add proposal' %}</button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'account_login' %}?next={{ request.path }}">{% trans 'Log in to add a proposal' %}</a></p>
+        {% endif %}
+
+        <h2>{% trans 'Proposals' %}</h2>
+        {% if not proposals %}
+            <p>{% trans 'No proposals yet.' %}</p>
+        {% else %}
+            {% for proposal in proposals %}
+                <div class="mb-4 pb-4" style="border-bottom: 1px solid #ddd;">
+                    <h3>{{ proposal.title }}</h3>
+                    <p>{{ proposal.description }}</p>
+                    <p class="text-muted">
+                        {% blocktrans with creator=proposal.creator %}Proposed by {{ creator }}{% endblocktrans %}
+                    </p>
+
+                    {% if proposal.result.has_consent %}
+                        <p><strong>{% trans 'This proposal has consent.' %}</strong></p>
+                    {% else %}
+                        <p><strong>{% trans 'No consent yet.' %}</strong></p>
+                    {% endif %}
+                    <p class="text-muted">
+                        {% blocktrans with agree=proposal.result.n_agree stand_aside=proposal.result.n_stand_aside unresolved=proposal.result.n_unresolved_objections %}
+                            {{ agree }} agree, {{ stand_aside }} standing aside, {{ unresolved }} unresolved objection(s).
+                        {% endblocktrans %}
+                    </p>
+
+                    {% if proposal.all_responses %}
+                        <ul>
+                            {% for response in proposal.all_responses %}
+                                {% if response.stance == 'object' %}
+                                    <li>
+                                        {{ response.creator }}
+                                        {% trans 'objects:' %}
+                                        {{ response.reason }}
+                                        {% if response.resolved %}
+                                            <em>({% trans 'resolved' %})</em>
+                                        {% elif request.user == response.creator or request.user == proposal.creator %}
+                                            <form method="post" action="" style="display:inline;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="resolve" />
+                                                <input type="hidden" name="response_id" value="{{ response.pk }}" />
+                                                <button type="submit" class="btn btn--small">{% trans 'Mark resolved' %}</button>
+                                            </form>
+                                        {% endif %}
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    {% if request.user.is_authenticated %}
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="respond" />
+                            <input type="hidden" name="proposal_id" value="{{ proposal.pk }}" />
+                            <label>
+                                <input type="radio" name="stance" value="agree" {% if proposal.my_response.stance == 'agree' %}checked{% endif %} />
+                                {% trans 'Agree' %}
+                            </label>
+                            <label>
+                                <input type="radio" name="stance" value="stand_aside" {% if proposal.my_response.stance == 'stand_aside' %}checked{% endif %} />
+                                {% trans "Stand aside" %}
+                            </label>
+                            <label>
+                                <input type="radio" name="stance" value="object" {% if proposal.my_response.stance == 'object' %}checked{% endif %} />
+                                {% trans 'Object' %}
+                            </label>
+                            <br />
+                            <label for="id_reason_{{ proposal.pk }}">{% trans 'Reason (required if objecting)' %}</label>
+                            <input type="text" id="id_reason_{{ proposal.pk }}" name="reason" style="width: 100%;" value="{% if proposal.my_response %}{{ proposal.my_response.reason }}{% endif %}" />
+                            <button type="submit" class="btn btn--primary">{% trans 'Save response' %}</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
