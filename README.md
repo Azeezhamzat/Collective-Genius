@@ -14,6 +14,7 @@ Collective Genius gives any group a toolkit for going from many individual persp
 * **Synthesis** — clustering related input and surfacing where a group actually agrees or disagrees (see [Synthesis](./apps/synthesis)), plus an automatic ["key points" summary](./apps/summarization) of any discussion (dependency-free by default, with an optional LLM-backed mode)
 * **Decision-making** — polls, phased processes with clear timelines, moderator workflows, and a project-wide [facilitator toolkit](./apps/facilitator) (activity overview, reported-comments queue)
 * **Follow-through** — dashboards, exports, notifications, activity feeds
+* **Cross-language groups** — [on-demand translation](./apps/translation) of discussion content (not just interface chrome) on the Synthesis and Summarization pages, so a multilingual group isn't stuck reading a discussion it can't follow
 
 A "project" in Collective Genius is any structured process a group runs — it doesn't have to be a government initiative. An "organisation" is any group running processes — a company, a lab, a nonprofit, a DAO, a city council, or a community of volunteers.
 

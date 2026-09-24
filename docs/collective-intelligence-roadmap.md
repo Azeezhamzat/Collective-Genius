@@ -171,14 +171,34 @@ for civic participation.
   on the `'llm'` mode in production; the extractive default needs no
   such caveat.
 
-## Phase 1 (next) — high-leverage, low-risk
+* **[`apps/translation`](../apps/translation)** — on-demand machine
+  translation of *discussion content*, not UI chrome. Reframed from the
+  original "translate untranslated UI strings" idea: this project
+  already has a real workflow for that (transifex-client, in
+  requirements/dev.txt, translating maintained `.po` files) — a shadow
+  auto-translate system for interface strings would just conflict with
+  it. What has no solution at all today is a participant's own comment
+  text when a group isn't all working in the same language, so that's
+  what this adds: a language picker on the Synthesis and Summarization
+  pages (both already extract and render comment text server-side,
+  outside the React comment widget, which made this a clean place to
+  hook in without touching JS this sandbox can't build or verify) that
+  translates the displayed key/bridging/divisive comments on request,
+  with a "machine translated" badge. `settings.A4_TRANSLATION_BACKEND`
+  is `'none'` by default (feature fully off, no control shown anywhere);
+  set to `'llm'` to enable it via Claude. Same fallback-on-failure shape
+  as the summarization LLM backend, including the same honest limit on
+  what's unit tested here: `engine.translate_with_fallback` is pure
+  Python and covered by 5 tests (`python3 -m unittest
+  apps.translation.tests.test_engine`), `backends.py` needs Django
+  settings to even import and isn't tested standalone in this sandbox.
 
-Features that extend existing primitives and don't require new
-infrastructure.
-
-* **Expanded i18n.** Currently 5 languages; add machine-translation
-  fallback (with a "translated" badge) for languages without a maintained
-  translation, so non-English/German groups aren't second-class.
+**Phase 1 is now complete** — every item originally listed here has
+shipped, sometimes reframed along the way when digging in showed a
+better or more honest scope (Synthesis/Quadratic Voting's phase-vs-
+overlay split, deduplication skipping `apps/debate`, translation
+targeting content instead of UI strings). See git log for the full
+sequence of commits.
 
 ## Phase 2 — differentiating features
 

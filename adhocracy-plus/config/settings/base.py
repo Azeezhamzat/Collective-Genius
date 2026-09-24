@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'apps.summarization',
     'apps.deduplication',
     'apps.facilitator',
+    'apps.translation',
 )
 
 MIDDLEWARE = (
@@ -562,6 +563,15 @@ A4_ACTIONS_PHASE_ENDS_HOURS = 48
 # to 'extractive' automatically, so this is safe to flip per-deployment
 # without touching code. See apps/summarization/backends.py.
 A4_SUMMARIZATION_BACKEND = 'extractive'
+
+# On-demand machine translation of discussion content (apps/translation)
+# -- separate from, and doesn't touch, the gettext-based UI translation
+# workflow above (LOCALE_PATHS, transifex-client). 'none' (default)
+# means the feature is off entirely: no "Translate" control is shown
+# anywhere. Set to 'llm' to enable it via Claude -- requires
+# `pip install anthropic` and ANTHROPIC_API_KEY; any failure falls back
+# to showing the original text. See apps/translation/backends.py.
+A4_TRANSLATION_BACKEND = 'none'
 
 # Disable CSP by default
 CSP_REPORT_ONLY = True

@@ -40,6 +40,19 @@
             </div>
         </div>
 
+        {% if translation_enabled %}
+            <form method="get" action="" class="mb-3">
+                <label for="id_lang">{% trans 'Show statements in:' %}</label>
+                <select name="lang" id="id_lang" onchange="this.form.submit()">
+                    <option value="">{% trans 'Original language' %}</option>
+                    {% for code, name in languages %}
+                        <option value="{{ code }}" {% if code == target_language %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+                <noscript><button type="submit">{% trans 'Go' %}</button></noscript>
+            </form>
+        {% endif %}
+
         <div class="row">
             <div class="col-md-6 my-2">
                 <h2>{% trans 'Consensus (bridging statements)' %}</h2>
@@ -47,7 +60,12 @@
                     <ul>
                         {% for result in bridging_statements %}
                             <li>
-                                {{ result.comment.comment }}
+                                {% if target_language and result.translated_text %}
+                                    {{ result.translated_text }}
+                                    <span class="text-muted">({% trans 'machine translated' %})</span>
+                                {% else %}
+                                    {{ result.comment.comment }}
+                                {% endif %}
                                 <span class="text-muted">
                                     ({{ result.consensus_score|floatformat:2 }}
                                     {% trans 'agreement across groups' %})
@@ -65,7 +83,12 @@
                     <ul>
                         {% for result in divisive_statements %}
                             <li>
-                                {{ result.comment.comment }}
+                                {% if target_language and result.translated_text %}
+                                    {{ result.translated_text }}
+                                    <span class="text-muted">({% trans 'machine translated' %})</span>
+                                {% else %}
+                                    {{ result.comment.comment }}
+                                {% endif %}
                                 <span class="text-muted">
                                     ({{ result.divisiveness|floatformat:2 }}
                                     {% trans 'gap between groups' %})

@@ -30,11 +30,31 @@
             </p>
         {% endif %}
 
+        {% if translation_enabled %}
+            <form method="get" action="" class="mb-3">
+                <label for="id_lang">{% trans 'Show key comments in:' %}</label>
+                <select name="lang" id="id_lang" onchange="this.form.submit()">
+                    <option value="">{% trans 'Original language' %}</option>
+                    {% for code, name in languages %}
+                        <option value="{{ code }}" {% if code == target_language %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+                <noscript><button type="submit">{% trans 'Go' %}</button></noscript>
+            </form>
+        {% endif %}
+
         <h2>{% trans 'Key comments' %}</h2>
         {% if key_comments %}
             <ol>
                 {% for key_comment in key_comments %}
-                    <li>{{ key_comment.comment.comment }}</li>
+                    <li>
+                        {% if target_language and key_comment.translated_text %}
+                            {{ key_comment.translated_text }}
+                            <span class="text-muted">({% trans 'machine translated' %})</span>
+                        {% else %}
+                            {{ key_comment.comment.comment }}
+                        {% endif %}
+                    </li>
                 {% endfor %}
             </ol>
         {% else %}
