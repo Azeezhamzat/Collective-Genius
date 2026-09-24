@@ -9,7 +9,7 @@ It is a rebuild of [adhocracy+](https://github.com/liqd/adhocracy-plus), origina
 Collective Genius gives any group a toolkit for going from many individual perspectives to a shared, legible outcome:
 
 * **Idea generation** — open calls for ideas, geo-located proposals, structured briefs, with a ["check for similar ideas/proposals" step](./apps/deduplication) before submitting to cut down on near-duplicate entries
-* **Deliberation** — threaded discussion, commenting on documents paragraph-by-paragraph, structured debates with [argument mapping](./apps/argumentmapping) showing where a debate's support actually concentrates
+* **Deliberation** — threaded discussion, commenting on documents paragraph-by-paragraph (with automatic [revision history](./apps/documentrevisions) — every edit keeps its previous text), structured debates with [argument mapping](./apps/argumentmapping) showing where a debate's support actually concentrates
 * **Prioritization** — voting, budgeting/resource allocation, topic prioritization, and [quadratic voting](./apps/quadraticvoting) (now configurable entirely from the project dashboard) for surfacing preference intensity, not just majority direction
 * **Synthesis** — clustering related input and surfacing where a group actually agrees or disagrees (see [Synthesis](./apps/synthesis)), plus an automatic ["key points" summary](./apps/summarization) of any discussion (dependency-free by default, with an optional LLM-backed mode)
 * **Decision-making** — polls, phased processes with clear timelines, moderator workflows, a project-wide [facilitator toolkit](./apps/facilitator) (activity overview, reported-comments queue), and [consent-based decisions](./apps/consent) (sociocracy/Loomio-style — a proposal passes once nobody has a standing objection, not because a majority likes it best)
@@ -72,7 +72,7 @@ We're rebuilding this platform to be the best general-purpose collective intelli
 
 ## Contributing or maintaining your own fork
 
-If you found an issue, want to contribute, or would like to add your own features to your own version of Collective Genius, check out [contributing](./docs/contributing.md).
+If you found an issue, want to contribute, or would like to add your own features to your own version of Collective Genius, check out [contributing](./docs/contributing.md). Building a new participation module (a new voting method, a new visualization)? See [`docs/building_a_module.md`](./docs/building_a_module.md) — a practical guide written from having built eight of them.
 
 ## Attribution
 

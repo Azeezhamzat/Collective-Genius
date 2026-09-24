@@ -299,17 +299,59 @@ Bigger features that make this platform stand out, not just catch up.
   as deduplication — nothing to migrate, results computed live. Linked
   from the organisation landing page as "Search across all projects."
 
+* **[`apps/documentrevisions`](../apps/documentrevisions) — partial,
+  honestly scoped.** This is *not* the real-time collaborative-editing
+  feature originally listed here. That needs a CRDT library (Yjs or
+  similar), a WebSocket transport (Django Channels, an ASGI server —
+  this project's `wsgi.py`-only stack doesn't have one), and a live
+  multi-browser session to prove simultaneous-edit merging actually
+  works — none of which this sandbox can build or verify (no network,
+  no way to run two browser sessions against a live server, no
+  Channels in the dependency stack). Building it anyway and calling it
+  done would mean shipping something never actually exercised end to
+  end, which is exactly the failure mode the honesty notes throughout
+  this document exist to avoid. So: real-time co-editing stays
+  genuinely undone, tracked below as future work with what it would
+  actually require.
+
+  What *is* real and safe to ship without that infrastructure: every
+  `Paragraph` edit in `apps/documents` now keeps its previous text
+  automatically (a `pre_save` signal on the existing `Paragraph` model,
+  not a change to `apps/documents` itself — additive, lower risk than
+  modifying a shared model in place), with a read-only history page per
+  paragraph (linked from the chapter page) and a trivial-edit flag using
+  a small diff-similarity wrapper around Python's stdlib `difflib`. A
+  real, useful step toward "a group can see how a draft evolved," not a
+  substitute for "a group can draft text together live" — those are
+  different features and only the first one is what got built. The
+  diff-similarity wrapper (`apps/documentrevisions/engine.py` —
+  `similarity_ratio`, `is_trivial_edit`) is pure Python and unit tested,
+  10 tests: `python3 -m unittest
+  apps.documentrevisions.tests.test_engine`.
+
 ### Not yet
 
-* **Real-time collaborative documents.** CRDT-based co-editing (e.g. via
-  Yjs) for `apps/documents`, so a group can draft text together, not just
-  comment on a static version — turns the platform into a genuine
-  co-creation tool, not just a feedback-collection one.
+* **Real-time collaborative documents (the actual original ask).**
+  What it would take, concretely, beyond what's in this sandbox: an
+  ASGI server + Django Channels (or a separate sync service) for the
+  WebSocket transport, a CRDT library on both ends (Yjs client-side,
+  a Python CRDT implementation or a thin proxy to a `y-py`/`pycrdt`
+  server process), a rewrite of the paragraph editor's JS to talk to it
+  instead of posting a form, and conflict-free merge semantics that
+  need real multi-client testing to trust — this genuinely can't be
+  responsibly built blind. `apps/documentrevisions` (above) is the
+  closest safe step taken toward it so far.
 * **Plugin/module marketplace.** The blueprint system
-  (`A4_DASHBOARD['BLUEPRINTS']`) already supports pluggable phase types;
-  formalize a plugin interface + registry so third parties can ship new
-  module types (a new voting method, a new visualization) without forking
-  the platform.
+  (`A4_DASHBOARD['BLUEPRINTS']`) already supports pluggable phase types
+  — this rebuild has now shipped eight new module types through exactly
+  that mechanism (Quadratic Voting, Forecasting, Consent, Delphi, and
+  four standalone overlay apps), so what "formalize a plugin interface"
+  actually means at this point is written up as a real, tested-by-use
+  developer guide rather than new code: see
+  [`docs/building_a_module.md`](./building_a_module.md). A registry/
+  marketplace *listing* third-party modules is still open — worth
+  revisiting once there's more than one codebase's worth of modules to
+  list.
 
 ## Phase 3 — platform & ecosystem
 

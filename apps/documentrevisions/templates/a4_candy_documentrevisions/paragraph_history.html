@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+
+{% block content %}
+<div class="container my-4">
+    <p>
+        <a href="{{ chapter.get_absolute_url }}">&laquo; {{ chapter.name }}</a>
+    </p>
+
+    <h1>{% blocktrans with name=paragraph.name|default:chapter.name %}Revision history: {{ name }}{% endblocktrans %}</h1>
+
+    <h2>{% trans 'Current text' %}</h2>
+    <div>{{ paragraph.text|richtext }}</div>
+
+    <h2>{% trans 'Earlier versions' %}</h2>
+    {% if not revisions %}
+        <p>{% trans 'No earlier versions -- this paragraph has not been edited since it was created.' %}</p>
+    {% else %}
+        {% for revision in revisions %}
+            <div class="mb-3 pb-3" style="border-bottom: 1px solid #ddd;">
+                <p class="text-muted">
+                    {{ revision.created }}
+                    {% if revision.is_trivial %}
+                        &mdash; <em>{% trans 'trivial edit' %}</em>
+                    {% endif %}
+                </p>
+                <div>{{ revision.text|richtext }}</div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

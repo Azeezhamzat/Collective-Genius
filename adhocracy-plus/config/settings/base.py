@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     'apps.consent',
     'apps.delphi',
     'apps.search',
+    'apps.documentrevisions',
 )
 
 MIDDLEWARE = (

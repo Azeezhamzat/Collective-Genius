@@ -52,6 +52,11 @@
                                         <i class="fa fa-comment-o" aria-hidden="true"></i>
                                         {% blocktrans count count=paragraph.comments.all|length %}{{ count }} Comment{% plural %}{{ count }} Comments{% endblocktrans %}
                                     </a>
+                                    {% if paragraph.revisions.exists %}
+                                        <a href="{% url 'a4_candy_documentrevisions:paragraph-history' organisation_slug=object.project.organisation.slug pk=paragraph.pk %}">
+                                            {% trans 'Revision history' %}
+                                        </a>
+                                    {% endif %}
                                 </div>
                             </section>
 
