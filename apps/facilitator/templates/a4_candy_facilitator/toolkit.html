@@ -1,0 +1,51 @@
+{% extends "a4dashboard/base_dashboard_project.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Facilitator toolkit" %} &mdash; {{ block.super }}{% endblock %}
+
+{% block dashboard_project_content %}
+    <h1 class="mt-0">{% trans 'Facilitator toolkit' %}</h1>
+    <p class="text-muted">
+        {% trans "A project-wide view for moderators: recent activity, comments that have been reported, and quick links into each module's synthesis and summary." %}
+    </p>
+
+    <h2>{% blocktrans with total=activity_total %}Activity in the last 7 days ({{ total }} comments){% endblocktrans %}</h2>
+    <ul class="u-list-reset">
+        {% for day in activity %}
+            <li>{{ day.date }}: {{ day.count }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>{% trans 'Reported comments' %}</h2>
+    {% if reported_comments %}
+        <ul>
+            {% for comment, report_count in reported_comments %}
+                <li>
+                    {{ comment.comment|truncatewords:30 }}
+                    <span class="text-muted">
+                        ({% blocktrans count count=report_count %}{{ count }} report{% plural %}{{ count }} reports{% endblocktrans %})
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>{% trans 'No reported comments right now.' %}</p>
+    {% endif %}
+
+    <h2>{% trans 'Modules' %}</h2>
+    <ul>
+        {% for module in modules %}
+            <li>
+                {{ module.name }}
+                &mdash;
+                <a href="{% url 'a4_candy_summarization:summary-module-detail' organisation_slug=project.organisation.slug module_slug=module.slug %}">
+                    {% trans 'Key points' %}
+                </a>
+                &middot;
+                <a href="{% url 'a4_candy_synthesis:synthesis-module-detail' organisation_slug=project.organisation.slug module_slug=module.slug %}">
+                    {% trans 'Where this group agrees' %}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

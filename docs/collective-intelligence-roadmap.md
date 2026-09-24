@@ -132,6 +132,20 @@ for civic participation.
   that's what this is (a real Django `ModelForm` for the round's
   settings, plus `inlineformset_factory(VotingRound, Option, ...)` for
   its options).
+* **[`apps/facilitator`](../apps/facilitator)** — a project-wide
+  facilitator toolkit: recent comment activity (a 7-day bucketed
+  count), a reported-comments queue (there was no server-rendered view
+  of `adhocracy4.reports.Report` anywhere in this codebase before this —
+  reports were only reachable through the REST API, presumably meant
+  for a React widget), and quick links into each module's Synthesis/
+  Summarization pages. Registered as a *project*-level
+  `DashboardComponent` (`components.register_project`, not
+  `register_module` — the other new dashboard component so far), so
+  it's reached from the project dashboard and gated by the same
+  `a4projects.change_project` permission as every other dashboard page.
+  The date-bucketing logic (`apps/facilitator/engine.py`) is pure Python
+  and unit tested, including day-boundary edge cases: `python3 -m
+  unittest apps.facilitator.tests.test_engine` (8 tests).
 
 ## Phase 1 (next) — high-leverage, low-risk
 
@@ -151,10 +165,6 @@ infrastructure.
   blended with) the extractive default — genuinely better summaries for
   large discussions, still falling back to the dependency-free default
   when no key is set.
-* **Facilitator toolkit.** A dashboard view for moderators showing: new
-  activity since last visit, comments needing moderation, and — powered by
-  Synthesis — where the group currently stands. Builds on the existing
-  `apps/dashboard` and `apps/moderatorfeedback`.
 * **Expanded i18n.** Currently 5 languages; add machine-translation
   fallback (with a "translated" badge) for languages without a maintained
   translation, so non-English/German groups aren't second-class.

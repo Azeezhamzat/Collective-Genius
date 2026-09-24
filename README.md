@@ -12,7 +12,7 @@ Collective Genius gives any group a toolkit for going from many individual persp
 * **Deliberation** — threaded discussion, commenting on documents paragraph-by-paragraph, structured debates with [argument mapping](./apps/argumentmapping) showing where a debate's support actually concentrates
 * **Prioritization** — voting, budgeting/resource allocation, topic prioritization, and [quadratic voting](./apps/quadraticvoting) (now configurable entirely from the project dashboard) for surfacing preference intensity, not just majority direction
 * **Synthesis** — clustering related input and surfacing where a group actually agrees or disagrees (see [Synthesis](./apps/synthesis)), plus an automatic ["key points" summary](./apps/summarization) of any discussion
-* **Decision-making** — polls, phased processes with clear timelines, moderator workflows
+* **Decision-making** — polls, phased processes with clear timelines, moderator workflows, and a project-wide [facilitator toolkit](./apps/facilitator) (activity overview, reported-comments queue)
 * **Follow-through** — dashboards, exports, notifications, activity feeds
 
 A "project" in Collective Genius is any structured process a group runs — it doesn't have to be a government initiative. An "organisation" is any group running processes — a company, a lab, a nonprofit, a DAO, a city council, or a community of volunteers.

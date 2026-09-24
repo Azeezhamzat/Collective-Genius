@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'apps.argumentmapping',
     'apps.summarization',
     'apps.deduplication',
+    'apps.facilitator',
 )
 
 MIDDLEWARE = (
