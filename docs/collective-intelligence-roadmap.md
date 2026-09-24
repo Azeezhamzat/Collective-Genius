@@ -103,6 +103,21 @@ for civic participation.
   module_detail.html`, a "Key points" / "Where this group agrees" link
   row) — before this they were only reachable if you already knew the
   URL, which defeated the point of building them.
+* **[`apps/deduplication`](../apps/deduplication)** — "check for similar
+  ideas" before submitting a new one, using TF-IDF + cosine similarity
+  (standard, no ML library or API key needed). Linked directly from the
+  idea-submission form (`apps/ideas/templates/.../idea_create_form.html`)
+  as "Check if a similar idea already exists" — a plain GET-param search
+  page, no JS, so it's also a shareable/bookmarkable link. Stateless: no
+  models, nothing to migrate, just computed live off `Idea.objects`.
+  Pure-Python core, unit tested, 9 tests:
+  `python3 -m unittest apps.deduplication.tests.test_engine`.
+
+  Only wired into `apps/ideas` so far -- `apps/budgeting` proposals are
+  the same shape (title + rich-text description) and would reuse
+  `engine.find_similar` directly; extending `services.py` to accept any
+  queryset instead of hardcoding `Idea` is a small follow-up, tracked
+  below.
 
 ## Phase 1 (next) — high-leverage, low-risk
 
@@ -114,11 +129,10 @@ infrastructure.
   a field for `credit_budget`), so a project admin doesn't have to touch
   `/django-admin/` to set up a round. Mirror `apps/polls/dashboard.py`'s
   `PollComponent`.
-* **AI-assisted idea deduplication.** When someone starts a new idea/
-  proposal, semantically search existing ones in the same module and
-  surface likely duplicates before they submit — reduces fragmentation of
-  a discussion across near-identical entries. Natural fit on top of
-  `apps/ideas` and `apps/budgeting`.
+* **Extend idea deduplication to budgeting proposals.** Generalize
+  `apps/deduplication/services.py` (currently hardcoded to `Idea`) to
+  take any queryset + text-extraction function, and add the same "check
+  for similar" link to `apps/budgeting`'s proposal-submission form.
 * **LLM-backed summarization as an alternate backend.** Now that
   `apps/summarization` exists (below) with a plain `summarize(comments)`
   entry point, add an optional second backend behind the same signature

@@ -32,6 +32,11 @@
                         {% else %}
                         <p>{{ project.description }}</p>
                         {% endif %}
+                        <p>
+                            <a href="{% url 'a4_candy_deduplication:similar-ideas' organisation_slug=module.project.organisation.slug module_slug=module.slug %}">
+                                {% trans 'Check if a similar idea already exists' %}
+                            </a>
+                        </p>
                     </div>
                     {% include "a4_candy_ideas/includes/idea_form.html" with idea=idea cancel=module.get_detail_url %}
                 </div>

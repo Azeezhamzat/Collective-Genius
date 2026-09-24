@@ -125,6 +125,7 @@ INSTALLED_APPS = (
     'apps.quadraticvoting',
     'apps.argumentmapping',
     'apps.summarization',
+    'apps.deduplication',
 )
 
 MIDDLEWARE = (
