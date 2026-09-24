@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     'apps.forecasting',
     'apps.consent',
     'apps.delphi',
+    'apps.search',
 )
 
 MIDDLEWARE = (

@@ -15,6 +15,7 @@ Collective Genius gives any group a toolkit for going from many individual persp
 * **Decision-making** — polls, phased processes with clear timelines, moderator workflows, a project-wide [facilitator toolkit](./apps/facilitator) (activity overview, reported-comments queue), and [consent-based decisions](./apps/consent) (sociocracy/Loomio-style — a proposal passes once nobody has a standing objection, not because a majority likes it best)
 * **Forecasting** — [prediction-market-style forecasting](./apps/forecasting) for questions with a checkable outcome: the crowd's aggregate probability estimate, plus a Brier-score leaderboard tracking who's actually well-calibrated over time, not just who guessed right once
 * **Expert elicitation** — [Delphi-method rounds](./apps/delphi): anonymous numeric estimates, the group's aggregate shown back, revise and repeat — converges without anyone anchoring on who said what first
+* **Organisation-wide search** — [semantic search](./apps/search) across every idea, proposal, map-idea and debate subject in every project an organisation runs, by meaning, not just exact keywords
 * **Follow-through** — dashboards, exports, notifications, activity feeds
 * **Cross-language groups** — [on-demand translation](./apps/translation) of discussion content (not just interface chrome) on the Synthesis and Summarization pages, so a multilingual group isn't stuck reading a discussion it can't follow
 

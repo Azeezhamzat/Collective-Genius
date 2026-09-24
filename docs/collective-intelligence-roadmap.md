@@ -285,15 +285,26 @@ Bigger features that make this platform stand out, not just catch up.
   skipped, a custom threshold): `python3 -m unittest
   apps.delphi.tests.test_engine`.
 
+* **[`apps/search`](../apps/search)** — cross-project semantic search:
+  "has anyone already proposed something like this" across every idea,
+  budgeting proposal, map-idea and debate subject in every project an
+  organisation runs, not just the one module you happen to be in.
+  Deliberately reuses `apps/deduplication/engine.py` (TF-IDF + cosine
+  similarity) rather than writing a second copy of the same algorithm —
+  that module was already a generic "find text similar to a query"
+  engine, not specific to checking one module for duplicates, so this
+  is the same math applied organisation-wide instead of module-wide. No
+  new engine, no new unit tests needed: the similarity math is already
+  covered by `apps/deduplication/tests/test_engine.py`. Stateless, same
+  as deduplication — nothing to migrate, results computed live. Linked
+  from the organisation landing page as "Search across all projects."
+
 ### Not yet
 
 * **Real-time collaborative documents.** CRDT-based co-editing (e.g. via
   Yjs) for `apps/documents`, so a group can draft text together, not just
   comment on a static version — turns the platform into a genuine
   co-creation tool, not just a feedback-collection one.
-* **Cross-project semantic search.** Once an organisation has run many
-  projects, let members search across all of them by meaning, not just
-  keyword — "has anyone already proposed something like this."
 * **Plugin/module marketplace.** The blueprint system
   (`A4_DASHBOARD['BLUEPRINTS']`) already supports pluggable phase types;
   formalize a plugin interface + registry so third parties can ship new

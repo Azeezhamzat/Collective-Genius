@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container my-4">
+    <p>
+        <a href="{{ organisation.get_absolute_url }}">&laquo; {{ organisation.name }}</a>
+    </p>
+
+    <h1>{% trans 'Search across all projects' %}</h1>
+    <p class="text-muted">
+        {% trans "Searches by meaning, not just exact words, across every idea, proposal, map-idea and debate topic in every project this organisation runs." %}
+    </p>
+
+    <form method="get" action="" class="mb-4">
+        <label for="id_q">{% trans 'Search' %}</label>
+        <input type="text" id="id_q" name="q" value="{{ query }}" style="width: 100%; max-width: 40em;" />
+        <button type="submit" class="btn btn--primary">{% trans 'Search' %}</button>
+    </form>
+
+    {% if query %}
+        {% if results %}
+            <ul>
+                {% for result, item in results %}
+                    <li>
+                        <a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
+                        <span class="text-muted">
+                            ({{ item.project.name }},
+                            {% widthratio result.score 1 100 %}% {% trans 'similar' %})
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>{% trans 'No matches found.' %}</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
