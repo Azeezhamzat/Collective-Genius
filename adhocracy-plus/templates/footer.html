@@ -12,7 +12,7 @@
                 {% endif %}
                 {% endwith %}
                 <p class="footer__description">
-                    {% blocktrans with platformname=settings.a4_candy_cms_settings.OrganisationSettings.platform_name %}<a href="/">{{ platformname }}</a> is a platform provided by <a href="https://liqd.net/de/">Liquid Democracy e.V.</a> in Berlin.{% endblocktrans %} {% if ORGANISATION %}{% blocktrans %}Only the respective operator of the offer is responsible for the editorial content.{% endblocktrans %}{% endif %}
+                    {% blocktrans with platformname=settings.a4_candy_cms_settings.OrganisationSettings.platform_name %}<a href="/">{{ platformname }}</a> is free, open-source software for collective intelligence.{% endblocktrans %} {% if ORGANISATION %}{% blocktrans %}Only the respective operator of the offer is responsible for the editorial content.{% endblocktrans %}{% endif %}
                 </p>
             </div>
             <div class="col-lg-6">
@@ -36,7 +36,7 @@
                 <nav class="navi p-0">
                     <ul class="navi__list mb-2 d-sm-flex flex-wrap">
                         <li class="navi__item footer__link">
-                          2020 Liquid Democracy
+                          &copy; {% now "Y" %} {{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name }}
                         </li>
                         {% if pages.imprint %}
                         <li class="navi__item footer__link">
