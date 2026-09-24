@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
@@ -5,12 +6,25 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
+from adhocracy4.dashboard import mixins as dashboard_mixins
 from adhocracy4.projects.mixins import DisplayProjectOrModuleMixin
 from adhocracy4.projects.mixins import ProjectMixin
 
 from . import services
+from .models import Option
 from .models import VotingRound
 from .services import BallotRejected
+
+OptionFormSet = forms.inlineformset_factory(
+    VotingRound, Option,
+    fields=('title', 'description', 'weight'),
+    extra=3, can_delete=True,
+)
+
+VotingRoundForm = forms.modelform_factory(
+    VotingRound,
+    fields=('title', 'description', 'credit_budget', 'is_open'),
+)
 
 
 class VotingRoundDetail(ProjectMixin, DisplayProjectOrModuleMixin,
@@ -88,3 +102,58 @@ class VotingRoundDetail(ProjectMixin, DisplayProjectOrModuleMixin,
             }
 
         return context
+
+
+class VotingRoundDashboardView(ProjectMixin,
+                               dashboard_mixins.DashboardBaseMixin,
+                               dashboard_mixins.DashboardComponentMixin,
+                               generic.View):
+    """Lets a project admin manage a module's voting round and its
+    options without touching /django-admin/.
+
+    Deliberately hand-written rather than built on
+    ``adhocracy4.dashboard.ModuleFormSetComponent``: that base class
+    assumes the formset's parent instance is the Module itself, but our
+    Options hang off a VotingRound, one level below the Module -- so a
+    plain get-or-create-then-render-two-forms view is more correct here
+    than forcing a mismatched abstraction.
+    """
+
+    template_name = 'a4_candy_quadraticvoting/votinground_dashboard.html'
+    permission_required = 'a4projects.change_project'
+    component = None  # set via as_view(component=self) in dashboard.py
+
+    def get_permission_object(self):
+        return self.project
+
+    def get_or_create_voting_round(self):
+        voting_round, _created = VotingRound.objects.get_or_create(
+            module=self.module,
+            defaults={'title': self.module.name},
+        )
+        return voting_round
+
+    def get(self, request, *args, **kwargs):
+        voting_round = self.get_or_create_voting_round()
+        round_form = VotingRoundForm(instance=voting_round)
+        formset = OptionFormSet(instance=voting_round)
+        return self.render(round_form, formset)
+
+    def post(self, request, *args, **kwargs):
+        voting_round = self.get_or_create_voting_round()
+        round_form = VotingRoundForm(request.POST, instance=voting_round)
+        formset = OptionFormSet(request.POST, instance=voting_round)
+
+        if round_form.is_valid() and formset.is_valid():
+            round_form.save()
+            formset.save()
+            messages.success(request, _('Voting round saved.'))
+            return redirect(request.path)
+
+        return self.render(round_form, formset)
+
+    def render(self, round_form, formset):
+        context = self.get_context_data()
+        context['round_form'] = round_form
+        context['formset'] = formset
+        return TemplateResponse(self.request, self.template_name, context)

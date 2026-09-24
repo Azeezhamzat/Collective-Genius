@@ -1,0 +1,37 @@
+{% extends "a4dashboard/base_dashboard_project.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Quadratic voting" %} &mdash; {{ block.super }}{% endblock %}
+
+{% block dashboard_project_content %}
+    <h1 class="mt-0">{% trans 'Quadratic voting' %}</h1>
+    <p class="text-muted">
+        {% trans "Set the voice-credit budget and add the options participants will spread it across." %}
+    </p>
+
+    <form method="post" action="">
+        {% csrf_token %}
+
+        <h2>{% trans 'Round settings' %}</h2>
+        {{ round_form.as_p }}
+
+        <h2>{% trans 'Options' %}</h2>
+        {{ formset.management_form }}
+        {% if formset.non_form_errors %}
+            <div class="alert alert-danger" role="alert">{{ formset.non_form_errors }}</div>
+        {% endif %}
+        {% for form in formset %}
+            <div class="mb-3 pb-3" style="border-bottom: 1px solid #ddd;">
+                {{ form.id }}
+                {{ form.as_p }}
+                {% if form.instance.pk %}
+                    <label>
+                        {{ form.DELETE }} {% trans 'Delete this option' %}
+                    </label>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn--primary">{% trans 'Save' %}</button>
+    </form>
+{% endblock %}

@@ -40,6 +40,10 @@ class VotingRound(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def project(self):
+        return self.module.project
+
 
 class Option(models.Model):
     voting_round = models.ForeignKey(

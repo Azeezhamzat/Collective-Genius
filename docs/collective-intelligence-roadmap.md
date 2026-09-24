@@ -113,26 +113,37 @@ for civic participation.
   Pure-Python core, unit tested, 9 tests:
   `python3 -m unittest apps.deduplication.tests.test_engine`.
 
-  Only wired into `apps/ideas` so far -- `apps/budgeting` proposals are
-  the same shape (title + rich-text description) and would reuse
-  `engine.find_similar` directly; extending `services.py` to accept any
-  queryset instead of hardcoding `Idea` is a small follow-up, tracked
-  below.
+  Update: now also wired into `apps/budgeting` proposals — `Proposal`
+  turned out to be the same shape (`.module`, `.name`, `.description`,
+  since it's built on the same `AbstractIdea`/`Item` base as `Idea`), so
+  `services.py` was generalized to `find_similar_items(model, module,
+  query_text, ...)` behind two thin `find_similar_ideas` /
+  `find_similar_proposals` wrappers, and both the idea and proposal
+  submission forms now link to a "check for similar" page.
+* **In-dashboard configuration for Quadratic Voting.** Project admins
+  can now set a round's credit budget and add/edit/remove `Option`s from
+  the normal project dashboard (`apps/quadraticvoting/dashboard.py` +
+  `VotingRoundDashboardView`) instead of `/django-admin/`. Deliberately
+  *not* built on `adhocracy4.dashboard.ModuleFormSetComponent`: that base
+  class's formset assumes the parent instance is the Module itself, but
+  `Option` hangs off `VotingRound`, one level below the Module -- forcing
+  that mismatched abstraction seemed more likely to produce a subtle bug
+  than a plain hand-written get-or-create-then-render-two-forms view, so
+  that's what this is (a real Django `ModelForm` for the round's
+  settings, plus `inlineformset_factory(VotingRound, Option, ...)` for
+  its options).
 
 ## Phase 1 (next) — high-leverage, low-risk
 
 Features that extend existing primitives and don't require new
 infrastructure.
 
-* **In-dashboard configuration for Quadratic Voting.** A
-  `apps/quadraticvoting/dashboard.py` component (formset for `Option`s,
-  a field for `credit_budget`), so a project admin doesn't have to touch
-  `/django-admin/` to set up a round. Mirror `apps/polls/dashboard.py`'s
-  `PollComponent`.
-* **Extend idea deduplication to budgeting proposals.** Generalize
-  `apps/deduplication/services.py` (currently hardcoded to `Idea`) to
-  take any queryset + text-extraction function, and add the same "check
-  for similar" link to `apps/budgeting`'s proposal-submission form.
+* **Extend idea deduplication to `apps/mapideas` and `apps/debate`.**
+  `find_similar_items` already takes any model shaped like an
+  adhocracy4 `Item` (`.module`, `.name`, `.description`) — `MapIdea` and
+  `Subject` both qualify. Just needs a third/fourth thin wrapper in
+  `services.py` and a link from their respective create forms, same as
+  Idea and Proposal.
 * **LLM-backed summarization as an alternate backend.** Now that
   `apps/summarization` exists (below) with a plain `summarize(comments)`
   entry point, add an optional second backend behind the same signature
