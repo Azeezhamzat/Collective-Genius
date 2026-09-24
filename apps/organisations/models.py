@@ -161,6 +161,19 @@ class Organisation(TranslatableModel):
         blank=True,
         null=True
     )
+    custom_css = models.TextField(
+        verbose_name=_('Custom CSS'),
+        help_text=_(
+            'Plain CSS, inserted into every page on this organisation\'s '
+            'platform inside a <style> tag scoped after the default '
+            'stylesheet. Use it to re-theme colors, fonts and spacing for '
+            'a white-labelled deployment, e.g. ".btn--primary { '
+            'background-color: #123456; }". Only organisation initiators '
+            'can set this -- the same trust level as the imprint and '
+            'other rich-text fields below, which already allow arbitrary '
+            'HTML.'),
+        blank=True
+    )
 
     def __str__(self):
         return self.name

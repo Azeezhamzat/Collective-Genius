@@ -154,6 +154,14 @@ urlpatterns = [
     path('robots.txt',
          TemplateView.as_view(template_name='robots.txt',
                               content_type="text/plain"), name="robots_file"),
+    path('manifest.webmanifest',
+         TemplateView.as_view(template_name='manifest.webmanifest',
+                              content_type="application/manifest+json"),
+         name="manifest"),
+    path('sw.js',
+         TemplateView.as_view(template_name='sw.js',
+                              content_type="application/javascript"),
+         name="service-worker"),
 ]
 
 

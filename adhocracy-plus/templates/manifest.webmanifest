@@ -1,0 +1,21 @@
+{% load static %}{
+    "name": "{% filter escapejs %}{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name|default:"Collective Genius" }}{% endfilter %}",
+    "short_name": "{% filter escapejs %}{{ settings.a4_candy_cms_settings.OrganisationSettings.platform_name|default:"Collective Genius" }}{% endfilter %}",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2d40cc",
+    "icons": [
+        {
+            "src": "{% static 'images/logo.svg' %}",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "{% static 'images/favicon-96x96.png' %}",
+            "sizes": "96x96",
+            "type": "image/png"
+        }
+    ]
+}

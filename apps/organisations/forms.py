@@ -65,7 +65,7 @@ class OrganisationForm(forms.ModelForm):
         model = Organisation
         fields = ['title', 'logo', 'image', 'image_copyright', 'url',
                   'twitter_handle', 'facebook_handle', 'instagram_handle',
-                  'language']
+                  'language', 'custom_css']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

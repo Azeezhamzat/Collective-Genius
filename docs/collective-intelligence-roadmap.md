@@ -454,20 +454,47 @@ Bigger features that make this platform stand out, not just catch up.
   unit tested, 6 tests: `python3 -m unittest
   apps.moderationlog.tests.test_engine`.
 
-### Not yet
-
-* **White-label multi-tenant SaaS.** `apps/organisations` already
-  supports multiple orgs on one deployment; add per-organisation theming,
-  custom domains, and usage-based billing hooks for a hosted offering.
-  Custom domains and billing genuinely need real infrastructure (DNS/TLS
-  provisioning, a payment processor account and API keys) this sandbox
-  doesn't have — same reasoning as proof-of-personhood above. Per-
-  organisation theming (colors/logo, no new infrastructure, `Organisation`
-  already has an image field) is the safely buildable slice of this if
-  picked up next.
-* **Mobile apps / installable PWA.** Push notifications for phase
-  deadlines and synthesis updates matter far more for engagement than a
-  native app shell — start with a PWA before native.
+* **White-label theming (the safe slice of multi-tenant SaaS).**
+  `apps/organisations` already runs multiple orgs on one deployment with
+  their own logo, header image, and legal pages; what it couldn't do
+  before is change the platform's actual look and feel per organisation
+  — colors, buttons, fonts — because those are compiled once, at build
+  time, into a single `adhocracy4.css` from SCSS variables shared by
+  every organisation (`_variables.scss` says as much in a comment: "as
+  they should not be overwritten on organisation pages"). Rather than
+  claim runtime color theming that pipeline can't actually deliver — a
+  CSS-custom-property override wouldn't touch Bootstrap 5.1's
+  compiled-in component colors — `Organisation` gained one new field,
+  `custom_css` (plain CSS, editable by organisation initiators in the
+  dashboard, rendered in a `<style>` tag at the end of `<head>` on every
+  page of that organisation, so it wins the cascade over the compiled
+  stylesheet). It's the same trust boundary the `imprint`,
+  `terms_of_use`, and other rich-text fields already use — organisation
+  initiators can already put arbitrary HTML on their pages through those,
+  so trusting them with arbitrary CSS adds no new risk. Custom domains
+  and usage-based billing are the genuinely infrastructure-shaped part of
+  "multi-tenant SaaS" (DNS/TLS provisioning, a payment processor account
+  and API keys) this sandbox doesn't have and isn't attempted here — same
+  reasoning as proof-of-personhood above.
+* **Installable PWA.** A `manifest.webmanifest` (name/icons drawn from
+  the platform's existing branding, served the same way `robots.txt`
+  already is — a plain Django template view, no build step) plus a
+  minimal service worker (`sw.js`) satisfy the two things a browser
+  actually checks before offering an "Install app" prompt: a linked
+  manifest and a registered service worker with a fetch handler. The
+  service worker deliberately caches only static assets
+  (`/static/...` — CSS, JS, images) and never HTML: every page here can
+  carry a CSRF token and per-user state, and serving a stale cached page
+  offline risks submitting an expired token or showing someone else's
+  view of the app. That's a real, working install-to-homescreen PWA, not
+  an offline-first app — full offline support for a forms-heavy Django
+  app is its own project. Push notifications for phase deadlines and
+  synthesis updates are still open: Web Push doesn't strictly need a
+  third-party service (VAPID keys + the browser's own push endpoint are
+  enough), but it does need a subscription-storage model and a delivery
+  path (most naturally the same retry/backoff machinery
+  `apps/webhooks` already built) that hasn't been designed yet — left
+  for a follow-up rather than bolted on here.
 * **Open data & auditability (remaining).** The moderation changelog
   shipped above (`apps/moderationlog`); still open is a one-click,
   structured, *versioned* export of full project data as a public

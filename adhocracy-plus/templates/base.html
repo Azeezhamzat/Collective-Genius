@@ -10,6 +10,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="96x96" href="{% static 'images/favicon-96x96.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% url 'manifest' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/favicon-96x96.png' %}">
+    <meta name="theme-color" content="#2d40cc">
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
     {% endblock %}
@@ -42,6 +45,9 @@
     {% endblock %}
 
     <link rel="stylesheet" type="text/css" href="{% static 'adhocracy4.css' %}" />
+    {% if ORGANISATION.custom_css %}
+    <style>{{ ORGANISATION.custom_css|safe }}</style>
+    {% endif %}
     <script src="{% url 'javascript-catalog' %}"></script>
     <script src="{% static 'adhocracy4.js' %}"></script>
     <meta name="viewport" content="width=device-width" />
@@ -108,5 +114,12 @@
         {% endif %}
         {% endblock %}
     </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('{% url "service-worker" %}');
+            });
+        }
+    </script>
 </body>
 </html>
