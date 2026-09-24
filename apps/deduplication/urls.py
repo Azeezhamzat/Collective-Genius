@@ -9,4 +9,7 @@ urlpatterns = [
     re_path(r'^proposals/(?P<module_slug>[-\w_]+)/$',
             views.SimilarProposalsView.as_view(),
             name='similar-proposals'),
+    re_path(r'^mapideas/(?P<module_slug>[-\w_]+)/$',
+            views.SimilarMapIdeasView.as_view(),
+            name='similar-mapideas'),
 ]

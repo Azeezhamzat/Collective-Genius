@@ -56,3 +56,8 @@ def find_similar_ideas(module, query_text, **kwargs):
 def find_similar_proposals(module, query_text, **kwargs):
     from apps.budgeting.models import Proposal
     return find_similar_items(Proposal, module, query_text, **kwargs)
+
+
+def find_similar_mapideas(module, query_text, **kwargs):
+    from apps.mapideas.models import MapIdea
+    return find_similar_items(MapIdea, module, query_text, **kwargs)

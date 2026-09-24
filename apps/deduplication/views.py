@@ -48,3 +48,10 @@ class SimilarProposalsView(SimilarItemsView):
 
     def find_similar(self, query):
         return services.find_similar_proposals(self.module, query)
+
+
+class SimilarMapIdeasView(SimilarItemsView):
+    item_label = 'idea'
+
+    def find_similar(self, query):
+        return services.find_similar_mapideas(self.module, query)
