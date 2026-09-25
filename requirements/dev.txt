@@ -10,4 +10,13 @@ pytest-cov==3.0.0
 pytest-django==4.4.0
 pytest-factoryboy==2.1.0
 pytest==6.2.5
-transifex-client==0.14.3
+
+# Not installed here: transifex-client==0.14.3 -- only needed for the
+# `make po` / `make tx-mo` translation-sync commands (pulling/pushing
+# to Transifex), not for running or testing the app. Its PyPI releases
+# have a Python-version gap (0.x tops out below 3.10, 6.x needs 3.12+)
+# with no version at all supporting 3.10/3.11, so it can't sit in this
+# shared requirements file without breaking install for anyone in that
+# gap. If you need it, install a matching version in your own
+# environment separately: `pip install "transifex-client<1"` on
+# Python <3.10, or `pip install "transifex-client>=6"` on Python 3.12+.
