@@ -38,10 +38,6 @@
     overflow-wrap: break-word;
 }
 
-@media print {
-    padding-top: 0;
-}
-
 .project-header--image {
     background-size: cover;
     color: contrast-color($black);
