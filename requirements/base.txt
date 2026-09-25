@@ -31,6 +31,14 @@ django-multiselectfield==0.1.12
 django-widget-tweaks==1.4.9
 djangorestframework==3.12.4
 easy-thumbnails==2.8
+# Pinned explicitly: easy-thumbnails pulls in reportlab (SVG thumbnail
+# support) unconditionally, and pip's resolver backtracks all the way
+# down to reportlab==3.6.11 trying to satisfy wagtail's Pillow<9.0.0
+# pin -- and 3.6.11 has no prebuilt wheel for current platforms, so it
+# tries to build from source, which fetches a resource over the
+# network that now 403s. 3.6.12 is the newest version with a working
+# wheel that's still compatible with the old Pillow pin.
+reportlab==3.6.12
 html5lib==1.1
 jsonfield==3.1.0
 psycopg2-binary==2.9.2
