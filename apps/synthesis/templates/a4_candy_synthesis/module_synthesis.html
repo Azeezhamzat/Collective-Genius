@@ -1,8 +1,169 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block extra_css %}
+    {{ block.super }}
+    <style>
+        /* Scoped to this page only -- brand colors pulled from
+           adhocracy-plus/assets/scss/_variables.scss ($brand-primary,
+           $brand-danger) rather than new hues, so this stays on-brand
+           without touching the shared SCSS build. */
+        .synthesis-viz {
+            --sy-ink: #1a1a1a;
+            --sy-ink-secondary: #52514e;
+            --sy-ink-muted: #898781;
+            --sy-surface: #fff;
+            --sy-gridline: #e1e0d9;
+            --sy-consensus: #2d40cc;   /* $brand-primary */
+            --sy-consensus-track: #dde1f7;
+            --sy-divisive: #a72b1e;    /* $brand-danger */
+            --sy-divisive-track: #f3dcd9;
+            --sy-group-a: #2d40cc;     /* $brand-primary */
+            --sy-group-b: #a72b1e;     /* $brand-danger */
+            --sy-group-c: #008dc5;     /* $brand-tertiary */
+            --sy-group-d: #eda100;
+        }
+
+        .synthesis-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .synthesis-stat-tile {
+            flex: 1 1 12rem;
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--sy-gridline);
+            border-radius: 6px;
+        }
+        .synthesis-stat-tile__label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--sy-ink-secondary);
+            margin-bottom: 0.25rem;
+        }
+        .synthesis-stat-tile__value {
+            display: block;
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.1;
+            color: var(--sy-ink);
+        }
+
+        .synthesis-groupbar {
+            display: flex;
+            height: 28px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+        .synthesis-groupbar__segment {
+            height: 100%;
+        }
+        .synthesis-groupbar__segment:not(:last-child) {
+            border-right: 2px solid var(--sy-surface);
+        }
+        .synthesis-group-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem;
+            font-size: 0.9rem;
+            color: var(--sy-ink-secondary);
+        }
+        .synthesis-group-legend li {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .synthesis-group-legend__dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex: none;
+        }
+
+        .synthesis-barlist {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .synthesis-barlist li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--sy-gridline);
+        }
+        .synthesis-barlist li:last-child {
+            border-bottom: none;
+        }
+        .synthesis-barlist__text {
+            display: block;
+            color: var(--sy-ink);
+            margin-bottom: 0.4rem;
+        }
+        .synthesis-barlist__row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .synthesis-barlist__track {
+            flex: 1 1 auto;
+            height: 10px;
+            border-radius: 5px;
+            background: var(--sy-track, var(--sy-consensus-track));
+        }
+        .synthesis-barlist__fill {
+            height: 100%;
+            border-radius: 5px;
+            background: var(--sy-fill, var(--sy-consensus));
+        }
+        .synthesis-barlist--divisive .synthesis-barlist__track {
+            background: var(--sy-divisive-track);
+        }
+        .synthesis-barlist--divisive .synthesis-barlist__fill {
+            background: var(--sy-divisive);
+        }
+        .synthesis-barlist__value {
+            flex: none;
+            width: 3.5rem;
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--sy-ink-secondary);
+            font-variant-numeric: tabular-nums;
+        }
+        .synthesis-barlist__meta {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--sy-ink-muted);
+            margin-top: 0.25rem;
+        }
+
+        .synthesis-table-toggle {
+            margin: 0.5rem 0 1.5rem;
+            font-size: 0.85rem;
+        }
+        .synthesis-table-toggle summary {
+            cursor: pointer;
+            color: var(--sy-ink-secondary);
+        }
+        .synthesis-table-toggle table {
+            width: 100%;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            border-collapse: collapse;
+        }
+        .synthesis-table-toggle th,
+        .synthesis-table-toggle td {
+            text-align: left;
+            padding: 0.35rem 0.5rem;
+            border-bottom: 1px solid var(--sy-gridline);
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-<div class="container my-4">
+<div class="container my-4 synthesis-viz">
     <p>
         <a href="{{ module.project.get_absolute_url }}">&laquo; {{ module.project.name }}</a>
     </p>
@@ -29,16 +190,45 @@
             </div>
         </div>
     {% else %}
-        <div class="row">
-            <div class="col-md-12 my-2">
-                <p class="text-muted">
-                    {% blocktrans with n_participants=snapshot.n_participants n_groups=snapshot.n_groups %}
-                        Based on {{ n_participants }} participants, split into
-                        {{ n_groups }} opinion groups.
-                    {% endblocktrans %}
-                </p>
+        <div class="synthesis-stats">
+            <div class="synthesis-stat-tile">
+                <span class="synthesis-stat-tile__label">{% trans 'Participants' %}</span>
+                <span class="synthesis-stat-tile__value">{{ snapshot.n_participants }}</span>
+            </div>
+            <div class="synthesis-stat-tile">
+                <span class="synthesis-stat-tile__label">{% trans 'Opinion groups' %}</span>
+                <span class="synthesis-stat-tile__value">{{ snapshot.n_groups }}</span>
+            </div>
+            <div class="synthesis-stat-tile">
+                <span class="synthesis-stat-tile__label">{% trans 'Statements analyzed' %}</span>
+                <span class="synthesis-stat-tile__value">{{ snapshot.n_statements }}</span>
             </div>
         </div>
+
+        {% if snapshot.group_sizes %}
+            <div class="synthesis-groupbar" role="img"
+                 aria-label="{% blocktrans with n_groups=snapshot.n_groups %}Split of participants across {{ n_groups }} opinion groups{% endblocktrans %}">
+                {% for group_id, count in snapshot.group_sizes.items %}
+                    {% cycle 'a' 'b' 'c' 'd' as group_letter silent %}
+                    {% widthratio count snapshot.n_participants 100 as pct %}
+                    <div class="synthesis-groupbar__segment"
+                         style="width: {{ pct }}%; background: var(--sy-group-{{ group_letter }});"
+                         title="{% blocktrans with count=count pct=pct %}{{ count }} participants ({{ pct }}%){% endblocktrans %}">
+                    </div>
+                {% endfor %}
+            </div>
+            <ul class="synthesis-group-legend">
+                {% for group_id, count in snapshot.group_sizes.items %}
+                    {% cycle 'a' 'b' 'c' 'd' as group_letter_legend silent %}
+                    {% widthratio count snapshot.n_participants 100 as pct %}
+                    <li>
+                        <span class="synthesis-groupbar__segment synthesis-group-legend__dot"
+                              style="background: var(--sy-group-{{ group_letter_legend }});"></span>
+                        {% blocktrans with group_id=group_id count=count pct=pct %}Group {{ group_id }}: {{ count }} ({{ pct }}%){% endblocktrans %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
 
         {% if translation_enabled %}
             <form method="get" action="" class="mb-3">
@@ -57,22 +247,51 @@
             <div class="col-md-6 my-2">
                 <h2>{% trans 'Consensus (bridging statements)' %}</h2>
                 {% if bridging_statements %}
-                    <ul>
+                    <ul class="synthesis-barlist synthesis-barlist--consensus">
                         {% for result in bridging_statements %}
                             <li>
-                                {% if target_language and result.translated_text %}
-                                    {{ result.translated_text }}
-                                    <span class="text-muted">({% trans 'machine translated' %})</span>
-                                {% else %}
-                                    {{ result.comment.comment }}
-                                {% endif %}
-                                <span class="text-muted">
-                                    ({{ result.consensus_score|floatformat:2 }}
-                                    {% trans 'agreement across groups' %})
+                                <span class="synthesis-barlist__text">
+                                    {% if target_language and result.translated_text %}
+                                        {{ result.translated_text }}
+                                        <span class="text-muted">({% trans 'machine translated' %})</span>
+                                    {% else %}
+                                        {{ result.comment.comment }}
+                                    {% endif %}
+                                </span>
+                                {% widthratio result.consensus_score 1 100 as consensus_pct %}
+                                <div class="synthesis-barlist__row">
+                                    <div class="synthesis-barlist__track">
+                                        <div class="synthesis-barlist__fill" style="width: {{ consensus_pct }}%;"></div>
+                                    </div>
+                                    <span class="synthesis-barlist__value">{{ consensus_pct }}%</span>
+                                </div>
+                                <span class="synthesis-barlist__meta">
+                                    {% blocktrans with n_votes=result.n_votes %}{{ n_votes }} votes{% endblocktrans %}
                                 </span>
                             </li>
                         {% endfor %}
                     </ul>
+                    <details class="synthesis-table-toggle">
+                        <summary>{% trans 'View as table' %}</summary>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>{% trans 'Statement' %}</th>
+                                    <th>{% trans 'Agreement across groups' %}</th>
+                                    <th>{% trans 'Votes' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in bridging_statements %}
+                                    <tr>
+                                        <td>{{ result.comment.comment }}</td>
+                                        <td>{{ result.consensus_score|floatformat:2 }}</td>
+                                        <td>{{ result.n_votes }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </details>
                 {% else %}
                     <p>{% trans 'No consensus statements found yet.' %}</p>
                 {% endif %}
@@ -80,22 +299,51 @@
             <div class="col-md-6 my-2">
                 <h2>{% trans 'Divisive statements' %}</h2>
                 {% if divisive_statements %}
-                    <ul>
+                    <ul class="synthesis-barlist synthesis-barlist--divisive">
                         {% for result in divisive_statements %}
                             <li>
-                                {% if target_language and result.translated_text %}
-                                    {{ result.translated_text }}
-                                    <span class="text-muted">({% trans 'machine translated' %})</span>
-                                {% else %}
-                                    {{ result.comment.comment }}
-                                {% endif %}
-                                <span class="text-muted">
-                                    ({{ result.divisiveness|floatformat:2 }}
-                                    {% trans 'gap between groups' %})
+                                <span class="synthesis-barlist__text">
+                                    {% if target_language and result.translated_text %}
+                                        {{ result.translated_text }}
+                                        <span class="text-muted">({% trans 'machine translated' %})</span>
+                                    {% else %}
+                                        {{ result.comment.comment }}
+                                    {% endif %}
+                                </span>
+                                {% widthratio result.divisiveness 1 100 as divisive_pct %}
+                                <div class="synthesis-barlist__row">
+                                    <div class="synthesis-barlist__track">
+                                        <div class="synthesis-barlist__fill" style="width: {{ divisive_pct }}%;"></div>
+                                    </div>
+                                    <span class="synthesis-barlist__value">{{ divisive_pct }}%</span>
+                                </div>
+                                <span class="synthesis-barlist__meta">
+                                    {% blocktrans with n_votes=result.n_votes %}{{ n_votes }} votes{% endblocktrans %}
                                 </span>
                             </li>
                         {% endfor %}
                     </ul>
+                    <details class="synthesis-table-toggle">
+                        <summary>{% trans 'View as table' %}</summary>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>{% trans 'Statement' %}</th>
+                                    <th>{% trans 'Gap between groups' %}</th>
+                                    <th>{% trans 'Votes' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in divisive_statements %}
+                                    <tr>
+                                        <td>{{ result.comment.comment }}</td>
+                                        <td>{{ result.divisiveness|floatformat:2 }}</td>
+                                        <td>{{ result.n_votes }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </details>
                 {% else %}
                     <p>{% trans 'No strongly divisive statements found yet.' %}</p>
                 {% endif %}
