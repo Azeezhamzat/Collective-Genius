@@ -1,8 +1,115 @@
 {% extends extends %}
 {% load i18n %}
 
+{% block extra_css %}
+    {{ block.super }}
+    <style>
+        /* Scoped to this page. Brand colors from
+           adhocracy-plus/assets/scss/_variables.scss; status colors are
+           the fixed good/critical pair, never reused for anything else. */
+        .fc-viz {
+            --fc-ink-secondary: #52514e;
+            --fc-gridline: #e1e0d9;
+            --fc-forecast: #2d40cc;    /* $brand-primary */
+            --fc-track: #dde1f7;
+            --fc-good: #0a820a;        /* $feedback-color-accepted */
+            --fc-critical: #dc3818;    /* $feedback-color-rejected */
+            --fc-calibration: #2d40cc;
+            --fc-calibration-track: #dde1f7;
+        }
+        .fc-meter {
+            position: relative;
+            height: 14px;
+            border-radius: 4px;
+            background: var(--fc-track);
+            margin: 0.5rem 0 0.3rem;
+        }
+        .fc-meter__fill {
+            height: 100%;
+            border-radius: 4px;
+            background: var(--fc-forecast);
+        }
+        .fc-meter__marker {
+            position: absolute;
+            top: -4px;
+            bottom: -4px;
+            width: 2px;
+            background: var(--fc-ink-secondary);
+        }
+        .fc-meter__scale {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--fc-ink-secondary);
+            margin-bottom: 0.75rem;
+        }
+        .fc-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-weight: 600;
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+        }
+        .fc-badge--yes {
+            color: #fff;
+            background: var(--fc-good);
+        }
+        .fc-badge--no {
+            color: #fff;
+            background: var(--fc-critical);
+        }
+        .fc-leaderboard {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .fc-leaderboard li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--fc-gridline);
+        }
+        .fc-leaderboard li:last-child {
+            border-bottom: none;
+        }
+        .fc-leaderboard__row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .fc-leaderboard__rank {
+            flex: none;
+            width: 1.5rem;
+            color: var(--fc-ink-secondary);
+            font-variant-numeric: tabular-nums;
+        }
+        .fc-leaderboard__name {
+            flex: 1 1 auto;
+        }
+        .fc-leaderboard__track {
+            flex: 1 1 8rem;
+            height: 10px;
+            border-radius: 5px;
+            background: var(--fc-calibration-track);
+        }
+        .fc-leaderboard__fill {
+            height: 100%;
+            border-radius: 5px;
+            background: var(--fc-calibration);
+        }
+        .fc-leaderboard__score {
+            flex: none;
+            width: 5rem;
+            text-align: right;
+            font-size: 0.8rem;
+            color: var(--fc-ink-secondary);
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+{% endblock %}
+
 {% block phase_content %}
-<div class="row">
+<div class="row fc-viz">
     <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
 
         {% if messages %}
@@ -27,20 +134,36 @@
 
                     {% if question.is_resolved %}
                         <p>
-                            <strong>{% trans 'Resolved:' %}</strong>
-                            {% if question.outcome %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}
+                            {% if question.outcome %}
+                                <span class="fc-badge fc-badge--yes">&#10003; {% trans 'Resolved YES' %}</span>
+                            {% else %}
+                                <span class="fc-badge fc-badge--no">&#10007; {% trans 'Resolved NO' %}</span>
+                            {% endif %}
                         </p>
                         {% if question.aggregate_percent != None %}
-                            <p>
+                            <p class="text-muted mb-1">
                                 {% blocktrans with percent=question.aggregate_percent %}
                                     The crowd's aggregate forecast was {{ percent }}%.
                                 {% endblocktrans %}
                             </p>
+                            <div class="fc-meter" role="img"
+                                 aria-label="{% blocktrans with percent=question.aggregate_percent %}Crowd aggregate forecast: {{ percent }}%{% endblocktrans %}">
+                                <div class="fc-meter__fill" style="width: {{ question.aggregate_percent }}%;"></div>
+                                {% if question.my_probability != None %}
+                                    <div class="fc-meter__marker" style="left: {{ question.my_probability }}%;"
+                                         title="{% blocktrans with percent=question.my_probability %}Your forecast: {{ percent }}%{% endblocktrans %}"></div>
+                                {% endif %}
+                            </div>
+                            <div class="fc-meter__scale">
+                                <span>0%</span>
+                                <span>50%</span>
+                                <span>100%</span>
+                            </div>
                         {% endif %}
                         {% if question.my_probability != None %}
                             <p class="text-muted">
                                 {% blocktrans with percent=question.my_probability %}
-                                    Your forecast was {{ percent }}%.
+                                    Your forecast was {{ percent }}% (marked on the bar above).
                                 {% endblocktrans %}
                             </p>
                         {% endif %}
@@ -69,16 +192,26 @@
         {% if leaderboard %}
             <h2>{% trans 'Forecaster leaderboard' %}</h2>
             <p class="text-muted">
-                {% trans 'Lower is better -- this is the average Brier score across every resolved question, a standard measure of forecasting calibration, not just who guessed right once.' %}
+                {% trans 'Bar length shows calibration quality (longer is better) -- the inverse of the average Brier score across every resolved question, a standard measure of forecasting skill, not just who guessed right once. Exact score shown alongside; lower is better there.' %}
             </p>
-            <ol>
+            <ol class="fc-leaderboard">
                 {% for entry in leaderboard %}
                     <li>
-                        {% if entry.forecaster %}{{ entry.forecaster }}{% else %}{% trans 'Unknown' %}{% endif %}
-                        &mdash;
-                        {% blocktrans with score=entry.mean_brier_score|floatformat:3 n=entry.n_questions %}
-                            score {{ score }} ({{ n }} questions)
-                        {% endblocktrans %}
+                        <div class="fc-leaderboard__row">
+                            <span class="fc-leaderboard__rank">{{ forloop.counter }}.</span>
+                            <span class="fc-leaderboard__name">
+                                {% if entry.forecaster %}{{ entry.forecaster }}{% else %}{% trans 'Unknown' %}{% endif %}
+                            </span>
+                            <div class="fc-leaderboard__track">
+                                <div class="fc-leaderboard__fill" style="width: {{ entry.calibration_percent }}%;"></div>
+                            </div>
+                            <span class="fc-leaderboard__score">
+                                {% blocktrans with score=entry.mean_brier_score|floatformat:3 %}score {{ score }}{% endblocktrans %}
+                            </span>
+                        </div>
+                        <div class="text-muted" style="font-size: 0.8rem; margin-left: 2.1rem;">
+                            {% blocktrans with n=entry.n_questions %}{{ n }} questions{% endblocktrans %}
+                        </div>
                     </li>
                 {% endfor %}
             </ol>

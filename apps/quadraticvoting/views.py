@@ -100,6 +100,12 @@ class VotingRoundDetail(ProjectMixin, DisplayProjectOrModuleMixin,
             context['results_by_option_id'] = {
                 int(r.option_id): r for r in results
             }
+            context['max_side_votes'] = max(
+                [max(r.support_votes, r.oppose_votes) for r in results]
+                or [0])
+            context['total_voters'] = len(
+                {a.creator_id for a in
+                 services.allocations_for_round(voting_round)})
 
         return context
 

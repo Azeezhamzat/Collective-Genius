@@ -97,6 +97,8 @@ class QuestionListDetail(ProjectMixin, DisplayProjectOrModuleMixin,
             [int(entry.forecaster_id) for entry in leaderboard])
         for entry in leaderboard:
             entry.forecaster = users_by_id.get(int(entry.forecaster_id))
+            entry.calibration_percent = round(
+                (1 - entry.mean_brier_score) * 100)
         context['leaderboard'] = leaderboard
 
         return context

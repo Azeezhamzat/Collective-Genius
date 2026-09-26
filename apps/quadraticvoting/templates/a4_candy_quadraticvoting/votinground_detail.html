@@ -1,6 +1,131 @@
 {% extends extends %}
 {% load i18n quadraticvoting_tags %}
 
+{% block extra_css %}
+    {{ block.super }}
+    <style>
+        /* Scoped to this page. Brand colors from
+           adhocracy-plus/assets/scss/_variables.scss. */
+        .qv-viz {
+            --qv-ink-secondary: #52514e;
+            --qv-ink-muted: #898781;
+            --qv-gridline: #e1e0d9;
+            --qv-support: #2d40cc;   /* $brand-primary */
+            --qv-oppose: #a72b1e;    /* $brand-danger */
+        }
+        .qv-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0 1.5rem;
+        }
+        .qv-stat-tile {
+            flex: 1 1 10rem;
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--qv-gridline);
+            border-radius: 6px;
+        }
+        .qv-stat-tile__label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--qv-ink-secondary);
+            margin-bottom: 0.25rem;
+        }
+        .qv-stat-tile__value {
+            display: block;
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.1;
+        }
+        .qv-results {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .qv-results li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--qv-gridline);
+        }
+        .qv-results li:last-child {
+            border-bottom: none;
+        }
+        .qv-results__title {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+        .qv-divbar {
+            position: relative;
+            height: 14px;
+            background: var(--qv-gridline);
+            border-radius: 3px;
+        }
+        .qv-divbar__zero {
+            position: absolute;
+            left: 50%;
+            top: -3px;
+            bottom: -3px;
+            width: 2px;
+            background: var(--qv-ink-muted);
+            transform: translateX(-1px);
+        }
+        .qv-divbar__fill {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            border-radius: 3px;
+        }
+        .qv-divbar__fill--support {
+            left: 50%;
+            background: var(--qv-support);
+        }
+        .qv-divbar__fill--oppose {
+            right: 50%;
+            background: var(--qv-oppose);
+        }
+        .qv-results__meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--qv-ink-secondary);
+            margin-top: 0.35rem;
+        }
+        .qv-legend {
+            display: flex;
+            gap: 1.25rem;
+            font-size: 0.85rem;
+            color: var(--qv-ink-secondary);
+            margin-bottom: 1rem;
+        }
+        .qv-legend span.dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 0.35rem;
+        }
+        .qv-table-toggle {
+            margin: 0.75rem 0 1.5rem;
+            font-size: 0.85rem;
+        }
+        .qv-table-toggle summary {
+            cursor: pointer;
+            color: var(--qv-ink-secondary);
+        }
+        .qv-table-toggle table {
+            width: 100%;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            border-collapse: collapse;
+        }
+        .qv-table-toggle th, .qv-table-toggle td {
+            text-align: left;
+            padding: 0.35rem 0.5rem;
+            border-bottom: 1px solid var(--qv-gridline);
+        }
+    </style>
+{% endblock %}
+
 {% block phase_content %}
 <div class="row">
     <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
@@ -66,31 +191,86 @@
                 {% endif %}
             </form>
         {% else %}
-            <h2>{% trans 'Results' %}</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>{% trans 'Option' %}</th>
-                        <th>{% trans 'Net votes' %}</th>
-                        <th>{% trans 'Support' %}</th>
-                        <th>{% trans 'Oppose' %}</th>
-                        <th>{% trans 'Voters' %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for option in voting_round.options.all %}
-                        {% with result=results_by_option_id|get_item:option.pk %}
+            <div class="qv-viz">
+                <h2>{% trans 'Results' %}</h2>
+
+                <div class="qv-stats">
+                    <div class="qv-stat-tile">
+                        <span class="qv-stat-tile__label">{% trans 'Voice credit budget' %}</span>
+                        <span class="qv-stat-tile__value">{{ voting_round.credit_budget }}</span>
+                    </div>
+                    <div class="qv-stat-tile">
+                        <span class="qv-stat-tile__label">{% trans 'Options' %}</span>
+                        <span class="qv-stat-tile__value">{{ voting_round.options.count }}</span>
+                    </div>
+                    <div class="qv-stat-tile">
+                        <span class="qv-stat-tile__label">{% trans 'Participants who voted' %}</span>
+                        <span class="qv-stat-tile__value">{{ total_voters }}</span>
+                    </div>
+                </div>
+
+                {% if max_side_votes %}
+                    <div class="qv-legend">
+                        <span><span class="dot" style="background: var(--qv-support);"></span>{% trans 'Support' %}</span>
+                        <span><span class="dot" style="background: var(--qv-oppose);"></span>{% trans 'Oppose' %}</span>
+                    </div>
+                    <ul class="qv-results">
+                        {% for option in voting_round.options.all %}
+                            {% with result=results_by_option_id|get_item:option.pk %}
+                                <li>
+                                    <span class="qv-results__title">{{ option.title }}</span>
+                                    <div class="qv-divbar" role="img"
+                                         aria-label="{% blocktrans with title=option.title support=result.support_votes|default:0 oppose=result.oppose_votes|default:0 %}{{ title }}: {{ support }} support votes, {{ oppose }} oppose votes{% endblocktrans %}">
+                                        <div class="qv-divbar__zero"></div>
+                                        {% widthratio result.support_votes|default:0 max_side_votes 50 as support_pct %}
+                                        {% widthratio result.oppose_votes|default:0 max_side_votes 50 as oppose_pct %}
+                                        <div class="qv-divbar__fill qv-divbar__fill--support" style="width: {{ support_pct }}%;"></div>
+                                        <div class="qv-divbar__fill qv-divbar__fill--oppose" style="width: {{ oppose_pct }}%;"></div>
+                                    </div>
+                                    <div class="qv-results__meta">
+                                        <span>
+                                            {% blocktrans with support=result.support_votes|default:0 oppose=result.oppose_votes|default:0 %}{{ support }} support &middot; {{ oppose }} oppose{% endblocktrans %}
+                                        </span>
+                                        <span>
+                                            {% blocktrans with net=result.net_votes|default:0 voters=result.n_voters|default:0 %}net {{ net }} &middot; {{ voters }} voters{% endblocktrans %}
+                                        </span>
+                                    </div>
+                                </li>
+                            {% endwith %}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>{% trans 'No votes were cast in this round.' %}</p>
+                {% endif %}
+
+                <details class="qv-table-toggle">
+                    <summary>{% trans 'View as table' %}</summary>
+                    <table>
+                        <thead>
                             <tr>
-                                <td>{{ option.title }}</td>
-                                <td>{{ result.net_votes|default:0 }}</td>
-                                <td>{{ result.support_votes|default:0 }}</td>
-                                <td>{{ result.oppose_votes|default:0 }}</td>
-                                <td>{{ result.n_voters|default:0 }}</td>
+                                <th>{% trans 'Option' %}</th>
+                                <th>{% trans 'Net votes' %}</th>
+                                <th>{% trans 'Support' %}</th>
+                                <th>{% trans 'Oppose' %}</th>
+                                <th>{% trans 'Voters' %}</th>
                             </tr>
-                        {% endwith %}
-                    {% endfor %}
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                            {% for option in voting_round.options.all %}
+                                {% with result=results_by_option_id|get_item:option.pk %}
+                                    <tr>
+                                        <td>{{ option.title }}</td>
+                                        <td>{{ result.net_votes|default:0 }}</td>
+                                        <td>{{ result.support_votes|default:0 }}</td>
+                                        <td>{{ result.oppose_votes|default:0 }}</td>
+                                        <td>{{ result.n_voters|default:0 }}</td>
+                                    </tr>
+                                {% endwith %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </details>
+            </div>
         {% endif %}
     {% endif %}
 

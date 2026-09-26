@@ -13,6 +13,56 @@ from .models import Question
 from .models import Response
 
 
+def _convergence_chart(rounds):
+    """SVG-ready coordinates (0-100 viewBox) for a round-over-round
+    convergence chart: a min/max band plus a median line, one point per
+    round. Returns None if there are fewer than two rounds with data to
+    plot a line between.
+    """
+    rounds = [r for r in rounds if r is not None]
+    if len(rounds) < 2:
+        return None
+
+    global_min = min(r.minimum for r in rounds)
+    global_max = max(r.maximum for r in rounds)
+    value_range = (global_max - global_min) or 1
+
+    def y_for(value):
+        # SVG y grows downward; flip so higher values sit higher on screen.
+        return round(100 - (value - global_min) / value_range * 100, 1)
+
+    n = len(rounds)
+
+    def x_for(i):
+        return round(i / (n - 1) * 100, 1) if n > 1 else 50.0
+
+    band_top = [(x_for(i), y_for(r.maximum)) for i, r in enumerate(rounds)]
+    band_bottom = [(x_for(i), y_for(r.minimum))
+                   for i, r in enumerate(rounds)]
+    band_points = band_top + list(reversed(band_bottom))
+
+    markers = []
+    for i, r in enumerate(rounds):
+        markers.append({
+            'x': x_for(i),
+            'y': y_for(r.median),
+            'round_number': r.round_number,
+            'median': r.median,
+            'is_first': i == 0,
+            'is_last': i == n - 1,
+        })
+
+    return {
+        'band_points': ' '.join(
+            '{},{}'.format(x, y) for x, y in band_points),
+        'line_points': ' '.join(
+            '{},{}'.format(m['x'], m['y']) for m in markers),
+        'markers': markers,
+        'y_max_label': round(global_max, 1),
+        'y_min_label': round(global_min, 1),
+    }
+
+
 class QuestionListDetail(ProjectMixin, DisplayProjectOrModuleMixin,
                          generic.View):
     """The module's main page for a Delphi phase: every question, with
@@ -76,6 +126,8 @@ class QuestionListDetail(ProjectMixin, DisplayProjectOrModuleMixin,
             else:
                 question.previous_rounds = history[:-1] if history else []
             question.converged = services.has_converged(question)
+            question.convergence_chart = _convergence_chart(
+                question.previous_rounds)
 
             question.my_response = None
             if self.request.user.is_authenticated:

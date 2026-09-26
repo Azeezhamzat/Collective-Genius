@@ -1,8 +1,64 @@
 {% extends extends %}
 {% load i18n %}
 
+{% block extra_css %}
+    {{ block.super }}
+    <style>
+        /* Scoped to this page. Brand color from
+           adhocracy-plus/assets/scss/_variables.scss ($brand-primary);
+           status "good" reuses $feedback-color-accepted. */
+        .dp-viz {
+            --dp-ink-secondary: #52514e;
+            --dp-gridline: #e1e0d9;
+            --dp-line: #2d40cc;      /* $brand-primary */
+            --dp-band: rgba(45, 64, 204, 0.1);
+            --dp-good: #0a820a;      /* $feedback-color-accepted */
+        }
+        .dp-chart-card {
+            border: 1px solid var(--dp-gridline);
+            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0 1.25rem;
+        }
+        .dp-chart-caption {
+            font-size: 0.8rem;
+            color: var(--dp-ink-secondary);
+            margin-bottom: 0.5rem;
+        }
+        .dp-chart-svg {
+            width: 100%;
+            height: 120px;
+            display: block;
+        }
+        .dp-chart-xaxis {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--dp-ink-secondary);
+            margin-top: 0.35rem;
+        }
+        .dp-chart-summary {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        .dp-converged-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-weight: 600;
+            color: #fff;
+            background: var(--dp-good);
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+        }
+    </style>
+{% endblock %}
+
 {% block phase_content %}
-<div class="row">
+<div class="row dp-viz">
     <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
 
         {% if messages %}
@@ -25,6 +81,36 @@
 
                     {% if question.previous_rounds %}
                         <h3>{% trans 'Previous rounds' %}</h3>
+
+                        {% if question.convergence_chart %}
+                            <div class="dp-chart-card">
+                                <p class="dp-chart-caption">
+                                    {% trans 'Shaded band shows the full range of estimates each round; the line tracks the median.' %}
+                                </p>
+                                <svg class="dp-chart-svg" viewBox="0 0 100 100" preserveAspectRatio="none" role="img"
+                                     aria-label="{% trans 'Round-over-round convergence chart: shaded band is the range of estimates, line is the median' %}">
+                                    <polygon points="{{ question.convergence_chart.band_points }}" fill="var(--dp-band)" stroke="none"></polygon>
+                                    <polyline points="{{ question.convergence_chart.line_points }}" fill="none" stroke="var(--dp-line)" stroke-width="2" vector-effect="non-scaling-stroke"></polyline>
+                                    {% for marker in question.convergence_chart.markers %}
+                                        <circle cx="{{ marker.x }}" cy="{{ marker.y }}" r="4" fill="var(--dp-line)" stroke="#fff" stroke-width="2" vector-effect="non-scaling-stroke"></circle>
+                                    {% endfor %}
+                                </svg>
+                                <div class="dp-chart-xaxis">
+                                    {% for marker in question.convergence_chart.markers %}
+                                        <span>{% blocktrans with n=marker.round_number %}Round {{ n }}{% endblocktrans %}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="dp-chart-summary">
+                                    <span class="text-muted">
+                                        {% blocktrans with lo=question.convergence_chart.y_min_label hi=question.convergence_chart.y_max_label scale=question.scale_hint %}Full range across all rounds: {{ lo }}&ndash;{{ hi }} {{ scale }}{% endblocktrans %}
+                                    </span>
+                                    {% if question.converged %}
+                                        <span class="dp-converged-badge">&#10003; {% trans 'Converged' %}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+
                         <table class="table">
                             <thead>
                                 <tr>
@@ -47,7 +133,7 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        {% if question.converged %}
+                        {% if question.converged and not question.convergence_chart %}
                             <p><strong>{% trans 'The group’s estimates have converged.' %}</strong></p>
                         {% endif %}
                         {% if question.previous_rationales %}

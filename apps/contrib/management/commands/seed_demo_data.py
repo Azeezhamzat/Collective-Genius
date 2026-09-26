@@ -687,15 +687,36 @@ class Command(BaseCommand):
                 'scale_hint': '0-100%',
             },
         )
-        estimates = [(35, 'Uptake tends to track the demonstration plots, '
-                     'not the training sessions.'),
-                     (20, 'Credit access is the binding constraint in my '
-                     'community.'),
-                     (45, 'Cooperative coordination is already strong '
-                     'here.')]
-        for i, (value, rationale) in enumerate(estimates):
+        # Two closed rounds plus an open third round, so the module page
+        # shows both the round-over-round convergence chart (needs >= 2
+        # finished rounds) and a live form to submit round 3.
+        if question.current_round < 3:
+            question.current_round = 3
+            question.save()
+
+        round_1_estimates = [
+            (35, 'Uptake tends to track the demonstration plots, not the '
+             'training sessions.'),
+            (20, 'Credit access is the binding constraint in my '
+             'community.'),
+            (45, 'Cooperative coordination is already strong here.'),
+        ]
+        for i, (value, rationale) in enumerate(round_1_estimates):
             DelphiResponse.objects.get_or_create(
                 question=question, round_number=1,
+                creator=self.users[i % len(self.users)],
+                defaults={'value': value, 'rationale': rationale},
+            )
+
+        round_2_estimates = [
+            (28, 'Seeing the group leaning lower changed my estimate.'),
+            (24, 'Still think credit access caps this below 30%.'),
+            (30, 'Coming down some, but coordination is genuinely strong '
+             'here.'),
+        ]
+        for i, (value, rationale) in enumerate(round_2_estimates):
+            DelphiResponse.objects.get_or_create(
+                question=question, round_number=2,
                 creator=self.users[i % len(self.users)],
                 defaults={'value': value, 'rationale': rationale},
             )
@@ -836,6 +857,37 @@ class Command(BaseCommand):
                 defaults={'probability': probability},
             )
 
+        # A second, already-resolved question -- shown alongside the open
+        # one above so the module page demonstrates both the live
+        # forecast form and the resolved-outcome probability meter plus
+        # forecaster leaderboard.
+        resolved_question, _created = \
+            ForecastingQuestion.objects.get_or_create(
+                module=module,
+                title='Did the Benguerir pilot reach 30% adoption in its '
+                      'first season?',
+                defaults={
+                    'resolution_criteria': 'Resolves YES if the '
+                                           'season-end community survey '
+                                           'found 30% or more of '
+                                           'surveyed farmers had adopted '
+                                           'the practice.',
+                    'is_resolved': True,
+                    'outcome': True,
+                },
+            )
+        if not resolved_question.is_resolved:
+            resolved_question.is_resolved = True
+            resolved_question.outcome = True
+            resolved_question.save()
+        for i, probability in enumerate([70, 55, 80, 65, 60]):
+            if i >= len(self.users):
+                break
+            Forecast.objects.get_or_create(
+                question=resolved_question, creator=self.users[i],
+                defaults={'probability': probability},
+            )
+
     # -- quadratic voting: spend a voice-credit budget across options --------
 
     def _seed_quadraticvoting(self):
@@ -886,3 +938,10 @@ class Command(BaseCommand):
                     option=option, creator=user,
                     defaults={'votes': vote_count},
                 )
+
+        # Close the round so the module page shows the results chart
+        # rather than the ballot form (results are hidden while open, to
+        # avoid influencing later votes).
+        if round_.is_open:
+            round_.is_open = False
+            round_.save()
