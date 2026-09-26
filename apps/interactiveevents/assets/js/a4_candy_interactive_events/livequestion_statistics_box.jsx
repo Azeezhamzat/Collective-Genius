@@ -42,8 +42,18 @@ export default class StatisticsBox extends React.Component {
     return Math.round(countPerCategory * 100 / answeredQuestions) || 0
   }
 
+  getTopLiked () {
+    return [...this.props.answeredQuestions]
+      .sort((a, b) => b.likes.count - a.likes.count)
+      .slice(0, 5)
+  }
+
   render () {
     const questionAnsweredTag = django.gettext('Questions Answered')
+    const topLikedTag = django.gettext('Most liked answered questions')
+    const likesTag = django.gettext('likes')
+    const topLiked = this.getTopLiked()
+    const maxLikes = topLiked.length > 0 ? topLiked[0].likes.count : 0
     return (
       <div>
         {this.props.categories.length > 0 &&
@@ -65,6 +75,28 @@ export default class StatisticsBox extends React.Component {
                   </div>
                 )
               })}
+            </div>
+          </div>}
+        {maxLikes > 0 &&
+          <div className="row justify-content-center py-4">
+            <div className="col-12 col-md-8">
+              <h3 className="u-serif-header text-center mb-3">{topLikedTag}</h3>
+              <ul className="livequestion-statistics__barlist">
+                {topLiked.map((question, index) => {
+                  const pct = Math.round(question.likes.count * 100 / maxLikes)
+                  return (
+                    <li key={question.id}>
+                      <span className="livequestion-statistics__barlist-label">{question.text}</span>
+                      <div className="livequestion-statistics__barlist-row">
+                        <div className="livequestion-statistics__barlist-track">
+                          <div className="livequestion-statistics__barlist-fill" style={{ width: pct + '%' }} />
+                        </div>
+                        <span className="livequestion-statistics__barlist-value">{question.likes.count} {likesTag}</span>
+                      </div>
+                    </li>
+                  )
+                })}
+              </ul>
             </div>
           </div>}
         <h3 className="u-serif-header text-center mt-5">{questionAnsweredTag}</h3>

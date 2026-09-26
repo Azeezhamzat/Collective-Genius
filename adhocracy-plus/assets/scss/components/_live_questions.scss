@@ -108,3 +108,49 @@
 .livequestion-detail__image {
     width: 100%;
 }
+
+.livequestion-statistics__barlist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+        padding: 0.6 * $spacer 0;
+        border-bottom: 1px solid $gray-lightest;
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+}
+
+.livequestion-statistics__barlist-label {
+    display: block;
+    margin-bottom: 0.35 * $spacer;
+}
+
+.livequestion-statistics__barlist-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6 * $spacer;
+}
+
+.livequestion-statistics__barlist-track {
+    flex: 1 1 auto;
+    height: 10px;
+    border-radius: 5px;
+    background: lighten($brand-primary, 40);
+}
+
+.livequestion-statistics__barlist-fill {
+    height: 100%;
+    border-radius: 5px;
+    background: $brand-primary;
+}
+
+.livequestion-statistics__barlist-value {
+    flex: none;
+    font-size: $font-size-xs;
+    color: $text-color-gray;
+    white-space: nowrap;
+}
