@@ -129,6 +129,29 @@ $checkbox-size: 20px;
     margin-bottom: 0.5 * $spacer;
 }
 
+.poll-row__table-toggle {
+    margin: 0.5 * $spacer 0 $spacer;
+    font-size: $font-size-sm;
+
+    summary {
+        cursor: pointer;
+        color: $text-color-gray;
+    }
+}
+
+.poll-row__table {
+    width: 100%;
+    margin-top: 0.5 * $spacer;
+    border-collapse: collapse;
+
+    th,
+    td {
+        text-align: left;
+        padding: 0.35 * $spacer 0.5 * $spacer;
+        border-bottom: 1px solid $gray-lightest;
+    }
+}
+
 .poll__char-counter {
     display: flex;
     align-self: flex-end;

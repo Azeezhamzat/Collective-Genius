@@ -198,7 +198,15 @@ module.exports = {
       'file-saver': 'file-saver/dist/FileSaver.min.js',
       jquery$: 'jquery/dist/jquery.min.js',
       shpjs$: 'shpjs/dist/shp.min.js',
-      'slick-carousel$': 'slick-carousel/slick/slick.min.js'
+      'slick-carousel$': 'slick-carousel/slick/slick.min.js',
+      // Overwrite adhocracy4's poll results component with our own copy
+      // (adds a "view as table" fallback to the results bar chart).
+      // PollQuestions.jsx imports this via a relative path ('./PollResults'),
+      // so the alias key has to be the fully resolved path webpack would
+      // otherwise land on, not the npm package name.
+      [path.resolve(
+        __dirname, 'node_modules/adhocracy4/adhocracy4/polls/assets/PollResults.jsx'
+      )]: path.resolve(__dirname, 'apps/polls/assets/PollResults.jsx')
     },
     // when using `npm link` for a4 dev env, dependencies are resolved against the linked
     // folder by default. This may result in dependencies being included twice.
