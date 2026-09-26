@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from adhocracy4.categories.models import Category
 from adhocracy4.comments.models import Comment
+from adhocracy4.maps.models import AreaSettings
 from adhocracy4.modules.models import Module
 from adhocracy4.phases.models import Phase
 from adhocracy4.polls.models import Choice
@@ -148,6 +149,17 @@ class Command(BaseCommand):
             },
         )
         return module
+
+    def _ensure_area_settings(self, module):
+        """Provision an empty-polygon AreaSettings row for this module.
+
+        Map-based create forms (mapideas, budgeting) unconditionally
+        require ``module.settings_instance`` -- normally provisioned the
+        first time an initiator saves the module's "Areasettings"
+        dashboard form. An empty polygon means no area restriction.
+        """
+        AreaSettings.objects.get_or_create(
+            module=module, defaults={'polygon': {}})
 
     def _get_or_create_phase(self, module, phase_type, name, description,
                              start, end, weight=0):
@@ -294,6 +306,7 @@ class Command(BaseCommand):
             'Drop a pin where your community is piloting a sustainable '
             'practice, and describe how it is going.',
         )
+        self._ensure_area_settings(module)
         start, end = active_window()
         self._get_or_create_phase(
             module, 'a4_candy_mapideas:collect_feedback',
@@ -392,12 +405,13 @@ class Command(BaseCommand):
             'Propose and cost an extension or research activity for the '
             'community fund.',
         )
+        self._ensure_area_settings(module)
         start, end = active_window()
         self._get_or_create_phase(
-            module, 'a4_candy_budgeting:collect_feedback',
-            'Collect ideas and get feedback',
-            'Create new proposals and get feedback through rates and '
-            'comments.',
+            module, 'a4_candy_budgeting:submit',
+            'Request phase',
+            'Post ideas with budget proposals, comment on them and '
+            'rate them.',
             start, end,
         )
 
