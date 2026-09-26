@@ -1,10 +1,12 @@
 {% load i18n wagtailcore_tags wagtailimages_tags static %}
 
+{% if image %}
 {% image image fill-700x500 as smallImage %}
 {% image image fill-1700x500-c100 as bigImage %}
+{% endif %}
 <div class="homepage-hero">
-    <div class="homepage-hero__image d-none d-lg-block" role="img" style="background-image: url({{ bigImage.url }})"></div>
-    <div class="homepage-hero__image d-lg-none" role="img" style="background-image: url({{ smallImage.url }})"></div>
+    <div class="homepage-hero__image d-none d-lg-block" role="img" style="background-image: url({% if image %}{{ bigImage.url }}{% else %}{% static 'images/default-homepage-hero.png' %}{% endif %})"></div>
+    <div class="homepage-hero__image d-lg-none" role="img" style="background-image: url({% if image %}{{ smallImage.url }}{% else %}{% static 'images/default-homepage-hero.png' %}{% endif %})"></div>
     <div class="container homepage-hero__container">
         <div class="homepage-hero__header">
             <h1 class="homepage-hero__title">{{ title }}</h1>

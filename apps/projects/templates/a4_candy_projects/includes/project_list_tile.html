@@ -1,13 +1,11 @@
-{% load i18n project_tags a4_candy_project_tags contrib_tags thumbnail rules %}
+{% load i18n project_tags a4_candy_project_tags contrib_tags thumbnail rules static %}
 {% project_tile_image project as project_image %}
 {% project_tile_image_copyright project as project_image_copyright %}
 
 <li class="tile organisation__tile tile--{{ orientation }}">
     <div class="tile__head">
         <div class="tile__image"
-          {% if project_image %}
-              style="background-image: url({{ project_image|thumbnail_url:'project_thumbnail' }})"
-          {% endif %}>
+          style="background-image: url({% if project_image %}{{ project_image|thumbnail_url:'project_thumbnail' }}{% else %}{% static 'images/default-project-tile.png' %}{% endif %})">
           {% if project_image_copyright %}
               <div class="tile__image__copyright copyright">© {{ project_image_copyright }}</div>
           {% endif %}

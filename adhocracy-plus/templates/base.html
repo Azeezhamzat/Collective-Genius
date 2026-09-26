@@ -33,6 +33,12 @@
     <meta property="og:image" content="{{ fallback_image.url }}">
     <meta property="og:image:width" content="{{ fallback_image.width }}">
     <meta property="og:image:height" content="{{ fallback_image.height }}">
+    {% else %}
+    <meta name="twitter:image" content="{% static 'images/default-social-fallback.png' %}">
+    <meta name="linkedin:image" content="{% static 'images/default-social-fallback.png' %}">
+    <meta property="og:image" content="{% static 'images/default-social-fallback.png' %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     {% endif %}
     {% endblock %}
 

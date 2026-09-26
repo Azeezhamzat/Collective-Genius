@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load humanize i18n rules thumbnail %}
+{% load humanize i18n rules thumbnail static %}
 
 {% block title %}{{organisation.name}}{% endblock %}
 
@@ -8,9 +8,13 @@
 <meta name="twitter:image" content="{% thumbnail organisation.image "1500x610" crop %}">
 <meta name="linkedin:image" content="{% thumbnail organisation.image "1500x610" crop %}">
 <meta property="og:image" content="{% thumbnail organisation.image "1500x610" crop %}">
+{% else %}
+<meta name="twitter:image" content="{% static 'images/default-org-header.png' %}">
+<meta name="linkedin:image" content="{% static 'images/default-org-header.png' %}">
+<meta property="og:image" content="{% static 'images/default-org-header.png' %}">
+{% endif %}
 <meta property="og:image:width" content="1500">
 <meta property="og:image:height" content="610">
-{% endif %}
 {% endblock %}
 
 {% block social_meta_description %}
@@ -25,7 +29,7 @@
 <div class="u-bg-light py-5">
     <div class="container px-0 px-sm-3 u-bg-light">
         <div class="container--shadow">
-            <div class="hero-unit" style="background-image: url({% thumbnail organisation.image "1500x610" crop %});">
+            <div class="hero-unit" style="background-image: url({% if organisation.image %}{% thumbnail organisation.image "1500x610" crop %}{% else %}{% static 'images/default-org-header.png' %}{% endif %});">
                 {% if organisation.image_copyright %}
                 <div class="header__copyright copyright">© {{ organisation.image_copyright }}</div>
                 {% endif %}
