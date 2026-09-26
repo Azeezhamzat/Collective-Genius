@@ -3,9 +3,9 @@
     "model": "a4_candy_organisations.organisation",
     "pk": 1,
     "fields": {
-      "name": "liqd-orga",
-      "slug": "liqd-orga",
-      "imprint": "imprint liqd-orga",
+      "name": "collective-genius-demo",
+      "slug": "collective-genius-demo",
+      "imprint": "imprint collective-genius-demo",
       "initiators": ["1","3"]
     }
   },
@@ -14,7 +14,7 @@
   "pk": 1,
   "fields": {
     "language_code": "de",
-    "description": "Beschreibung liqd-orga",
+    "description": "Beschreibung collective-genius-demo",
     "master": 1
     }
   },
@@ -23,7 +23,7 @@
     "pk": 2,
     "fields": {
       "language_code": "en",
-      "description": "description liqd-orga",
+      "description": "description collective-genius-demo",
       "master": 1
     }
   }
