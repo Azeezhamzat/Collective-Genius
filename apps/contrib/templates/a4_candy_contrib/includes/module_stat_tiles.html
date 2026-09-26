@@ -1,0 +1,18 @@
+{% load i18n %}
+
+<div class="module-stat-tiles">
+    <div class="module-stat-tile">
+        <span class="module-stat-tile__label">{{ items_label }}</span>
+        <span class="module-stat-tile__value">{{ total_items }}</span>
+    </div>
+    <div class="module-stat-tile">
+        <span class="module-stat-tile__label">{% trans 'Comments' %}</span>
+        <span class="module-stat-tile__value">{{ total_comments }}</span>
+    </div>
+    {% if total_positive_ratings != None %}
+        <div class="module-stat-tile">
+            <span class="module-stat-tile__label">{% trans 'Positive ratings' %}</span>
+            <span class="module-stat-tile__value">{{ total_positive_ratings }}</span>
+        </div>
+    {% endif %}
+</div>

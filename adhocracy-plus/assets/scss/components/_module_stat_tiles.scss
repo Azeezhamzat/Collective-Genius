@@ -1,0 +1,29 @@
+.module-stat-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacer;
+    margin-bottom: $spacer;
+}
+
+.module-stat-tile {
+    flex: 1 1 10rem;
+    padding: (0.75 * $padding) $padding;
+    border: 1px solid $gray-lightest;
+    border-radius: 6px;
+    background: $body-bg;
+}
+
+.module-stat-tile__label {
+    display: block;
+    font-size: $font-size-xs;
+    color: $text-color-gray;
+    margin-bottom: 0.25rem;
+}
+
+.module-stat-tile__value {
+    display: block;
+    font-size: $font-size-xxl;
+    font-weight: $demi-bold;
+    line-height: 1.1;
+    color: $text-color;
+}

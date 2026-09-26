@@ -115,11 +115,26 @@ class DelegationRoundDetail(ProjectMixin, DisplayProjectOrModuleMixin,
 
         if not delegation_round.is_open:
             results = services.tally_round(delegation_round)
-            context['results_by_option_id'] = {
+            results_by_option_id = {
                 int(r.option_id): r.votes for r in results
             }
-            context['voting_power'] = services.voting_power_for_round(
-                delegation_round)
+            context['results_by_option_id'] = results_by_option_id
+            context['max_votes'] = max(
+                results_by_option_id.values() or [0])
+
+            power = services.voting_power_for_round(delegation_round)
+            voters_by_id = get_user_model().objects.in_bulk(power.keys())
+            voting_power = sorted(
+                (
+                    {'voter': voters_by_id.get(voter_id), 'power': p}
+                    for voter_id, p in power.items()
+                    if voter_id in voters_by_id
+                ),
+                key=lambda row: row['power'], reverse=True,
+            )
+            context['voting_power'] = voting_power
+            context['max_power'] = max(
+                [row['power'] for row in voting_power] or [0])
 
         return context
 

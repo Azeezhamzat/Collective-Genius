@@ -57,11 +57,29 @@ class IdeaFilterSet(a4_filters.DefaultsFilterSet):
 class AbstractIdeaListView(ProjectMixin,
                            filter_views.FilteredListView):
     paginate_by = 15
+    items_label = _('Items')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        module_items = self.model.objects.filter(module=self.module)
+        context['items_label'] = self.items_label
+        context['total_items'] = module_items.count()
+        context['total_comments'] = sum(
+            module_items.annotate_comment_count()
+            .values_list('comment_count', flat=True))
+        if self.module.has_feature('rate', self.model):
+            context['total_positive_ratings'] = sum(
+                module_items.annotate_positive_rating_count()
+                .values_list('positive_rating_count', flat=True))
+        else:
+            context['total_positive_ratings'] = None
+        return context
 
 
 class IdeaListView(AbstractIdeaListView, DisplayProjectOrModuleMixin):
     model = models.Idea
     filter_set = IdeaFilterSet
+    items_label = _('Ideas')
 
     def get_queryset(self):
         return super().get_queryset()\

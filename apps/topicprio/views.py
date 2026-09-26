@@ -47,6 +47,7 @@ class TopicListView(idea_views.AbstractIdeaListView,
                     DisplayProjectOrModuleMixin):
     model = models.Topic
     filter_set = TopicFilterSet
+    items_label = _('Topics')
 
     def get_queryset(self):
         return super().get_queryset()\

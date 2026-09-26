@@ -817,6 +817,13 @@ class Command(BaseCommand):
             defaults={'delegatee': self.users[0]},
         )
 
+        # Close the round so the module page shows the results chart
+        # rather than the ballot form (results are hidden while open, to
+        # avoid influencing later votes and delegations).
+        if round_.is_open:
+            round_.is_open = False
+            round_.save()
+
     # -- forecasting: probability estimates on a resolvable question ---------
 
     def _seed_forecasting(self):

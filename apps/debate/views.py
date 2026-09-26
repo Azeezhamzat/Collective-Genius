@@ -17,6 +17,7 @@ class SubjectListView(idea_views.AbstractIdeaListView,
                       DisplayProjectOrModuleMixin):
     model = models.Subject
     filter_set = filters.SubjectFilterSet
+    items_label = _('Subjects')
 
     def get_queryset(self):
         return super().get_queryset()\

@@ -56,6 +56,7 @@ class ProposalListView(idea_views.AbstractIdeaListView,
                        DisplayProjectOrModuleMixin):
     model = models.Proposal
     filter_set = ProposalFilterSet
+    items_label = _('Proposals')
 
     def dispatch(self, request, **kwargs):
         self.mode = request.GET.get('mode', 'map')

@@ -1,6 +1,60 @@
 {% extends extends %}
 {% load i18n delegation_tags %}
 
+{% block extra_css %}
+    {{ block.super }}
+    <style>
+        /* Scoped to this page. Brand color from
+           adhocracy-plus/assets/scss/_variables.scss ($brand-primary). */
+        .dl-viz {
+            --dl-ink-secondary: #52514e;
+            --dl-gridline: #e1e0d9;
+            --dl-fill: #2d40cc;   /* $brand-primary */
+            --dl-track: #dde1f7;
+        }
+        .dl-barlist {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem;
+        }
+        .dl-barlist li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--dl-gridline);
+        }
+        .dl-barlist li:last-child {
+            border-bottom: none;
+        }
+        .dl-barlist__label {
+            display: block;
+            margin-bottom: 0.35rem;
+        }
+        .dl-barlist__row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .dl-barlist__track {
+            flex: 1 1 auto;
+            height: 10px;
+            border-radius: 5px;
+            background: var(--dl-track);
+        }
+        .dl-barlist__fill {
+            height: 100%;
+            border-radius: 5px;
+            background: var(--dl-fill);
+        }
+        .dl-barlist__value {
+            flex: none;
+            width: 3rem;
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--dl-ink-secondary);
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+{% endblock %}
+
 {% block phase_content %}
 <div class="row">
     <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
@@ -88,23 +142,70 @@
                 </a>
             {% endif %}
         {% else %}
-            <h2>{% trans 'Results' %}</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>{% trans 'Option' %}</th>
-                        <th>{% trans 'Votes (direct + delegated)' %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for option in delegation_round.options.all %}
-                        <tr>
-                            <td>{{ option.title }}</td>
-                            <td>{{ results_by_option_id|get_item:option.pk|default:0 }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="dl-viz">
+                <h2>{% trans 'Results' %}</h2>
+                {% if max_votes %}
+                    <ul class="dl-barlist">
+                        {% for option in delegation_round.options.all %}
+                            {% widthratio results_by_option_id|get_item:option.pk|default:0 max_votes 100 as pct %}
+                            <li>
+                                <span class="dl-barlist__label">{{ option.title }}</span>
+                                <div class="dl-barlist__row">
+                                    <div class="dl-barlist__track">
+                                        <div class="dl-barlist__fill" style="width: {{ pct }}%;"></div>
+                                    </div>
+                                    <span class="dl-barlist__value">{{ results_by_option_id|get_item:option.pk|default:0 }}</span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>{% trans 'No votes were cast in this round.' %}</p>
+                {% endif %}
+
+                <details style="margin: 0.5rem 0 1.5rem; font-size: 0.85rem;">
+                    <summary style="cursor: pointer; color: var(--dl-ink-secondary);">{% trans 'View as table' %}</summary>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Option' %}</th>
+                                <th>{% trans 'Votes (direct + delegated)' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for option in delegation_round.options.all %}
+                                <tr>
+                                    <td>{{ option.title }}</td>
+                                    <td>{{ results_by_option_id|get_item:option.pk|default:0 }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </details>
+
+                {% if voting_power %}
+                    <h3>{% trans 'Voting power' %}</h3>
+                    <p class="text-muted" style="font-size: 0.85rem;">
+                        {% trans 'How many votes -- their own plus everyone whose delegation chain currently resolves to them -- each direct voter is carrying.' %}
+                    </p>
+                    <ul class="dl-barlist">
+                        {% for row in voting_power %}
+                            {% widthratio row.power max_power 100 as pct %}
+                            <li>
+                                <span class="dl-barlist__label">{{ row.voter }}</span>
+                                <div class="dl-barlist__row">
+                                    <div class="dl-barlist__track">
+                                        <div class="dl-barlist__fill" style="width: {{ pct }}%;"></div>
+                                    </div>
+                                    <span class="dl-barlist__value">
+                                        {% blocktrans count counter=row.power %}{{ counter }} vote{% plural %}{{ counter }} votes{% endblocktrans %}
+                                    </span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
         {% endif %}
     {% endif %}
 

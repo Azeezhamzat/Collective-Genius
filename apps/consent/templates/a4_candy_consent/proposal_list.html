@@ -1,8 +1,63 @@
 {% extends extends %}
 {% load i18n %}
 
+{% block extra_css %}
+    {{ block.super }}
+    <style>
+        /* Scoped to this page. Brand colors from
+           adhocracy-plus/assets/scss/_variables.scss; status colors are
+           the fixed good/critical pair, never reused for anything else. */
+        .cs-viz {
+            --cs-ink-secondary: #52514e;
+            --cs-gridline: #e1e0d9;
+            --cs-agree: #2d40cc;        /* $brand-primary */
+            --cs-stand-aside: #eda100;
+            --cs-object: #a72b1e;       /* $brand-danger */
+            --cs-good: #0a820a;         /* $feedback-color-accepted */
+            --cs-critical: #dc3818;     /* $feedback-color-rejected */
+        }
+        .cs-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-weight: 600;
+            color: #fff;
+            padding: 0.15rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+        }
+        .cs-badge--consent { background: var(--cs-good); }
+        .cs-badge--blocked { background: var(--cs-critical); }
+        .cs-divbar {
+            display: flex;
+            height: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 0.5rem 0 0.4rem;
+        }
+        .cs-divbar__segment:not(:last-child) {
+            border-right: 2px solid #fff;
+        }
+        .cs-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--cs-ink-secondary);
+            margin-bottom: 0.75rem;
+        }
+        .cs-legend span.dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 0.35rem;
+        }
+    </style>
+{% endblock %}
+
 {% block phase_content %}
-<div class="row">
+<div class="row cs-viz">
     <div class="col-md-10 col-lg-8 offset-md-1 offset-lg-2">
 
         {% if messages %}
@@ -40,16 +95,37 @@
                         {% blocktrans with creator=proposal.creator %}Proposed by {{ creator }}{% endblocktrans %}
                     </p>
 
-                    {% if proposal.result.has_consent %}
-                        <p><strong>{% trans 'This proposal has consent.' %}</strong></p>
-                    {% else %}
-                        <p><strong>{% trans 'No consent yet.' %}</strong></p>
-                    {% endif %}
-                    <p class="text-muted">
-                        {% blocktrans with agree=proposal.result.n_agree stand_aside=proposal.result.n_stand_aside unresolved=proposal.result.n_unresolved_objections %}
-                            {{ agree }} agree, {{ stand_aside }} standing aside, {{ unresolved }} unresolved objection(s).
-                        {% endblocktrans %}
+                    <p>
+                        {% if proposal.result.has_consent %}
+                            <span class="cs-badge cs-badge--consent">&#10003; {% trans 'Has consent' %}</span>
+                        {% elif proposal.result.n_unresolved_objections %}
+                            <span class="cs-badge cs-badge--blocked">
+                                &#10007;
+                                {% blocktrans count counter=proposal.result.n_unresolved_objections %}Blocked ({{ counter }} unresolved objection){% plural %}Blocked ({{ counter }} unresolved objections){% endblocktrans %}
+                            </span>
+                        {% else %}
+                            <span class="text-muted">{% trans 'No responses yet.' %}</span>
+                        {% endif %}
                     </p>
+
+                    {% with total=proposal.result.n_agree|add:proposal.result.n_stand_aside|add:proposal.result.n_objections %}
+                        {% if total %}
+                            <div class="cs-divbar" role="img"
+                                 aria-label="{% blocktrans with agree=proposal.result.n_agree stand_aside=proposal.result.n_stand_aside objections=proposal.result.n_objections %}{{ agree }} agree, {{ stand_aside }} standing aside, {{ objections }} objecting{% endblocktrans %}">
+                                {% widthratio proposal.result.n_agree total 100 as agree_pct %}
+                                {% widthratio proposal.result.n_stand_aside total 100 as stand_aside_pct %}
+                                {% widthratio proposal.result.n_objections total 100 as object_pct %}
+                                {% if agree_pct %}<div class="cs-divbar__segment" style="width: {{ agree_pct }}%; background: var(--cs-agree);"></div>{% endif %}
+                                {% if stand_aside_pct %}<div class="cs-divbar__segment" style="width: {{ stand_aside_pct }}%; background: var(--cs-stand-aside);"></div>{% endif %}
+                                {% if object_pct %}<div class="cs-divbar__segment" style="width: {{ object_pct }}%; background: var(--cs-object);"></div>{% endif %}
+                            </div>
+                            <ul class="cs-legend">
+                                <li><span class="dot" style="background: var(--cs-agree);"></span>{% blocktrans with n=proposal.result.n_agree %}{{ n }} agree{% endblocktrans %}</li>
+                                <li><span class="dot" style="background: var(--cs-stand-aside);"></span>{% blocktrans with n=proposal.result.n_stand_aside %}{{ n }} stand aside{% endblocktrans %}</li>
+                                <li><span class="dot" style="background: var(--cs-object);"></span>{% blocktrans with n=proposal.result.n_objections unresolved=proposal.result.n_unresolved_objections %}{{ n }} object ({{ unresolved }} unresolved){% endblocktrans %}</li>
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
 
                     {% if proposal.all_responses %}
                         <ul>
